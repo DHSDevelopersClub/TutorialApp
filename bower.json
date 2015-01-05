@@ -1,0 +1,15 @@
+{
+  "name": "TutorialApp",
+  "homepage": "https://github.com/DHSDevelopersClub/TutorialApp",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.5.2"
+  }
+}

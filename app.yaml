@@ -1,0 +1,32 @@
+application: dhs-tutorial
+
+# Version 1.0 (Alpha 1)
+version: 1-0-a-1
+api_version: 1
+runtime: python27
+threadsafe: true
+
+
+handlers:
+
+# Endpoints api
+- url: /_ah/spi/.*
+  script: server.application
+
+# Main page
+- url: /
+  static_files: web_client/index.html
+  upload: web_client/index.html
+
+# Web client resources
+- url: /res/web_client
+  static_dir: web_client/res
+- url: /res/components
+  static_dir: bower_components
+
+
+libraries:
+- name: pycrypto
+  version: latest
+- name: endpoints
+  version: 1.0
