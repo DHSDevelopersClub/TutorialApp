@@ -1,19 +1,20 @@
 '''The endpoints server.
 
-It can respond to a GET request with the classes avalible on a certain date.
+It can respond to a GET request with the classes available on a certain date.
 
     A GET request sent to the path "classes" in "v1" of the api named
-    "tutorialsignup" with the date parameter "2015-01-04".
+    "tutorialsignup" with the date parameter "2015-01-04" and search parameter
+    "mr".
         ---------------------------------------------
-        GET /_ah/api/tutorialsignup/v1/classes?date=2015-01-04 HTTP/1.1
+        GET /_ah/api/tutorialsignup/v1/classes?date=2015-01-04&search=mr HTTP/1.1
         Example-Header:  Foo Example Header
         Other-Header:  etc, etc...
         ---------------------------------------------
 
-    Should return a response with a list of classrooms availible for tutorial
-    on that day.  It should include the teacher's name, the room number,
-    the number of seats availible, and whether the student has signed up
-    already.
+    Should return a response with a list of classrooms available for tutorial
+    on that day, with teacher name or room number containing the search term.
+    It should include the teacher's name, the room number, the number of seats
+    available, and whether the student has signed up already.
         ---------------------------------------------
         200 OK
         Date:  Mon, 05 Jan 2015 01:48:57 GMT
@@ -21,7 +22,7 @@ It can respond to a GET request with the classes avalible on a certain date.
         More-Headers:  etc...
 
         {
-          "classes": [
+          "classrooms": [
             {
               "teacher": "Mr. Milstead",
               "room": "127",
@@ -43,7 +44,7 @@ It can respond to a GET request with the classes avalible on a certain date.
 It can also accept a POST request to signup for a specific class on a certain
 date.
 
-    Recieve a POST request to "tutorialsignup" api with a room number, a date,
+    Receive a POST request to "tutorialsignup" api with a room number, a date,
     and whether to sign up, or un sign up.
         ---------------------------------------------
         POST /_ah/api/tutorialsignup/v1/sign HTTP/1.1

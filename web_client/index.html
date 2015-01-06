@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <!--Main page for web client.
 
-This is where all of the `local-` components come together.  Most of the dirty
-work is handled within custom components, so they are pretty much just dropped
-here.
+Implement the action bar with search.  Use `history.pushState(...)` and
+`history.replaceState(...)` when the user is searching so the search state is
+always saved.  See `https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history`
+and `https://developer.mozilla.org/en-US/docs/WindowEventHandlers.onpopstate`
+for more on history manipulation.
+
+Include the `local-date-spinner` and the `local-classroom-manager` element in
+content area.
 
 Author: insert name here
 -->
@@ -15,10 +20,15 @@ Author: insert name here
 
         <title>Drake Tutorial</title>
 
-        <script src='/res/bower/webcomponentsjs/webcomponents.min.js'></script>
+        <script src='/res/components/webcomponentsjs/webcomponents.min.js'></script>
 
         <!-- Imports to third party components. -->
+
         <!-- Imports to local components at /res/components/local-*. -->
+        <link rel='import'
+              href='/res/components/local-classroom-manager/local-classroom-manager.html'>
+        <link rel='import'
+              href='/res/components/local-date-spinner/local-date-spinner.html'>
     </head>
 
     <body>
