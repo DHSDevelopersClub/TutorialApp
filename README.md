@@ -16,6 +16,7 @@ MVP Features
 
 We must implement these before we can release Alpha 1.
 
+  - ~~Completed Task~~
   - Server
     - Respond to a GET request with the classes avalible on a certain date.
     - Accept a POST request to signup for a specific class on a certain date.
