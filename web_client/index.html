@@ -22,7 +22,7 @@ Author: Alexander Otavka
         <title>Signed - Drake High School</title>
 
         <script src='/res/components/webcomponentsjs/webcomponents.min.js'></script>
-
+        <link rel="import" href="res/components/polymer/polymer.html" >
         <!-- Imports to third party components. -->
 
         <!-- Imports to local components at /res/components/local-*. -->
@@ -32,11 +32,12 @@ Author: Alexander Otavka
               href='/res/components/local-date-spinner/local-date-spinner.html'>
 
         <link rel='stylesheet' type='text/css' href='/res/web_client/main.css'>
-        <script src='/res/web/main.js'></script>
+
     </head>
 
     <body>
         <h1>Signed</h1>
         Drake Tutorial Signups
+        <local-date-spinner date="1999-10-07"></local-date-spinner>
     </body>
 </html>

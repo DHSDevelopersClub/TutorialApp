@@ -4,5 +4,48 @@ Has data bound published property 'date' with the date being displayed.  `date`
 is a string in the format 'yyyy-mm-dd'.  The date displayed should look like
 'Wednesday, January 7'.  Right now, the date cannot be changed.
 
-Author: insert name here
+Author: Max Starr
 -->
+
+<polymer-element name="locaL-date-spinner" constructor="LocalDateSpinner" attributes="date">
+    <template>
+        Date:
+        <div id="dateContainer">{{dayStr}}, {{month}} {{dayNum}}</div>
+    </template>
+    <script>
+        (function () {
+            // Run once. Private and static to the element.
+
+            // Run for every instance of the element that's created.
+            Polymer({
+                monthsNum: [11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                monthsStr: ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                days: ['Sunday', 'Monday', 'Tuesday', 'Wednessday', 'Thursday', 'Friday', 'Saturday'],
+                date: '2015-01-20',
+                ready: function () {
+                    dateArr = this.date.split('-');
+                    if (dateArr[1] == 1 || dateArr[1] == 2) {
+                        Y = dateArr[0] - 1;
+                    } else {
+                        Y = dateArr[0];
+                    }
+                    y = parseInt(Y.toString().slice(2, 4));
+                    c = parseInt(Y.toString().slice(0, 2));
+                    d = parseInt(dateArr[2]);
+                    m = this.monthsNum[parseInt(dateArr[1])-1];
+                    console.log('Y: ' + Y);
+                    console.log('y: ' + y);
+                    console.log('c: ' + c);
+                    console.log('d: ' + d);
+                    console.log('m: ' + m);
+                    dayNum = (d + (2.6 * m - 0.2) + y + (y / 4) + (c / 4) - 2 * c)%7;
+                    dayStr = this.days[Math.floor(dayNum)];
+                    console.log(dayStr);
+                    this.dayStr = dayStr;
+                    this.month = this.monthsStr[parseInt(dateArr[1])-1];
+                    this.dayNum = d;
+                }
+            });
+        })();
+    </script>
+</polymer-element>
