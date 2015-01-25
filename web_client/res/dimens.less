@@ -1,3 +1,27 @@
 /**
  * Variables relating to margins, spacing, and sizing.
  */
+
+@threshold_mobile_width: 640px;
+
+#less-dimens {
+    .threshold_mobile_width { width: @threshold_mobile_width }
+}
+
+@dimen_margin_standard: 16px;
+@dimen_margin_small: @dimen_margin_standard * .5;
+@dimen_margin_medium: @dimen_margin_standard;
+@dimen_margin_large: @dimen_margin_standard * 2;
+
+@dimen_screen_horizontal_margin: @dimen_margin_medium;
+@dimen_screen_vertical_margin: @dimen_margin_large;
+
+@dimen_mobile_screen_horizontal_margin: @dimen_margin_medium;
+@dimen_mobile_screen_vertical_margin: @dimen_margin_medium;
+
+//@dimen_padding_standard: 8px;
+//@dimen_padding_large: @dimen_padding_standard * 2;
+
+@dimen_padding_search: 8px;
+
+@dimen_max_content_width: 768px;

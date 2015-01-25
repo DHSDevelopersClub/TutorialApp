@@ -1,0 +1,149 @@
+<!-- Search bar element.
+
+Transitions between button and input states.
+
+Author: Alexander Otavka
+-->
+
+<link rel="import" href="../paper-input/paper-input.html" />
+<link rel="import" href="../paper-icon-button/paper-icon-button.html" />
+<link rel="import" href="../paper-ripple/paper-ripple.html" />
+<link rel="import" href="../paper-shadow/paper-shadow.html" />
+<link rel="import" href="../core-icon/core-icon.html" />
+<link rel="import" href="../core-icons/core-icons.html" />
+<link rel="import" href="../core-input/core-input.html" />
+
+<polymer-element name="local-search-bar" constructor="LocalSearchBar"
+                 attributes="search">
+    <template>
+        <link rel="stylesheet" type="text/css" href="local-search-bar.css" />
+
+        <div id="boxWrapper">
+            <paper-shadow id="searchBox" z="1" animated
+                          on-tap="{{enableSearchMode}}">
+                <div horizontal layout>
+                    <core-icon id="boxIcon" class="noselect"
+                               icon="search">
+                    </core-icon>
+
+                    <div id="boxButtonWrapper" class="button" flex>
+                        <span>Search</span>
+                        <paper-ripple fit></paper-ripple>
+                    </div>
+
+                    <div id="boxInputWrapper" hidden flex>
+                        <input id="boxInput" is="core-input" />
+                    </div>
+                </div>
+            </paper-shadow>
+        </div>
+
+        <div id="iconButtonWrapper" class="noselect" hidden
+             on-tap="{{enableSearchMode}}">
+            <paper-icon-button id="iconButton" icon="search"
+                               on-tap="{{setSearchMode}}">
+            </paper-icon-button>
+        </div>
+    </template>
+
+    <script>
+        (function () {
+            var MEDIA_MOBILE = window.matchMedia("(max-width: 640px)");
+
+            var MODE_NULL = 0;
+            var MODE_SEARCH = 1;
+            var MODE_BUTTON = 2;
+            var MODE_BOX = 3;
+
+            var checkSizing = function (context) {
+                if (context.mode == MODE_SEARCH) {
+                    return;
+                } else if (MEDIA_MOBILE.matches) {
+                    context.setButtonMode();
+                } else {
+                    context.setBoxMode();
+                }
+            };
+
+            Polymer({
+                ready: function () {
+                    this.search = "";
+                    this.mode = MODE_NULL;
+
+                    /* Handle responsive design. */
+                    (function (context) {
+                        checkSizing(context);
+                        MEDIA_MOBILE.addListener(function () {
+                            checkSizing(context);
+                        });
+                    })(this);
+
+                    this.searchListener = (function (context) {
+                        return function (event) {
+                            context.search = context.$.boxInput.committedValue;
+                            context.fire("on-search-change");
+                        }
+                    })(this);
+                },
+
+                setButtonMode: function () {
+                    if (this.mode == MODE_BUTTON) {
+                        return;
+                    }
+                    this.mode = MODE_BUTTON;
+
+                    this.$.boxWrapper.setAttribute("hidden", "");
+                    this.$.iconButtonWrapper.removeAttribute("hidden");
+                },
+
+                setBoxMode: function () {
+                    if (this.mode == MODE_BOX) {
+                        return;
+                    }
+                    this.mode = MODE_BOX;
+
+                    this.$.iconButtonWrapper.setAttribute("hidden", "");
+                    this.$.boxWrapper.removeAttribute("hidden");
+                },
+
+                enableSearchMode: function () {
+                    if (this.mode == MODE_SEARCH) {
+                        return;
+                    }
+                    this.setBoxMode();
+                    this.mode = MODE_SEARCH;
+
+                    this.$.boxButtonWrapper.setAttribute("hidden", "");
+                    this.$.boxInputWrapper.removeAttribute("hidden");
+                    this.$.searchBox.setZ(0);
+
+                    this.$.boxInput.focus();
+                    this.$.boxInput.addEventListener("change", this.searchListener);
+
+                    this.fire("on-search-mode-enable");
+                },
+
+                disableSearchMode: function () {
+                    if (this.mode != MODE_SEARCH) {
+                        return;
+                    }
+
+                    this.$.boxInputWrapper.setAttribute("hidden", "");
+                    this.$.boxButtonWrapper.removeAttribute("hidden");
+                    this.$.searchBox.setZ(1);
+
+                    this.clearInput();
+                    this.$.boxInput.removeEventListener("change", this.searchListener);
+
+                    this.mode = MODE_NULL;
+                    checkSizing(this);
+                },
+
+                clearInput: function () {
+                    this.$.boxInput.value = "";
+                    this.$.boxInput.commit();
+                }
+            });
+        })();
+    </script>
+</polymer-element>
