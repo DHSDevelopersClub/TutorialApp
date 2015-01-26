@@ -81,7 +81,7 @@ Author: Alexander Otavka
                     this.searchListener = (function (context) {
                         return function (event) {
                             context.search = context.$.boxInput.committedValue;
-                            context.fire("on-search-change");
+                            context.fire("search-change");
                         }
                     })(this);
                 },
@@ -120,7 +120,7 @@ Author: Alexander Otavka
                     this.$.boxInput.focus();
                     this.$.boxInput.addEventListener("change", this.searchListener);
 
-                    this.fire("on-search-mode-enable");
+                    this.fire("search-mode-enable");
                 },
 
                 disableSearchMode: function () {

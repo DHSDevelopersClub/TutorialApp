@@ -26,7 +26,7 @@ Author: Alexander Otavka
         <link rel="import" href="res/components/polymer/polymer.html" />
 
         <!-- Third party scripts. -->
-        <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>-->
+<!--        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>-->
         <!--<script src="https://gist.githubusercontent.com/Sjeiti/2948738/raw/dc9f90e700b3c54809d21ec20fcbca26de26678a/getLessVars.js">
         </script>-->
 
@@ -61,9 +61,9 @@ Author: Alexander Otavka
             <local-search-bar id="searchBar" flex></local-search-bar>
 
             <div id="actionButtons" class="noselect">
-                <paper-icon-button id="refresh" icon="refresh"></paper-icon-button>
-                <div style="display: inline-block; width: 4px; height: 40px;"></div>
-                <paper-icon-button icon="more-vert"></paper-icon-button>
+                <paper-icon-button id="refreshButton" icon="refresh"></paper-icon-button>
+<!--                <div style="display: inline-block; width: 4px; height: 10px;"></div>-->
+                <paper-icon-button id="moreButton" icon="more-vert"></paper-icon-button>
             </div>
         </core-toolbar>
 
@@ -75,25 +75,23 @@ Author: Alexander Otavka
         </div>
 
         <script type="text/javascript">
-            window.onload = function () {
+            window.addEventListener("polymer-ready", function () {
                 var MEDIA_MOBILE = window.matchMedia("(max-width: 640px)");
 
                 /* Center search bar. */
                 var navWrapper = document.getElementById("navWrapper");
-                var actionButtons = document.getElementById("actionButtons");
                 var navBackText = document.getElementById("navBackText");
-
-                var centerSearchBar = function () {
+                var actionButtons = document.getElementById("actionButtons");
+                var centerSearchBar = function (animate) {
                     navWrapper.style.width = "auto";
                     actionButtons.style.width = "auto";
-                    if (MEDIA_MOBILE.matches) {
-                        navBackText.setAttribute("hidden", "");
-                    } else {
-                        navBackText.removeAttribute("hidden");
-                    }
                     var widthMargin = Math.max(actionButtons.offsetWidth, navWrapper.offsetWidth) + 2;
-                    navWrapper.style.width = widthMargin + "px";
-                    actionButtons.style.width = widthMargin + "px";
+                    if (animate) {
+                        console.log("TODO animate centerSearchBar");
+                    } else {
+                        navWrapper.style.width = widthMargin + "px";
+                        actionButtons.style.width = widthMargin + "px";
+                    }
                 }
                 var checkSizing = function () {
                     centerSearchBar();
@@ -157,21 +155,41 @@ Author: Alexander Otavka
 
                 /* Add tap and change event listeners for search. */
                 var searchBar = document.getElementById("searchBar");
+                var searchBoxWrapper;
+                try {
+                    searchBoxWrapper = document.querySelector("#searchBar::shadow #boxWrapper");
+                } catch(error) {
+                    searchBoxWrapper = document.querySelector("#searchBar").$.boxWrapper;
+                }
                 var navTitle = document.getElementById("navTitle");
                 var navBack = document.getElementById("navBack");
-                searchBar.addEventListener("on-search-mode-enable", function (e) {
+                var clearSearchSizing = function () {
+                    actionButtons.removeAttribute("hidden");
+                    navBackText.removeAttribute("hidden");
+                    searchBoxWrapper.style.textAlign = "center";
+                }
+                var checkSearchSizing = function () {
+                    if (MEDIA_MOBILE.matches) {
+                        actionButtons.setAttribute("hidden", "");
+                        navBackText.setAttribute("hidden", "");
+                        searchBoxWrapper.style.textAlign = "left";
+                    } else {
+                        clearSearchSizing();
+                    }
+                    centerSearchBar();
+                }
+                searchBar.addEventListener("click", function () { //"search-mode-enable", function () {
                     navTitle.setAttribute("hidden", "");
                     navBack.removeAttribute("hidden");
 
                     searchAnimation.play();
-                    if (MEDIA_MOBILE.matches) {
-                        actionButtons.setAttribute("hidden", "");
-                    }
+                    checkSearchSizing();
+                    MEDIA_MOBILE.addListener(checkSearchSizing);
 
                     centerSearchBar();
                 });
-                searchBar.addEventListener("on-search-change", function (e) {
-                    console.log("debug search changed to '" + searchBar.search + "'");
+                searchBar.addEventListener("search-change", function () {
+                    console.log("TODO search changed to '" + searchBar.search + "'");
                 });
 
                 /* Add click event listener for back button. */
@@ -182,11 +200,12 @@ Author: Alexander Otavka
 
                     searchBar.disableSearchMode();
                     searchAnimation.playReverse();
-                    actionButtons.removeAttribute("hidden");
+                    MEDIA_MOBILE.removeListener(checkSearchSizing);
+                    clearSearchSizing();
 
                     centerSearchBar();
                 });
-            };
+            });
         </script>
     </body>
 </html>
