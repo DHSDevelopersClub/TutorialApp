@@ -7,7 +7,7 @@
 window.addEventListener("polymer-ready", function () {
     "use strict";
 
-    /* Element Selectors */
+    /* Element Selectors. */
     var mediaMobile = document.getElementById("mediaMobile");
     var navWrapper = document.getElementById("navWrapper");
     var navBack = document.getElementById("navBack");
@@ -21,7 +21,7 @@ window.addEventListener("polymer-ready", function () {
     var moreButton = document.getElementById("moreButton");
     var classroomManager = document.getElementById("classroomManager");
 
-    /* Animation Declaration */
+    /* Animation Declaration. */
     var actionBarSearchAnimation = (function () {
         /* Search transition animation for the action bar. */
         var green = "#4CB04F";
