@@ -1,4 +1,4 @@
-/* local-search-bar.less */
+/** local-search-bar.less */
 
 .noselect {
     -webkit-user-select: none;
@@ -11,6 +11,11 @@
 .button {
     .noselect;
     cursor: pointer;
+}
+
+.searchBoxIcon {
+    width: 16px;
+    height: 16px;
 }
 
 #boxWrapper {
@@ -31,9 +36,8 @@
 }
 
 #boxIcon {
-    width: 16px;
-    height: 16px;
     margin-right: 8px;
+    .searchBoxIcon;
 }
 
 #iconButtonWrapper {
@@ -48,4 +52,12 @@
 
 #boxInput {
     width: 100%;
+}
+
+#clearSearchButton {
+    padding: 0px;
+
+    &::shadow #icon {
+        .searchBoxIcon;
+    }
 }

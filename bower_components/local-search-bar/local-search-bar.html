@@ -12,6 +12,7 @@ Author: Alexander Otavka
 <link rel="import" href="../core-icon/core-icon.html" />
 <link rel="import" href="../core-icons/core-icons.html" />
 <link rel="import" href="../core-input/core-input.html" />
+<link rel="import" href="../core-media-query/core-media-query.html" />
 
 <polymer-element name="local-search-bar" constructor="LocalSearchBar"
                  attributes="search">
@@ -31,8 +32,12 @@ Author: Alexander Otavka
                         <paper-ripple fit></paper-ripple>
                     </div>
 
-                    <div id="boxInputWrapper" hidden flex>
-                        <input id="boxInput" is="core-input" />
+                    <div id="boxInputWrapper" hidden flex
+                         horizontal layout>
+                        <input id="boxInput" is="core-input" flex />
+                        <paper-icon-button id="clearSearchButton" icon="clear"
+                                           on-tap="{{clearInput}}">
+                        </paper-icon-button>
                     </div>
                 </div>
             </paper-shadow>
@@ -44,106 +49,10 @@ Author: Alexander Otavka
                                on-tap="{{setSearchMode}}">
             </paper-icon-button>
         </div>
+
+        <core-media-query query="max-width: 640px" queryMatches="{{mediaMobile}}">
+        </core-media-query>
     </template>
 
-    <script>
-        (function () {
-            var MEDIA_MOBILE = window.matchMedia("(max-width: 640px)");
-
-            var MODE_NULL = 0;
-            var MODE_SEARCH = 1;
-            var MODE_BUTTON = 2;
-            var MODE_BOX = 3;
-
-            var checkSizing = function (context) {
-                if (context.mode == MODE_SEARCH) {
-                    return;
-                } else if (MEDIA_MOBILE.matches) {
-                    context.setButtonMode();
-                } else {
-                    context.setBoxMode();
-                }
-            };
-
-            Polymer({
-                ready: function () {
-                    this.search = "";
-                    this.mode = MODE_NULL;
-
-                    /* Handle responsive design. */
-                    (function (context) {
-                        checkSizing(context);
-                        MEDIA_MOBILE.addListener(function () {
-                            checkSizing(context);
-                        });
-                    })(this);
-
-                    this.searchListener = (function (context) {
-                        return function (event) {
-                            context.search = context.$.boxInput.committedValue;
-                            context.fire("search-change");
-                        }
-                    })(this);
-                },
-
-                setButtonMode: function () {
-                    if (this.mode == MODE_BUTTON) {
-                        return;
-                    }
-                    this.mode = MODE_BUTTON;
-
-                    this.$.boxWrapper.setAttribute("hidden", "");
-                    this.$.iconButtonWrapper.removeAttribute("hidden");
-                },
-
-                setBoxMode: function () {
-                    if (this.mode == MODE_BOX) {
-                        return;
-                    }
-                    this.mode = MODE_BOX;
-
-                    this.$.iconButtonWrapper.setAttribute("hidden", "");
-                    this.$.boxWrapper.removeAttribute("hidden");
-                },
-
-                enableSearchMode: function () {
-                    if (this.mode == MODE_SEARCH) {
-                        return;
-                    }
-                    this.setBoxMode();
-                    this.mode = MODE_SEARCH;
-
-                    this.$.boxButtonWrapper.setAttribute("hidden", "");
-                    this.$.boxInputWrapper.removeAttribute("hidden");
-                    this.$.searchBox.setZ(0);
-
-                    this.$.boxInput.focus();
-                    this.$.boxInput.addEventListener("change", this.searchListener);
-
-                    this.fire("search-mode-enable");
-                },
-
-                disableSearchMode: function () {
-                    if (this.mode != MODE_SEARCH) {
-                        return;
-                    }
-
-                    this.$.boxInputWrapper.setAttribute("hidden", "");
-                    this.$.boxButtonWrapper.removeAttribute("hidden");
-                    this.$.searchBox.setZ(1);
-
-                    this.clearInput();
-                    this.$.boxInput.removeEventListener("change", this.searchListener);
-
-                    this.mode = MODE_NULL;
-                    checkSizing(this);
-                },
-
-                clearInput: function () {
-                    this.$.boxInput.value = "";
-                    this.$.boxInput.commit();
-                }
-            });
-        })();
-    </script>
+    <script type="application/javascript" src="local-search-bar.js"></script>
 </polymer-element>
