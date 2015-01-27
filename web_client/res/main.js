@@ -1,4 +1,6 @@
 /**
+ * main.js
+ *
  * Javascript for index.html.
  */
 
@@ -15,6 +17,8 @@ window.addEventListener("polymer-ready", function () {
     var searchBar = document.getElementById("searchBar");
     var searchBoxWrapper = document.querySelector("#searchBar").$.boxWrapper;
     var actionButtons = document.getElementById("actionButtons");
+    var refreshButton = document.getElementById("refreshButton");
+    var moreButton = document.getElementById("moreButton");
     var classroomManager = document.getElementById("classroomManager");
 
     /* Animation Declaration */
@@ -45,8 +49,8 @@ window.addEventListener("polymer-ready", function () {
         nav.target = document.getElementById("navWrapper");
         nav.fill = "forwards";
         var default_nav_keyframes = [{opacity: 0, left: "-15px"},
-                                     {opacity: 1, left: "0px"}],
-            reverse_nav_keyframes = [{left: "15px"},
+                                     {opacity: 1, left: "0px"}];
+        var reverse_nav_keyframes = [{left: "15px"},
                                      {left: "0px"}];
         nav.keyframes = default_nav_keyframes;
         anim.appendChild(nav);
@@ -148,8 +152,8 @@ window.addEventListener("polymer-ready", function () {
         fireMediaEvent(mediaMobile);
     });
     searchBar.addEventListener("search-change", function () {
-        console.log("search changed to '" + searchBar.search + "'");
         // NOTE: local-classroom-manager search will work as soon as classroom manager is implemented
+        console.log("search changed to '" + searchBar.search + "'");
         classroomManager.search = searchBar.search;
     });
 
@@ -162,4 +166,11 @@ window.addEventListener("polymer-ready", function () {
         navTitle.removeAttribute("hidden");
         fireMediaEvent(mediaMobile);
     });
+
+    /* Add click event listener for action buttons. */
+    refreshButton.addEventListener("click", classroomManager.load);
+    moreButton.addEventListener("click", function () {
+        // TODO: implement more button
+        console.log("more button pressed");
+    })
 });
