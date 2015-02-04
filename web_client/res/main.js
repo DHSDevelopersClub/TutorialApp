@@ -17,6 +17,7 @@ window.addEventListener("polymer-ready", function () {
     var searchBar = document.getElementById("searchBar");
     var searchBoxWrapper = document.querySelector("#searchBar").$.boxWrapper;
     var actionButtons = document.getElementById("actionButtons");
+    var actionButtonList = document.querySelectorAll("#actionButtons paper-icon-button");
     var refreshButton = document.getElementById("refreshButton");
     var moreButton = document.getElementById("moreButton");
     var classroomManager = document.getElementById("classroomManager");
@@ -100,8 +101,9 @@ window.addEventListener("polymer-ready", function () {
     /* Align the search bar based on media and search state. */
     mediaMobile.addEventListener("core-media-change", function () {
         var onMobile = mediaMobile.queryMatches;
+        var inSearchMode = (searchBar.mode === searchBar.MODE_SEARCH);
 
-        if (onMobile && (searchBar.mode === searchBar.MODE_SEARCH)) {
+        if (onMobile && inSearchMode) {
             actionButtons.setAttribute("hidden", "");
             navBackText.setAttribute("hidden", "");
             searchBoxWrapper.style.textAlign = "left";
@@ -109,6 +111,12 @@ window.addEventListener("polymer-ready", function () {
             actionButtons.removeAttribute("hidden");
             navBackText.removeAttribute("hidden");
             searchBoxWrapper.style.textAlign = "center";
+        }
+
+        if (!inSearchMode) {
+            for (var i = 0; i < actionButtonList.length; i++) {
+                actionButtonList[i].removeAttribute("hidden");
+            }
         }
 
         var oldNavWid;
@@ -127,6 +135,12 @@ window.addEventListener("polymer-ready", function () {
             var snapToWidth = function () {
                 navWrapper.style.width = widthMargin + "px";
                 actionButtons.style.width = widthMargin + "px";
+
+                if (searchBar.mode === searchBar.MODE_SEARCH) {
+                    for (var i = 0; i < actionButtonList.length; i++) {
+                        actionButtonList[i].setAttribute("hidden", "");
+                    }
+                }
             };
             if (oldABWid === oldNavWid) {
                 var oldWidth = oldNavWid;
