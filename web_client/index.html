@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!--Main page for web client.
+<!-- Main page for web client.
 
 Implement the action bar with search.  Use `history.pushState(...)` and
 `history.replaceState(...)` when the user is searching so the search state is
@@ -16,28 +16,63 @@ Author: Alexander Otavka
 
 <html>
     <head>
-        <meta charset='UTF-8'>
-        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Signed - Drake High School</title>
 
-        <script src='/res/components/webcomponentsjs/webcomponents.min.js'></script>
-        <link rel="import" href="res/components/polymer/polymer.html" >
+        <!-- Polymer setup. -->
+        <script src="/res/components/webcomponentsjs/webcomponents.min.js"></script>
+        <link rel="import" href="res/components/polymer/polymer.html" />
+
+        <!-- Third party scripts. -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
         <!-- Imports to third party components. -->
+        <link rel="import" href="/res/components/font-roboto/roboto.html" />
+        <link rel="import" href="/res/components/core-animation/core-animation.html" />
+        <link rel="import" href="/res/components/core-animation/core-animation-group.html" />
+        <link rel="import" href="/res/components/core-icons/core-icons.html" />
+        <link rel="import" href="/res/components/core-toolbar/core-toolbar.html" />
+        <link rel="import" href="/res/components/paper-icon-button/paper-icon-button.html" />
 
         <!-- Imports to local components at /res/components/local-*. -->
-        <link rel='import'
-              href='/res/components/local-classroom-manager/local-classroom-manager.html'>
-        <link rel='import'
-              href='/res/components/local-date-spinner/local-date-spinner.html'>
+        <link rel="import" href="/res/components/local-classroom-manager/local-classroom-manager.html" />
+        <link rel="import" href="/res/components/local-date-spinner/local-date-spinner.html" />
+        <link rel="import" href="/res/components/local-search-bar/local-search-bar.html" />
 
-        <link rel='stylesheet' type='text/css' href='/res/web_client/main.css'>
-
+        <!-- Local stylesheets and JavaScript. -->
+        <link rel="stylesheet" type="text/css" href="/res/web_client/main.css" shim-shadowdom />
     </head>
 
-    <body>
-        <h1>Signed</h1>
-        Drake Tutorial Signups
-        <local-date-spinner date="1999-10-07"></local-date-spinner>
+    <body unresolved fullbleed vertical layout>
+        <core-toolbar id="actionBar">
+            <div id="navWrapper" class="noselect">
+                <div id="navTitle" class="title">Signed</div>
+                <div id="navBack" horizontal center layout hidden="">
+                    <paper-icon-button id="backButton"
+                                       icon="arrow-back">
+                    </paper-icon-button>
+                    <div id="navBackText" class="title">Search</div>
+                </div>
+            </div>
+
+            <local-search-bar id="searchBar" flex></local-search-bar>
+
+            <div id="actionButtons" class="noselect">
+                <paper-icon-button id="refreshButton" icon="refresh"></paper-icon-button>
+                <paper-icon-button id="moreButton" icon="more-vert"></paper-icon-button>
+            </div>
+        </core-toolbar>
+
+        <div id="contentWrapper" vertical center layout>
+            <div id="contentArea" vertical layout>
+                <local-date-spinner date="2015-01-07"></local-date-spinner>
+                <local-classroom-manager id="classroomManager"></local-classroom-manager>
+            </div>
+        </div>
+
+        <core-media-query id="mediaMobile" query="max-width: 640px"></core-media-query>
+        <script type="text/javascript" src="/res/web_client/main.js"></script>
     </body>
 </html>

@@ -1,0 +1,58 @@
+<!-- Search bar element.
+
+Transitions between button and input states.
+
+Author: Alexander Otavka
+-->
+
+<link rel="import" href="../paper-input/paper-input.html" />
+<link rel="import" href="../paper-icon-button/paper-icon-button.html" />
+<link rel="import" href="../paper-ripple/paper-ripple.html" />
+<link rel="import" href="../paper-shadow/paper-shadow.html" />
+<link rel="import" href="../core-icon/core-icon.html" />
+<link rel="import" href="../core-icons/core-icons.html" />
+<link rel="import" href="../core-input/core-input.html" />
+<link rel="import" href="../core-media-query/core-media-query.html" />
+
+<polymer-element name="local-search-bar" constructor="LocalSearchBar"
+                 attributes="search">
+    <template>
+        <link rel="stylesheet" type="text/css" href="local-search-bar.css" />
+
+        <div id="boxWrapper">
+            <paper-shadow id="searchBox" z="1" animated
+                          on-tap="{{enableSearchMode}}">
+                <div horizontal layout>
+                    <core-icon id="boxIcon" class="noselect"
+                               icon="search">
+                    </core-icon>
+
+                    <div id="boxButtonWrapper" class="button" flex>
+                        <span>Search</span>
+                        <paper-ripple fit></paper-ripple>
+                    </div>
+
+                    <div id="boxInputWrapper" hidden flex
+                         horizontal layout>
+                        <input id="boxInput" is="core-input" flex />
+                        <paper-icon-button id="clearSearchButton" icon="clear"
+                                           on-tap="{{clearInput}}">
+                        </paper-icon-button>
+                    </div>
+                </div>
+            </paper-shadow>
+        </div>
+
+        <div id="iconButtonWrapper" class="noselect" hidden
+             on-tap="{{enableSearchMode}}">
+            <paper-icon-button id="iconButton" icon="search"
+                               on-tap="{{setSearchMode}}">
+            </paper-icon-button>
+        </div>
+
+        <core-media-query query="max-width: 640px" queryMatches="{{mediaMobile}}">
+        </core-media-query>
+    </template>
+
+    <script type="application/javascript" src="local-search-bar.js"></script>
+</polymer-element>

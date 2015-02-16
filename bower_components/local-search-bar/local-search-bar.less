@@ -1,0 +1,63 @@
+/** local-search-bar.less */
+
+.noselect {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+.button {
+    .noselect;
+    cursor: pointer;
+}
+
+.searchBoxIcon {
+    width: 16px;
+    height: 16px;
+}
+
+#boxWrapper {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+#searchBox {
+    display: inline-block;
+    position: relative;
+    width: 90%;
+    text-align: left;
+
+    font-weight: 300;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+#boxIcon {
+    margin-right: 8px;
+    .searchBoxIcon;
+}
+
+#iconButtonWrapper {
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+}
+
+#iconButton {
+    float: right;
+}
+
+#boxInput {
+    width: 100%;
+}
+
+#clearSearchButton {
+    padding: 0px;
+
+    &::shadow #icon {
+        .searchBoxIcon;
+    }
+}

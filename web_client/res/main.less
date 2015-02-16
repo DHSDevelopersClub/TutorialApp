@@ -1,5 +1,92 @@
 /**
- * Main stylesheet across pages, and for index.html.
- * 
- * Author: insert name here
+ * Main.less
  */
+
+@import url(http://fonts.googleapis.com/css?family=Roboto:300,400);
+@import "colors";
+@import "dimens";
+
+body {
+    font-family: "Roboto", sans-serif;
+    background: @color_window_bg;
+}
+
+.title {
+    font-weight: 300;
+}
+
+.noselect {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    cursor: default;
+}
+
+#actionBar {
+    background: @color_primary;
+}
+
+#navWrapper {
+    display: inline-block;
+    position: relative;
+}
+
+#contentArea {
+    max-width: @dimen_max_content_width;
+    width: 100%;
+
+    local-date-spinner::shadow #dateContainer {
+        color: @color_dark_grey;
+    }
+}
+
+#searchBar::shadow #searchBox {
+    background-color: @color_medium_grey;
+    padding: @dimen_padding_search;
+    max-width: @dimen_max_content_width;
+
+    paper-ripple {
+        color: @color_touch_accent;
+    }
+}
+
+#contentWrapper {
+    margin: @dimen_screen_vertical_margin @dimen_screen_horizontal_margin;
+
+    @media screen and (max-width: @threshold_mobile_width) {
+        margin: @dimen_mobile_screen_vertical_margin @dimen_mobile_screen_horizontal_margin;
+    }
+}
+
+#actionButtons {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: right;
+//    vertical-align: middle;
+    margin: 0px;
+    margin-right: 8px;
+
+    paper-icon-button {
+        margin: 2px 0px 0px 8px;
+    }
+}
+
+#navBackText {
+    margin-left: 8px;
+}
+
+#moreButton {
+//    float: right;
+//    margin: 8px 0px;
+//    height: 40px;
+}
+
+#refreshButton {
+//    float: right;
+//    margin: 8px 0px;
+//    height: 40px;
+}
