@@ -14,3 +14,6 @@ function Room(teacher, seats, roomNumber, profilePic) {
 
     };
 }
+
+var rm2 = new Room('Mrs. Foo', 30, 211, 'img.jpg');
+console.log(rm2);

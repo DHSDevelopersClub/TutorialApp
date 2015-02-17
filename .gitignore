@@ -56,3 +56,4 @@ target/
 # Vim swap files
 *.swp
 *.swo
+/.brackets.json
