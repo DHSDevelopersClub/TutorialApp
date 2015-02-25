@@ -2,6 +2,8 @@
  * app.js
  *
  * Javascript for app template in index.html.
+ *
+ * Author: Alexander Otavka
  */
 
 var app = document.querySelector("template#app");
