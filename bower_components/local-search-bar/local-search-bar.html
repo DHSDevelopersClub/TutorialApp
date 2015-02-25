@@ -34,7 +34,8 @@ Author: Alexander Otavka
 
                     <div id="boxInputWrapper" hidden flex
                          horizontal layout>
-                        <input id="boxInput" is="core-input" flex />
+                        <input id="boxInput" is="core-input" flex
+                               committedValue="{{search}}" />
                         <paper-icon-button id="clearSearchButton" icon="clear"
                                            on-tap="{{clearInput}}">
                         </paper-icon-button>
@@ -50,7 +51,8 @@ Author: Alexander Otavka
             </paper-icon-button>
         </div>
 
-        <core-media-query query="max-width: 640px" queryMatches="{{mediaMobile}}">
+        <core-media-query query="max-width: 640px"
+                          queryMatches="{{mediaMobile}}">
         </core-media-query>
     </template>
 

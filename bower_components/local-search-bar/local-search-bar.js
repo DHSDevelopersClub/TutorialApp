@@ -18,12 +18,12 @@
             this.mode = this.MODE_NULL;
             this.mediaMobile = null;
 
-            this.searchListener = (function (context) {
-                return function (event) {
-                    context.search = context.$.boxInput.committedValue;
-                    context.fire("search-change");
-                };
-            }(this));
+//            this.searchListener = (function (context) {
+//                return function (event) {
+//                    context.search = context.$.boxInput.committedValue;
+//                    context.fire("search-change");
+//                };
+//            }(this));
         },
 
         mediaMobileChanged: function (oldValue) {
@@ -68,8 +68,8 @@
             this.$.searchBox.setZ(0);
 
             this.$.boxInput.focus();
-            this.$.boxInput.addEventListener("change",
-                                             this.searchListener);
+//            this.$.boxInput.addEventListener("change",
+//                                             this.searchListener);
 
             this.fire("search-mode-enable");
         },
@@ -84,9 +84,10 @@
             this.$.boxButtonWrapper.removeAttribute("hidden");
             this.$.searchBox.setZ(1);
 
-            this.clearInput();
-            this.$.boxInput.removeEventListener("change",
-                                                this.searchListener);
+//            this.clearInput();
+//            this.$.boxInput.removeEventListener("change",
+//                                                this.searchListener);
+            this.search = "";
 
             this.mediaMobileChanged();
         },

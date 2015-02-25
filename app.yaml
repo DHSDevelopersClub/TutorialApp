@@ -20,7 +20,7 @@ handlers:
 
 # Web client resources
 - url: /res/web_client
-  static_dir: web_client/res
+  static_dir: web_client/static
 - url: /res/components
   static_dir: bower_components
 

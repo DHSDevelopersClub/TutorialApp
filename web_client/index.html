@@ -46,33 +46,51 @@ Author: Alexander Otavka
     </head>
 
     <body unresolved fullbleed vertical layout>
-        <core-toolbar id="actionBar">
-            <div id="navWrapper" class="noselect">
-                <div id="navTitle" class="title">Signed</div>
-                <div id="navBack" horizontal center layout hidden="">
-                    <paper-icon-button id="backButton"
-                                       icon="arrow-back">
+        <template id="app" is="auto-binding">
+            <core-toolbar id="actionBar">
+                <div id="navWrapper" class="noselect">
+                    <div id="navTitle" class="title">Signed</div>
+                    <div id="navBack" horizontal center layout hidden>
+                        <paper-icon-button id="backButton"
+                                           icon="arrow-back"
+                                           on-tap="{{disableSearchMode}}">
+                        </paper-icon-button>
+                        <div id="navBackText" class="title">Search</div>
+                    </div>
+                </div>
+
+                <local-search-bar id="searchBar" flex
+                                  search="{{search}}"
+                                  on-search-mode-enable="{{enableSearchMode}}">
+                </local-search-bar>
+
+                <div id="actionButtons" class="noselect">
+                    <paper-icon-button id="refreshButton" icon="refresh"
+                                       on-tap="{{refresh}}">
                     </paper-icon-button>
-                    <div id="navBackText" class="title">Search</div>
+                    <paper-icon-button id="moreButton" icon="more-vert"
+                                       on-tap="{{inflateMoreMenu}}">
+                    </paper-icon-button>
+                </div>
+            </core-toolbar>
+
+            <div id="contentWrapper" vertical center layout>
+                <div id="contentArea" vertical layout>
+                    <local-date-spinner date="{{date}}"></local-date-spinner>
+                    <local-classroom-manager id="classroomManager"
+                                             search="{{search}}"
+                                             date="{{date}}">
+                    </local-classroom-manager>
                 </div>
             </div>
 
-            <local-search-bar id="searchBar" flex></local-search-bar>
+            <core-media-query id="mediaMobile"
+                              query="max-width: 640px"
+                              queryMatches="{{mediaMobile}}"
+                              on-core-media-change="{{onMediaMobileChange}}">
+            </core-media-query>
+        </template>
 
-            <div id="actionButtons" class="noselect">
-                <paper-icon-button id="refreshButton" icon="refresh"></paper-icon-button>
-                <paper-icon-button id="moreButton" icon="more-vert"></paper-icon-button>
-            </div>
-        </core-toolbar>
-
-        <div id="contentWrapper" vertical center layout>
-            <div id="contentArea" vertical layout>
-                <local-date-spinner date="2015-01-07"></local-date-spinner>
-                <local-classroom-manager id="classroomManager"></local-classroom-manager>
-            </div>
-        </div>
-
-        <core-media-query id="mediaMobile" query="max-width: 640px"></core-media-query>
-        <script type="text/javascript" src="/res/web_client/main.js"></script>
+        <script type="text/javascript" src="/res/web_client/app.js"></script>
     </body>
 </html>
