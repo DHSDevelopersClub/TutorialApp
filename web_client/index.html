@@ -3,7 +3,8 @@
 
 Implement the action bar with search.  Use `history.pushState(...)` and
 `history.replaceState(...)` when the user is searching so the search state is
-always saved.  See `https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history`
+always saved.  See
+`https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history`
 and `https://developer.mozilla.org/en-US/docs/WindowEventHandlers.onpopstate`
 for more on history manipulation.
 
@@ -24,9 +25,6 @@ Author: Alexander Otavka
         <script src="/res/components/webcomponentsjs/webcomponents.min.js"></script>
         <link rel="import" href="res/components/polymer/polymer.html" />
 
-        <!-- Third party scripts. -->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-
         <!-- Imports to third party components. -->
         <link rel="import" href="/res/components/font-roboto/roboto.html" />
         <link rel="import" href="/res/components/core-animation/core-animation.html" />
@@ -36,7 +34,8 @@ Author: Alexander Otavka
         <link rel="import" href="/res/components/paper-icon-button/paper-icon-button.html" />
 
         <!-- Imports to local components at /res/components/local-*. -->
-        <link rel="import" href="/res/components/local-classroom-manager/local-classroom-manager.html" />
+        <link rel="import"
+              href="/res/components/local-classroom-manager/local-classroom-manager.html" />
         <link rel="import" href="/res/components/local-date-spinner/local-date-spinner.html" />
         <link rel="import" href="/res/components/local-search-bar/local-search-bar.html" />
 
@@ -50,16 +49,14 @@ Author: Alexander Otavka
                 <div id="navWrapper" class="noselect">
                     <div id="navTitle" class="title">Signed</div>
                     <div id="navBack" horizontal center layout hidden>
-                        <paper-icon-button id="backButton"
-                                           icon="arrow-back"
+                        <paper-icon-button id="backButton" icon="arrow-back"
                                            on-tap="{{disableSearchMode}}">
                         </paper-icon-button>
                         <div id="navBackText" class="title">Search</div>
                     </div>
                 </div>
 
-                <local-search-bar id="searchBar" flex
-                                  search="{{search}}"
+                <local-search-bar id="searchBar" flex search="{{search}}"
                                   on-search-mode-enable="{{enableSearchMode}}">
                 </local-search-bar>
 
