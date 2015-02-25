@@ -2,6 +2,9 @@
 
 Transitions between button and input states.
 
+Fires Custom Events:
+    local-search-mode-enable : When search mode is to be enabled.
+
 Author: Alexander Otavka
 -->
 
@@ -12,7 +15,7 @@ Author: Alexander Otavka
 <link rel="import" href="../core-icon/core-icon.html" />
 <link rel="import" href="../core-icons/core-icons.html" />
 <link rel="import" href="../core-input/core-input.html" />
-<link rel="import" href="../core-media-query/core-media-query.html" />
+<link rel="import" href="../local-media/local-media.html" />
 
 <polymer-element name="local-search-bar" constructor="LocalSearchBar"
                  attributes="search">
@@ -51,9 +54,7 @@ Author: Alexander Otavka
             </paper-icon-button>
         </div>
 
-        <core-media-query query="max-width: 640px"
-                          queryMatches="{{mediaMobile}}">
-        </core-media-query>
+        <local-media mediaIsMobile="{{mediaIsMobile}}"></local-media>
     </template>
 
     <script type="application/javascript" src="local-search-bar.js"></script>

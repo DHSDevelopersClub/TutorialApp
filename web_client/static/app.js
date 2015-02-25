@@ -7,6 +7,8 @@
  */
 
 var app = document.querySelector("template#app");
+app.search = "";
+app.date = "2015-01-07";
 
 app.addEventListener("template-bound", function () {
     "use strict";
@@ -78,16 +80,14 @@ app.addEventListener("template-bound", function () {
         return anim;
     }());
 
-    app.search = "";
-    app.date = "2015-01-07";
-
     app.onMediaMobileChange = function () {
         /* Align the search bar based on media and search state. */
 
-        var onMobile = app.$.mediaMobile.queryMatches;
-        var inSearchMode = (app.$.searchBar.mode === app.$.searchBar.MODE_SEARCH);
+        var inSearchMode = function () {
+            return (app.$.searchBar.mode === app.$.searchBar.MODE_SEARCH);
+        };
 
-        if (onMobile && inSearchMode) {
+        if (app.mediaIsMobile && inSearchMode()) {
             app.$.actionButtons.setAttribute("hidden", "");
             app.$.navBackText.setAttribute("hidden", "");
             app.$.searchBar.$.boxWrapper.style.textAlign = "left";
@@ -97,7 +97,7 @@ app.addEventListener("template-bound", function () {
             app.$.searchBar.$.boxWrapper.style.textAlign = "center";
         }
 
-        if (!inSearchMode) {
+        if (!inSearchMode()) {
             for (var i = 0; i < app.$.actionButtons.children.length; i++) {
                 app.$.actionButtons.children[i].removeAttribute("hidden");
             }
@@ -105,7 +105,7 @@ app.addEventListener("template-bound", function () {
 
         var oldNavWid;
         var oldABWid;
-        if (!onMobile) {
+        if (!app.mediaIsMobile) {
             oldNavWid = app.$.navWrapper.offsetWidth;
             oldABWid = app.$.actionButtons.offsetWidth;
         }
@@ -113,7 +113,7 @@ app.addEventListener("template-bound", function () {
         app.$.navWrapper.style.width = "auto";
         app.$.actionButtons.style.width = "auto";
 
-        if (!onMobile) {
+        if (!app.mediaIsMobile) {
             var widthMargin = Math.max(app.$.actionButtons.offsetWidth,
                                        app.$.navWrapper.offsetWidth) + 2;
             var snapToWidth = function () {

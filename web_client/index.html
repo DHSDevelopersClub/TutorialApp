@@ -38,6 +38,7 @@ Author: Alexander Otavka
               href="/res/components/local-classroom-manager/local-classroom-manager.html" />
         <link rel="import" href="/res/components/local-date-spinner/local-date-spinner.html" />
         <link rel="import" href="/res/components/local-search-bar/local-search-bar.html" />
+        <link rel="import" href="/res/components/local-media/local-media.html" />
 
         <!-- Local stylesheets and JavaScript. -->
         <link rel="stylesheet" type="text/css" href="/res/web_client/main.css" shim-shadowdom />
@@ -57,7 +58,7 @@ Author: Alexander Otavka
                 </div>
 
                 <local-search-bar id="searchBar" flex search="{{search}}"
-                                  on-search-mode-enable="{{enableSearchMode}}">
+                                  on-local-search-mode-enable="{{enableSearchMode}}">
                 </local-search-bar>
 
                 <div id="actionButtons" class="noselect">
@@ -80,11 +81,9 @@ Author: Alexander Otavka
                 </div>
             </div>
 
-            <core-media-query id="mediaMobile"
-                              query="max-width: 640px"
-                              queryMatches="{{mediaMobile}}"
-                              on-core-media-change="{{onMediaMobileChange}}">
-            </core-media-query>
+            <local-media mediaIsMobile="{{mediaIsMobile}}"
+                         on-local-media-mobile-change="{{onMediaMobileChange}}">
+            </local-media>
         </template>
 
         <script type="text/javascript" src="/res/web_client/app.js"></script>

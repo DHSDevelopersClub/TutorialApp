@@ -1,0 +1,31 @@
+<!-- Custom media query element to be shared across the app.
+
+Fires Custom Events:
+    local-media-mobile-change : When `mediaIsMobile` changes.
+
+Author: Alexander Otavka
+-->
+
+<link rel="import" href="../core-media-query/core-media-query.html" />
+
+<polymer-element name="local-media" attributes="mediaIsMobile">
+    <template>
+        <core-media-query id="mobile"
+                          query="max-width: 640px"
+                          queryMatches="{{mediaIsMobile}}">
+        </core-media-query>
+    </template>
+
+    <script type="application/javascript">
+        (function () {
+            "use strict";
+
+            Polymer({
+                mediaIsMobileChanged: function () {
+                    console.log(this.mediaIsMobile);
+                    this.fire("local-media-mobile-change")
+                },
+            });
+        })();
+    </script>
+</polymer-element>

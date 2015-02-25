@@ -16,7 +16,6 @@
 
             this.search = "";
             this.mode = this.MODE_NULL;
-            this.mediaMobile = null;
 
 //            this.searchListener = (function (context) {
 //                return function (event) {
@@ -26,10 +25,10 @@
 //            }(this));
         },
 
-        mediaMobileChanged: function (oldValue) {
+        mediaIsMobileChanged: function (oldValue) {
             if (this.mode === this.MODE_SEARCH) {
                 return;
-            } else if (this.mediaMobile) {
+            } else if (this.mediaIsMobile) {
                 this.setButtonMode();
             } else {
                 this.setBoxMode();
@@ -71,7 +70,7 @@
 //            this.$.boxInput.addEventListener("change",
 //                                             this.searchListener);
 
-            this.fire("search-mode-enable");
+            this.fire("local-search-mode-enable");
         },
 
         disableSearchMode: function () {
@@ -89,7 +88,7 @@
 //                                                this.searchListener);
             this.search = "";
 
-            this.mediaMobileChanged();
+            this.mediaIsMobileChanged();
         },
 
         clearInput: function () {
