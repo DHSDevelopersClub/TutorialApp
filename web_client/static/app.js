@@ -155,9 +155,16 @@ app.addEventListener("template-bound", function () {
         app.$.navTitle.removeAttribute("hidden");
         app.onMediaMobileChange();
     };
-    app.refresh = app.$.classroomManager.load;
+    app.refresh = function () {
+        app.$.classroomManager.load();
+    };
     app.inflateMoreMenu = function () {
         // TODO: implement more button
         console.log("more button pressed");
     };
+    app.signIn = function () {
+        signIn(false, app.refresh);
+    };
+
+    app.onMediaMobileChange();
 });

@@ -1,4 +1,4 @@
-<!--Use ajax to pull a list of classrooms and then display them.
+<!-- Use ajax to pull a list of classrooms and then display them.
 
 Has data bound published properties 'search' and 'date'.  Whenever they change,
 the `load()` function is called.  `load()` sends an ajax request to
@@ -11,5 +11,21 @@ shadow DOM via Polymer magic.  All of the styling of the data is handled
 within the `local-classroom-manager` element.
 
 Author: Max Starr
+Author: Alexander Otavka
 -->
 
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../local-classroom-card/local-classroom-card.html">
+
+<polymer-element name="local-classroom-manager" attributes="search date">
+    <template>
+        <template repeat="{{classroom in classrooms}}">
+            <local-classroom-card data="{{classroom}}"
+                                  on-local-signup="{{onSignup}}"
+                                  on-local-unsignup="{{onUnsignup}}">
+            </local-classroom-card>
+        </template>
+    </template>
+
+    <script src="local-classroom-manager.js"></script>
+</polymer-element>

@@ -1,0 +1,3 @@
+[submodule "bower_components/polymer-ui-card"]
+	path = bower_components/polymer-ui-card
+	url = https://github.com/PolymerLabs/polymer-ui-card.git

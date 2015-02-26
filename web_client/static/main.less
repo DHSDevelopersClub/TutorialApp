@@ -1,5 +1,5 @@
 /**
- * Main.less
+ * main.less
  *
  * Author: Alexander Otavka
  */
@@ -7,6 +7,7 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:300,400);
 @import "colors";
 @import "dimens";
+@import "../../bower_components/local-media/media";
 
 body {
     font-family: "Roboto", sans-serif;
@@ -33,6 +34,7 @@ body {
 #navWrapper {
     display: inline-block;
     position: relative;
+    margin-right: 0px;
 }
 
 #contentArea {
@@ -68,9 +70,7 @@ body {
     overflow: hidden;
     white-space: nowrap;
     text-align: right;
-//    vertical-align: middle;
-    margin: 0px;
-    margin-right: 8px;
+    margin-left: 0px;
 
     paper-icon-button {
         margin: 2px 0px 0px 8px;
@@ -81,14 +81,30 @@ body {
     margin-left: 8px;
 }
 
-#moreButton {
-//    float: right;
-//    margin: 8px 0px;
-//    height: 40px;
+#signIn {
+    font-weight: 300;
+    color: @color_dark_grey;
+    background: fade(@color_dark_grey, 10%);
+    margin: 0px;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
-#refreshButton {
-//    float: right;
-//    margin: 8px 0px;
-//    height: 40px;
+#navTitle {
+    margin-right: 8px;
+}
+
+#classroomManager::shadow local-classroom-card::shadow #button paper-button {
+    &.classroom-button-signup {
+        color: @color_primary;
+        background-color: darken(@color_window_bg, 5%);
+    }
+
+    &.classroom-button-signedup {
+        color: white;
+        background-color: @color_primary;
+    }
 }

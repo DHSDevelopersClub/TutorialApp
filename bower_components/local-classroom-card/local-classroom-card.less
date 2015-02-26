@@ -1,0 +1,42 @@
+/**
+ * local-classroom-card.less
+ */
+
+
+:host {
+    display: block;
+}
+
+#card {
+    display: block;
+    background-color: white;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    border-radius: 2px;
+    font-weight: 300;
+}
+
+#room {
+    font-size: 0.8rem;
+}
+
+#info {
+    padding-left: 16px;
+}
+
+#portrait {
+    display: inline-block;
+    height: 75px;
+}
+
+#button paper-button {
+    margin: 0 16px 0 16px;
+    width: 100px;
+    text-transform: none;
+    font-weight: 400;
+    font-size: 0.9rem;
+
+    &::shadow .button-content {
+        padding: 6px;
+    }
+}

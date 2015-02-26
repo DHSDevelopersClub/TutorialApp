@@ -31,16 +31,17 @@ Author: Alexander Otavka
         <link rel="import" href="/res/components/core-animation/core-animation-group.html" />
         <link rel="import" href="/res/components/core-icons/core-icons.html" />
         <link rel="import" href="/res/components/core-toolbar/core-toolbar.html" />
+        <link rel="import" href="/res/components/paper-button/paper-button.html" />
         <link rel="import" href="/res/components/paper-icon-button/paper-icon-button.html" />
 
         <!-- Imports to local components at /res/components/local-*. -->
         <link rel="import"
               href="/res/components/local-classroom-manager/local-classroom-manager.html" />
         <link rel="import" href="/res/components/local-date-spinner/local-date-spinner.html" />
-        <link rel="import" href="/res/components/local-search-bar/local-search-bar.html" />
         <link rel="import" href="/res/components/local-media/local-media.html" />
+        <link rel="import" href="/res/components/local-search-bar/local-search-bar.html" />
 
-        <!-- Local stylesheets and JavaScript. -->
+        <!-- Local stylesheets. -->
         <link rel="stylesheet" type="text/css" href="/res/web_client/main.css" shim-shadowdom />
     </head>
 
@@ -73,7 +74,13 @@ Author: Alexander Otavka
 
             <div id="contentWrapper" vertical center layout>
                 <div id="contentArea" vertical layout>
-                    <local-date-spinner date="{{date}}"></local-date-spinner>
+                    <div horizontal center layout>
+                        <local-date-spinner date="{{date}}" flex></local-date-spinner>
+                        <paper-button id="signIn"
+                                      on-tap="{{signIn}}">
+                            Sign In
+                        </paper-button>
+                    </div>
                     <local-classroom-manager id="classroomManager"
                                              search="{{search}}"
                                              date="{{date}}">
@@ -86,6 +93,8 @@ Author: Alexander Otavka
             </local-media>
         </template>
 
-        <script type="text/javascript" src="/res/web_client/app.js"></script>
+        <script src="/res/web_client/api-auth.js"></script>
+        <script src="/res/web_client/app.js"></script>
+        <script src="https://apis.google.com/js/client.js?onload=apiInit"></script>
     </body>
 </html>

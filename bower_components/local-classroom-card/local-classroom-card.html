@@ -1,0 +1,69 @@
+<!-- An individual classroom card.
+
+Events:
+    local-signup : When sign up button is pressed.  Contains `detail.classid` with the id of the
+                   classroom.
+    local-unsignup : When a signup is removed.  Contains `detail.classid` with the id of the
+                     classroom.
+
+Author: Alexander Otavka
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-shadow/paper-shadow.html">
+<link rel="import" href="../paper-button/paper-button.html">
+
+<polymer-element name="local-classroom-card" attributes="data">
+    <template>
+        <link rel="stylesheet" type="text/css" href="local-classroom-card.css" />
+
+        <paper-shadow id="card" z="1">
+            <div horizontal center layout>
+                <div id="portrait">
+                    <img src="{{data.profilepic}}" width="75" height="75" />
+                </div>
+                <div id="info" vertical layout flex>
+                    <div id="teacher">{{data.teacher}}</div>
+                    <div id="room">{{data.room}}</div>
+                </div>
+                <div id="remainingseats">{{data.remainingseats}}</div>
+                <div id="button">
+                    <template if="{{data.signedup}}">
+                        <paper-button class="classroom-button-signedup"
+                                      on-tap="{{unSignup}}"
+                                      raised>
+                            Signed Up
+                        </paper-button>
+                    </template>
+
+                    <template if="{{!data.signedup}}">
+                        <paper-button class="classroom-button-signup"
+                                      on-tap="{{signup}}"
+                                      raised>
+                            Sign Up
+                        </paper-button>
+                    </template>
+                </div>
+            </div>
+        </paper-shadow>
+    </template>
+
+    <script>
+        Polymer({
+            data: null,
+
+            signup: function() {
+                if (this.data.signedup === true) {
+                    return;
+                }
+                this.fire("local-signup", {classid: this.data.id});
+            },
+            unSignup: function() {
+                if (this.data.signedup === false) {
+                    return;
+                }
+                this.fire("local-unsignup", {classid: this.data.id});
+            },
+        });
+    </script>
+</polymer-element>
