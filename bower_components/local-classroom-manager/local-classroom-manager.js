@@ -165,6 +165,7 @@
             //    }
             //});
             var animate = Boolean(animate);
+            // TODO: implement reload animation
             this.classrooms = JSON.parse(FAKE_SERVER.getData(this.search, this.date)).classrooms;
 
             for (var i = 0; i < this.classrooms.length; i++) {
