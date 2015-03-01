@@ -15,10 +15,22 @@ Author: Alexander Otavka
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-animation/core-animation.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
 <link rel="import" href="../local-classroom-card/local-classroom-card.html">
 
 <polymer-element name="local-classroom-manager" attributes="search date">
     <template>
+        <style shim-shadowdom>
+            #loadingSpinnerWrapper {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 20%;
+                padding-top: 64px;
+            }
+        </style>
+
         <div id="container">
             <template repeat="{{classroom in classrooms}}">
                 <local-classroom-card data="{{classroom}}"
@@ -27,6 +39,22 @@ Author: Alexander Otavka
                 </local-classroom-card>
             </template>
         </div>
+
+        <div id="loadingSpinnerWrapper"
+             vertical center layout>
+            <paper-spinner id="loadingSpinner"></paper-spinner>
+        </div>
+
+        <core-animation id="contentAnimation" duration="200" fill="forwards">
+            <core-animation-keyframe>
+                <core-animation-prop name="opacity" value="1"></core-animation-prop>
+                <core-animation-prop name="margin-top" value="0px"></core-animation-prop>
+            </core-animation-keyframe>
+            <core-animation-keyframe>
+                <core-animation-prop name="opacity" value="0"></core-animation-prop>
+                <core-animation-prop name="margin-top" value="50px"></core-animation-prop>
+            </core-animation-keyframe>
+        </core-animation>
     </template>
 
     <script src="local-classroom-manager.js"></script>

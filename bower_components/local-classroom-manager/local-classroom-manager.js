@@ -86,7 +86,7 @@
             var data = JSON.stringify(this.data);
             setTimeout(function() {
                 callback(data);
-            }, 200);
+            }, 1000);
         },
         _changeEntry: function(classroom, signedup) {
             var signedup = Boolean(signedup);
@@ -123,7 +123,7 @@
 
             setTimeout(function() {
                 callback(classroom.signedup, status);
-            }, 200);
+            }, 1000);
         }
     }
 
@@ -159,13 +159,23 @@
             this.load(true);
         },
         load: function(animate) {
-            // TODO: implement reload animation
             var animate = Boolean(animate);
             var context = this;
+
+            var contentAnimation = this.$.contentAnimation;
+            contentAnimation.target = this.$.container;
+            if (animate) {
+                contentAnimation.direction = "normal";
+                contentAnimation.play();
+                this.$.loadingSpinner.active = true;
+            }
 
             sendGetRequest(this.search, this.date, function(response) {
                 context.classrooms = JSON.parse(response).classrooms;
                 context.updateClassroomCards();
+                contentAnimation.direction = "reverse";
+                contentAnimation.play();
+                context.$.loadingSpinner.active = false;
             });
         },
         updateClassroomCards: function() {

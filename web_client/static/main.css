@@ -15,6 +15,7 @@ body {
   font-family: "Roboto", sans-serif;
   background: #eeeeee;
   min-width: 300px;
+  overflow-y: scroll;
 }
 .title {
   font-weight: 300;
@@ -103,6 +104,9 @@ body {
 }
 #navTitle {
   margin-right: 8px;
+}
+#classroomManager::shadow #loadingSpinner::shadow .circle {
+  border-color: #4cb04f;
 }
 #classroomManager::shadow local-classroom-card::shadow #button #paperButton {
   color: #4cb04f;

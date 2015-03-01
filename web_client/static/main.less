@@ -13,6 +13,7 @@ body {
     font-family: "Roboto", sans-serif;
     background: @color_window_bg;
     min-width: @threshold_min_width;
+    overflow-y: scroll;
 }
 
 .title {
@@ -71,12 +72,16 @@ body {
 }
 
 #contentWrapper {
-    margin: @dimen_screen_vertical_margin + 64px @dimen_screen_horizontal_margin
-            @dimen_screen_vertical_margin @dimen_screen_horizontal_margin;
+    margin: @dimen_screen_vertical_margin + 64px
+            @dimen_screen_horizontal_margin
+            @dimen_screen_vertical_margin
+            @dimen_screen_horizontal_margin;
 
     @media screen and (max-width: @threshold_mobile_width) {
-        margin: @dimen_mobile_screen_vertical_margin + 64px @dimen_mobile_screen_horizontal_margin
-                @dimen_mobile_screen_vertical_margin @dimen_mobile_screen_horizontal_margin;
+        margin: @dimen_mobile_screen_vertical_margin + 64px
+                @dimen_mobile_screen_horizontal_margin
+                @dimen_mobile_screen_vertical_margin
+                @dimen_mobile_screen_horizontal_margin;
     }
 }
 
@@ -119,29 +124,35 @@ body {
     margin-right: 8px;
 }
 
-#classroomManager::shadow local-classroom-card::shadow #button {
-    #paperButton {
-        color: @color_primary;
-        background-color: @color_light_grey;
-
-        &.signedup {
-            color: white;
-            background-color: @color_primary;
-        }
+#classroomManager::shadow {
+    #loadingSpinner::shadow .circle {
+        border-color: @color_primary;
     }
 
-    #paperCheckbox::shadow {
-        #ink {
+    local-classroom-card::shadow #button {
+        #paperButton {
             color: @color_primary;
-        }
-
-        #checkbox {
-            border-color: @color_light_grey;
             background-color: @color_light_grey;
 
-            &.checked {
-                border-color: @color_primary;
+            &.signedup {
+                color: white;
                 background-color: @color_primary;
+            }
+        }
+
+        #paperCheckbox::shadow {
+            #ink {
+                color: @color_primary;
+            }
+
+            #checkbox {
+                border-color: @color_light_grey;
+                background-color: @color_light_grey;
+
+                &.checked {
+                    border-color: @color_primary;
+                    background-color: @color_primary;
+                }
             }
         }
     }
