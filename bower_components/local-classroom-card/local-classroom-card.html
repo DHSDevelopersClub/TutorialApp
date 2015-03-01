@@ -61,9 +61,19 @@ Author: Alexander Otavka
             </div>
         </paper-shadow>
 
-        <local-media mediaIsTiny="{{mediaIsTiny}}">
-        </local-media>
+        <local-media mediaIsTiny="{{mediaIsTiny}}"></local-media>
     </template>
 
-    <script src="local-classroom-card.js"></script>
+    <script>
+        Polymer({
+            toggleSignup: function() {
+                this.data.signedup = !this.data.signedup;
+                this.syncSignup();
+            },
+            syncSignup: function() {
+                this.fire(this.data.signedup ? "local-signup" : "local-unsignup",
+                          {classid: this.data.id});
+            },
+        });
+    </script>
 </polymer-element>
