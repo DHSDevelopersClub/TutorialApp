@@ -163,7 +163,10 @@ app.addEventListener("template-bound", function () {
         console.log("more button pressed");
     };
     app.signIn = function () {
-        signIn(false, app.refresh);
+        signIn(false, function() {
+            window.apiSignedIn = true;
+            app.refresh();
+        });
     };
 
     app.onMediaMobileChange();

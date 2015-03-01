@@ -6,15 +6,19 @@
  */
 
 // TODO: add client id and scopes
-var CLIENT_ID = null;
-var SCOPES = [];
-var API_ROOT = '//' + window.location.host + '/_ah/api';
+window.CLIENT_ID = null;
+window.SCOPES = [];
+window.API_ROOT = '//' + window.location.host + '/_ah/api';
+window.apiSignedIn = false;
 
 function apiInit() {
     var apisToLoad;
     var loadCallback = function() {
         if (--apisToLoad == 0) {
-            signIn(true, app.refresh);
+            signIn(true, function() {
+                window.apiSignedIn = true;
+                app.refresh();
+            });
         }
     };
 

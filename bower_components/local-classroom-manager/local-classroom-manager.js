@@ -109,11 +109,14 @@
 
     var FAKE_SERVER = {
         data: JSON.parse(FAKE_DATA),
-        getData: function(search, date) {
-            return JSON.stringify(this.data);
+        getData: function(search, date, callback) {
+            if (!window.apiSignedIn) return;
+            var data = JSON.stringify(this.data);
+            setTimeout(function() {
+                callback(data);
+            }, 200);
         },
-        postData: function(id, signedup, callback) {
-            var classroom = findClassroomById(this.data.classrooms, id);
+        _changeEntry: function(classroom, signedup) {
             var signedup = Boolean(signedup);
             var status;
             if (classroom.signedup !== signedup) {
@@ -131,13 +134,39 @@
             } else {
                 status = 1;
             }
+        },
+        postData: function(id, signedup, callback) {
+            if (!window.apiSignedIn) return;
+            var classroom = findClassroomById(this.data.classrooms, id);
+            this._changeEntry(classroom, signedup);
+
+            if (signedup) {
+                var previousSignedup = findClassroom(this.data.classrooms, function(classroom) {
+                    return classroom.signedup && (classroom.id !== id);
+                });
+                if (previousSignedup !== undefined) {
+                    this._changeEntry(previousSignedup, false);
+                }
+            }
+
             setTimeout(function() {
                 callback(classroom.signedup, status);
             }, 200);
         }
     }
 
-    var sendServerRequest = function(id, signedup, callback) {
+    var sendGetRequest = function(search, date, callback) {
+        // TODO: send an actual request to the server instead of using FAKE_DATA
+        //var request = gapi.client.oauth2.userinfo.get().execute(function(resp) {
+        //    if (!resp.code) {
+        //        // User is signed in, call my Endpoint
+        //        console.log("debug loading...");
+        //    }
+        //});
+        FAKE_SERVER.getData(search, date, callback);
+    }
+
+    var sendPostRequest = function(id, signedup, callback) {
         // TODO: send a real server request
         FAKE_SERVER.postData(id, signedup, callback);
     };
@@ -146,9 +175,10 @@
         classrooms: [],
         search: "",
         date: "",
-        fakeServer: FAKE_SERVER,
+        FAKE_SERVER: FAKE_SERVER,
 
-        ready: function() {
+        classroomsChanged: function() {
+            this.updateClassroomCards();
         },
         searchChanged: function(oldValue) {
             this.load(true);
@@ -157,17 +187,16 @@
             this.load(true);
         },
         load: function(animate) {
-            // TODO: send an actual request to the server instead of using FAKE_DATA
-            //var request = gapi.client.oauth2.userinfo.get().execute(function(resp) {
-            //    if (!resp.code) {
-            //        // User is signed in, call my Endpoint
-            //        console.log("debug loading...");
-            //    }
-            //});
-            var animate = Boolean(animate);
             // TODO: implement reload animation
-            this.classrooms = JSON.parse(FAKE_SERVER.getData(this.search, this.date)).classrooms;
+            var animate = Boolean(animate);
+            var context = this;
 
+            sendGetRequest(this.search, this.date, function(response) {
+                context.classrooms = JSON.parse(response).classrooms;
+                context.updateClassroomCards();
+            });
+        },
+        updateClassroomCards: function() {
             for (var i = 0; i < this.classrooms.length; i++) {
                 var remainingSeats = this.classrooms[i].totalseats - this.classrooms[i].takenseats;
                 if (remainingSeats === 0) {
@@ -178,37 +207,24 @@
                     this.classrooms[i].remainingseats = String(remainingSeats) + " seats remain";
                 }
             }
-
-            var classroomNodes = this.$.container.querySelectorAll("local-classroom-card");
-            for (var i = 0; i < classroomNodes.length; i++) {
-                classroomNodes[i].updateButton();
-            }
         },
         onSignup: function(event) {
-            findClassroomById(this.classrooms, event.detail.classid).signedup = true
-            sendServerRequest(event.detail.classid, true, function(signedup, status) {});
+            findClassroomById(this.classrooms, event.detail.classid).takenseats ++;
+            sendPostRequest(event.detail.classid, true, function(signedup, status) {});
 
             var previousSignedupClassroom = findClassroom(this.classrooms, function(classroom) {
                 return classroom.signedup && (classroom.id !== event.detail.classid);
             });
             if (previousSignedupClassroom !== undefined) {
                 previousSignedupClassroom.signedup = false;
-
-                var classroomNodes = this.$.container.querySelectorAll("local-classroom-card");
-                for (var i = 0; i < classroomNodes.length; i++) {
-                    if (classroomNodes[i].data.id === previousSignedupClassroom.id) {
-                        classroomNodes[i].updateButton();
-                        break;
-                    }
-                }
-
-                sendServerRequest(previousSignedupClassroom.id, false,
-                                  function(signedup, status) {});
+                previousSignedupClassroom.takenseats --;
             }
+            this.updateClassroomCards();
         },
         onUnsignup: function(event) {
-            findClassroomById(this.classrooms, event.detail.classid).signedup = false;
-            sendServerRequest(event.detail.classid, false, function(signedup, status) {});
+            findClassroomById(this.classrooms, event.detail.classid).takenseats --;
+            sendPostRequest(event.detail.classid, false, function(signedup, status) {});
+            this.updateClassroomCards();
         },
     });
 })();

@@ -46,6 +46,7 @@
   margin-right: 8px;
 }
 #button paper-checkbox {
+  margin: 0;
   margin-left: 16px;
 }
 #remainingseats {

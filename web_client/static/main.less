@@ -94,6 +94,7 @@ body {
     }
 
     @media screen and (max-width: @threshold_mobile_width) {
+        margin-left: 0;
         margin-right: 0;
     }
 }
@@ -105,7 +106,7 @@ body {
 #signIn {
     font-weight: 300;
     color: @color_dark_grey;
-    background: fade(@color_dark_grey, 10%);
+    background: @color_light_grey;
     margin: 0px;
     cursor: pointer;
 
@@ -121,7 +122,7 @@ body {
 #classroomManager::shadow local-classroom-card::shadow #button {
     #paperButton {
         color: @color_primary;
-        border: 2px solid @color_primary;
+        background-color: @color_light_grey;
 
         &.signedup {
             color: white;
@@ -135,9 +136,11 @@ body {
         }
 
         #checkbox {
-            border-color: @color_primary;
+            border-color: @color_light_grey;
+            background-color: @color_light_grey;
 
             &.checked {
+                border-color: @color_primary;
                 background-color: @color_primary;
             }
         }

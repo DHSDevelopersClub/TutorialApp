@@ -41,14 +41,8 @@ Date algorythem taken from http://en.wikipedia.org/wiki/Determination_of_the_day
                     c = parseInt(Y.toString().slice(0, 2));
                     d = parseInt(dateArr[2]);
                     m = MONTHS_NUM[parseInt(dateArr[1])-1];
-//                    console.log('Y: ' + Y);
-//                    console.log('y: ' + y);
-//                    console.log('c: ' + c);
-//                    console.log('d: ' + d);
-//                    console.log('m: ' + m);
                     dayNum = (d + (2.6 * m - 0.2) + y + (y / 4) + (c / 4) - 2 * c)%7;
                     dayStr = DAYS[Math.floor(dayNum)];
-//                    console.log(dayStr);
                     this.dayStr = dayStr;
                     this.month = MONTHS_STR[parseInt(dateArr[1])-1];
                     this.dayNum = d;

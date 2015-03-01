@@ -37,7 +37,9 @@ Author: Alexander Otavka
                 <div id="button">
                     <template if="{{!(!data.signedup && (data.takenseats == data.totalseats))}}">
                         <template if="{{!mediaIsTiny}}">
-                            <paper-button id="paperButton" on-tap="{{toggleSignup}}">
+                            <paper-button id="paperButton"
+                                          class="{{{signedup: data.signedup} | tokenList}}"
+                                          on-tap="{{toggleSignup}}">
                                 <template if="{{data.signedup}}">
                                     Signed Up
                                 </template>
@@ -50,7 +52,8 @@ Author: Alexander Otavka
 
                         <template if="{{mediaIsTiny}}">
                             <paper-checkbox id="paperCheckbox"
-                                            on-tap="{{toggleSignup}}">
+                                            checked="{{data.signedup}}"
+                                            on-tap="{{syncSignup}}">
                             </paper-checkbox>
                         </template>
                     </template>
@@ -58,8 +61,7 @@ Author: Alexander Otavka
             </div>
         </paper-shadow>
 
-        <local-media mediaIsTiny="{{mediaIsTiny}}"
-                     on-local-media-tiny-change="{{updateButton}}">
+        <local-media mediaIsTiny="{{mediaIsTiny}}">
         </local-media>
     </template>
 

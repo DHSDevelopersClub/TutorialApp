@@ -60,7 +60,7 @@ body {
   max-width: 752px;
 }
 #searchBar::shadow #searchBox paper-ripple {
-  color: rgba(170, 170, 170, 0.6);
+  color: rgba(221, 221, 221, 0.6);
 }
 #contentWrapper {
   margin: 96px 32px 32px 32px;
@@ -84,6 +84,7 @@ body {
 }
 @media screen and (max-width: 640px) {
   #actionButtons {
+    margin-left: 0;
     margin-right: 0;
   }
 }
@@ -93,7 +94,7 @@ body {
 #signIn {
   font-weight: 300;
   color: #333333;
-  background: rgba(51, 51, 51, 0.1);
+  background: #dddddd;
   margin: 0px;
   cursor: pointer;
 }
@@ -105,7 +106,7 @@ body {
 }
 #classroomManager::shadow local-classroom-card::shadow #button #paperButton {
   color: #4cb04f;
-  border: 2px solid #4cb04f;
+  background-color: #dddddd;
 }
 #classroomManager::shadow local-classroom-card::shadow #button #paperButton.signedup {
   color: white;
@@ -115,8 +116,10 @@ body {
   color: #4cb04f;
 }
 #classroomManager::shadow local-classroom-card::shadow #button #paperCheckbox::shadow #checkbox {
-  border-color: #4cb04f;
+  border-color: #dddddd;
+  background-color: #dddddd;
 }
 #classroomManager::shadow local-classroom-card::shadow #button #paperCheckbox::shadow #checkbox.checked {
+  border-color: #4cb04f;
   background-color: #4cb04f;
 }
