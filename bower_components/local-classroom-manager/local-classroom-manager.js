@@ -5,26 +5,8 @@
 (function () {
     "use strict";
 
-/*    function Room(teacher, seats, roomNumber, profilePic) {
-        this.teacher = teacher;
-        this.seats = seats;
-        this.roomNumber = roomNumber;
-        this.profilePic = profilePic;
-        this.signedUp = false;
-        this.seatsTaken = 0;
-        this.seatsLeft = this.seats - this.seatsTaken;
-        this.studensInClass = [];
-
-        this.signUp = function (firstName, lastName) {
-            this.studentsInClass[this.seatsTaken] = [firstName, lastName];
-            this.seatsTaken = this.seatsTaken + 1;
-        };
-    }
-
-    var rm2 = new Room('Mrs. Foo', 30, 211, 'img.jpg');
-    console.log(rm2);*/
-
-    Array.prototype.move = function (old_index, new_index) {
+    Array.prototype.move = function (item, new_index) {
+        var old_index = this.indexOf(item);
         if (new_index >= this.length) {
             var k = new_index - this.length;
             while ((k--) + 1) {
@@ -49,66 +31,64 @@
         });
     };
 
-    var FAKE_DATA = JSON.stringify({
-      "classrooms": [
-        {
-          "id": "a39hsefosFHSO4892",
-          "teacher": "Mr. Milstead",
-          "profilepic": "http://cache3.asset-cache.net/gc/57442583-portrait-of-a-school-teacher-" +
-                        "gettyimages.jpg?v=1&c=IWSAsset&k=2&d=Y3hy48kuiy7pabQpAfxaQrcgpfAMUuQ1Fc" +
-                        "wFl8J80Es%3D",
-          "room": "127",
-          "totalseats": 30,
-          "takenseats": 14,
-          "signedup": true
-        },
-        {
-          "id": "bh9hsefk23hrkO489",
-          "teacher": "Mrs. Foo",
-          "profilepic": "http://mcauliffe.dpsk12.org/wp-content/uploads/2011/09/StephanieGronhol" +
-                        "z_Retouch-square-crop.jpg",
-          "room": "222",
-          "totalseats": 28,
-          "takenseats": 28,
-          "signedup": false
-        },
-        {
-          "id": "Clghi4k23hrkO4892",
-          "teacher": "Mr. Bar",
-          "profilepic": "http://4.bp.blogspot.com/-sXyOdCbaVi4/UA7dYAwjUCI/AAAAAAAAFmI/tbO4vxpVH" +
-                        "S4/s220/nfowkes-square.jpg",
-          "room": "409",
-          "totalseats": 30,
-          "takenseats": 28,
-          "signedup": false
-        },
-        {
-          "id": "d8s4hOFH4h84HOf48",
-          "teacher": "Mrs. Wolfeschlegelsteinhausenbergerdorff",
-          "profilepic": "http://cache2.asset-cache.net/gc/dv1313056-portrait-of-a-mature-teacher" +
-                        "-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=jDI%2BiZbzwv%2BjFYTsYAzbzRIz392Wx" +
-                        "p0jHzYXiV6NO3k%3D",
-          "room": "413",
-          "totalseats": 18,
-          "takenseats": 17,
-          "signedup": false
-        },
-        {
-          "id": "ehHUE7e2BF2Hkkeuk",
-          "teacher": "Mrs. Example",
-          "profilepic": "http://cache4.asset-cache.net/gc/57442708-portrait-of-a-female-school-t" +
-                        "eacher-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=E5y3FqGCZA78hfJC8P3s3hrnAf5" +
-                        "0DBBxD1Fa1hqvjx8%3D",
-          "room": "104A",
-          "totalseats": 33,
-          "takenseats": 3,
-          "signedup": false
-        }
-      ]
-    });
-
     var FAKE_SERVER = {
-        data: JSON.parse(FAKE_DATA),
+        data: {
+          "classrooms": [
+            {
+              "id": "a39hsefosFHSO4892",
+              "teacher": "Mr. Milstead",
+              "profilepic": "http://cache3.asset-cache.net/gc/57442583-portrait-of-a-school-teacher-" +
+                            "gettyimages.jpg?v=1&c=IWSAsset&k=2&d=Y3hy48kuiy7pabQpAfxaQrcgpfAMUuQ1Fc" +
+                            "wFl8J80Es%3D",
+              "room": "127",
+              "totalseats": 30,
+              "takenseats": 14,
+              "signedup": true
+            },
+            {
+              "id": "bh9hsefk23hrkO489",
+              "teacher": "Mrs. Foo",
+              "profilepic": "http://mcauliffe.dpsk12.org/wp-content/uploads/2011/09/StephanieGronhol" +
+                            "z_Retouch-square-crop.jpg",
+              "room": "222",
+              "totalseats": 28,
+              "takenseats": 28,
+              "signedup": false
+            },
+            {
+              "id": "Clghi4k23hrkO4892",
+              "teacher": "Mr. Bar",
+              "profilepic": "http://4.bp.blogspot.com/-sXyOdCbaVi4/UA7dYAwjUCI/AAAAAAAAFmI/tbO4vxpVH" +
+                            "S4/s220/nfowkes-square.jpg",
+              "room": "409",
+              "totalseats": 30,
+              "takenseats": 28,
+              "signedup": false
+            },
+            {
+              "id": "d8s4hOFH4h84HOf48",
+              "teacher": "Mrs. Wolfeschlegelsteinhausenbergerdorff",
+              "profilepic": "http://cache2.asset-cache.net/gc/dv1313056-portrait-of-a-mature-teacher" +
+                            "-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=jDI%2BiZbzwv%2BjFYTsYAzbzRIz392Wx" +
+                            "p0jHzYXiV6NO3k%3D",
+              "room": "413",
+              "totalseats": 18,
+              "takenseats": 17,
+              "signedup": false
+            },
+            {
+              "id": "ehHUE7e2BF2Hkkeuk",
+              "teacher": "Mrs. Example",
+              "profilepic": "http://cache4.asset-cache.net/gc/57442708-portrait-of-a-female-school-t" +
+                            "eacher-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=E5y3FqGCZA78hfJC8P3s3hrnAf5" +
+                            "0DBBxD1Fa1hqvjx8%3D",
+              "room": "104A",
+              "totalseats": 33,
+              "takenseats": 3,
+              "signedup": false
+            }
+          ]
+        },
         getData: function(search, date, callback) {
             if (!window.apiSignedIn) return;
             var data = JSON.stringify(this.data);
@@ -123,7 +103,7 @@
                 classroom.takenseats += signedup ? 1 : -1;
                 if (classroom.takenseats <= classroom.totalseats) {
                     if (signedup) {
-                        this.data.classrooms.move(this.data.classrooms.indexOf(classroom), 0);
+                        this.data.classrooms.move(classroom, 0);
                     }
                     classroom.signedup = signedup;
                     status = 0;
