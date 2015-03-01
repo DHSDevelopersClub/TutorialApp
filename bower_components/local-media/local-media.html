@@ -9,11 +9,16 @@ Author: Alexander Otavka
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../core-media-query/core-media-query.html" />
 
-<polymer-element name="local-media" attributes="mediaIsMobile">
+<polymer-element name="local-media" attributes="mediaIsMobile mediaIsTiny">
     <template>
         <core-media-query id="mobile"
                           query="max-width: 640px"
                           queryMatches="{{mediaIsMobile}}">
+        </core-media-query>
+
+        <core-media-query id="tiny"
+                          query="max-width: 360px"
+                          queryMatches="{{mediaIsTiny}}">
         </core-media-query>
     </template>
 
@@ -23,7 +28,10 @@ Author: Alexander Otavka
 
             Polymer({
                 mediaIsMobileChanged: function () {
-                    this.fire("local-media-mobile-change")
+                    this.fire("local-media-mobile-change");
+                },
+                mediaIsTinyChanged: function () {
+                    this.fire("local-media-tiny-change");
                 },
             });
         })();

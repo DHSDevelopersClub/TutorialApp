@@ -12,6 +12,7 @@
 body {
     font-family: "Roboto", sans-serif;
     background: @color_window_bg;
+    min-width: @threshold_min_width;
 }
 
 .title {
@@ -28,13 +29,26 @@ body {
 }
 
 #actionBar {
-    background: @color_primary;
+    position: fixed;
+    left: 0;
+    right: 0;
+    min-width: @threshold_min_width;
+    z-index: 500;
+
+    core-toolbar {
+        background: @color_primary;
+    }
 }
 
 #navWrapper {
     display: inline-block;
     position: relative;
-    margin-right: 0px;
+    margin: 0;
+    margin-left: 24px;
+
+    @media screen and (max-width: @threshold_mobile_width) {
+        margin-left: 8px;
+    }
 }
 
 #contentArea {
@@ -49,7 +63,7 @@ body {
 #searchBar::shadow #searchBox {
     background-color: @color_medium_grey;
     padding: @dimen_padding_search;
-    max-width: @dimen_max_content_width;
+    max-width: @dimen_max_content_width - (2 * @dimen_padding_search);
 
     paper-ripple {
         color: @color_touch_accent;
@@ -57,10 +71,12 @@ body {
 }
 
 #contentWrapper {
-    margin: @dimen_screen_vertical_margin @dimen_screen_horizontal_margin;
+    margin: @dimen_screen_vertical_margin + 64px @dimen_screen_horizontal_margin
+            @dimen_screen_vertical_margin @dimen_screen_horizontal_margin;
 
     @media screen and (max-width: @threshold_mobile_width) {
-        margin: @dimen_mobile_screen_vertical_margin @dimen_mobile_screen_horizontal_margin;
+        margin: @dimen_mobile_screen_vertical_margin + 64px @dimen_mobile_screen_horizontal_margin
+                @dimen_mobile_screen_vertical_margin @dimen_mobile_screen_horizontal_margin;
     }
 }
 
@@ -70,10 +86,15 @@ body {
     overflow: hidden;
     white-space: nowrap;
     text-align: right;
-    margin-left: 0px;
+    margin-left: 8px;
+    margin-right: 16px;
 
     paper-icon-button {
         margin: 2px 0px 0px 8px;
+    }
+
+    @media screen and (max-width: @threshold_mobile_width) {
+        margin-right: 0;
     }
 }
 
@@ -97,14 +118,28 @@ body {
     margin-right: 8px;
 }
 
-#classroomManager::shadow local-classroom-card::shadow #button paper-button {
-    &.classroom-button-signup {
+#classroomManager::shadow local-classroom-card::shadow #button {
+    #paperButton {
         color: @color_primary;
-        background-color: darken(@color_window_bg, 5%);
+        border: 2px solid @color_primary;
+
+        &.signedup {
+            color: white;
+            background-color: @color_primary;
+        }
     }
 
-    &.classroom-button-signedup {
-        color: white;
-        background-color: @color_primary;
+    #paperCheckbox::shadow {
+        #ink {
+            color: @color_primary;
+        }
+
+        #checkbox {
+            border-color: @color_primary;
+
+            &.checked {
+                background-color: @color_primary;
+            }
+        }
     }
 }

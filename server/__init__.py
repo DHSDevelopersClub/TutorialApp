@@ -64,7 +64,8 @@ date.
 
     Respond with the new signup state.  If there was an error, eg. the class
     was full or the class doesn't exist anymore, then the state should reflect
-    that, and an error message can be included along with a status code.
+    that, and a status code should be included.  If they are already signed up,
+    return status 1.
         ---------------------------------------------
         200 OK
         Date:  Mon, 05 Jan 2015 02:43:57 GMT
@@ -74,10 +75,9 @@ date.
         {
           "signup": true,
           "status": 1,
-          "message": "You are already signed up."
         }
         ---------------------------------------------
-    If the class is full, say so.
+    If the class is full, return status 2.
         ---------------------------------------------
         200 OK
         Date:  Mon, 05 Jan 2015 02:43:57 GMT
@@ -90,7 +90,7 @@ date.
           "message": "Failed to sign up: class is full."
         }
         ---------------------------------------------
-    If everything is perfect, message should be blank.
+    If everything is perfect, return status 0.
         ---------------------------------------------
         200 OK
         Date:  Mon, 05 Jan 2015 02:43:57 GMT
@@ -116,7 +116,7 @@ import endpoints
 from protorpc import remote
 
 
-@endpoints.api(name='dhstutorialsignup', version='v1')
+@endpoints.api(name='tutorialsignup', version='v1')
 class TutorialSignupAPI(remote.Service):
     '''Mediates between client and datastore.'''
     pass

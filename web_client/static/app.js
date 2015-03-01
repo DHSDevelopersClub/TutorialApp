@@ -156,7 +156,7 @@ app.addEventListener("template-bound", function () {
         app.onMediaMobileChange();
     };
     app.refresh = function () {
-        app.$.classroomManager.load();
+        app.$.classroomManager.load(true);
     };
     app.inflateMoreMenu = function () {
         // TODO: implement more button

@@ -10,8 +10,10 @@ Author: Alexander Otavka
 -->
 
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../paper-shadow/paper-shadow.html">
 <link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../paper-shadow/paper-shadow.html">
+<link rel="import" href="../local-media/local-media.html">
 
 <polymer-element name="local-classroom-card" attributes="data">
     <template>
@@ -22,48 +24,44 @@ Author: Alexander Otavka
                 <div id="portrait">
                     <img src="{{data.profilepic}}" width="75" height="75" />
                 </div>
+
                 <div id="info" vertical layout flex>
                     <div id="teacher">{{data.teacher}}</div>
                     <div id="room">{{data.room}}</div>
                 </div>
-                <div id="remainingseats">{{data.remainingseats}}</div>
-                <div id="button">
-                    <template if="{{data.signedup}}">
-                        <paper-button class="classroom-button-signedup"
-                                      on-tap="{{unSignup}}"
-                                      raised>
-                            Signed Up
-                        </paper-button>
-                    </template>
 
-                    <template if="{{!data.signedup}}">
-                        <paper-button class="classroom-button-signup"
-                                      on-tap="{{signup}}"
-                                      raised>
-                            Sign Up
-                        </paper-button>
+                <template if="{{!data.signedup && !mediaIsTiny}}">
+                    <div id="remainingseats">{{data.remainingseats}}</div>
+                </template>
+
+                <div id="button">
+                    <template if="{{!(!data.signedup && (data.takenseats == data.totalseats))}}">
+                        <template if="{{!mediaIsTiny}}">
+                            <paper-button id="paperButton" on-tap="{{toggleSignup}}">
+                                <template if="{{data.signedup}}">
+                                    Signed Up
+                                </template>
+
+                                <template if="{{!data.signedup}}">
+                                    Sign Up
+                                </template>
+                            </paper-button>
+                        </template>
+
+                        <template if="{{mediaIsTiny}}">
+                            <paper-checkbox id="paperCheckbox"
+                                            on-tap="{{toggleSignup}}">
+                            </paper-checkbox>
+                        </template>
                     </template>
                 </div>
             </div>
         </paper-shadow>
+
+        <local-media mediaIsTiny="{{mediaIsTiny}}"
+                     on-local-media-tiny-change="{{updateButton}}">
+        </local-media>
     </template>
 
-    <script>
-        Polymer({
-            data: null,
-
-            signup: function() {
-                if (this.data.signedup === true) {
-                    return;
-                }
-                this.fire("local-signup", {classid: this.data.id});
-            },
-            unSignup: function() {
-                if (this.data.signedup === false) {
-                    return;
-                }
-                this.fire("local-unsignup", {classid: this.data.id});
-            },
-        });
-    </script>
+    <script src="local-classroom-card.js"></script>
 </polymer-element>

@@ -19,12 +19,14 @@ Author: Alexander Otavka
 
 <polymer-element name="local-classroom-manager" attributes="search date">
     <template>
-        <template repeat="{{classroom in classrooms}}">
-            <local-classroom-card data="{{classroom}}"
-                                  on-local-signup="{{onSignup}}"
-                                  on-local-unsignup="{{onUnsignup}}">
-            </local-classroom-card>
-        </template>
+        <div id="container">
+            <template repeat="{{classroom in classrooms}}">
+                <local-classroom-card data="{{classroom}}"
+                                      on-local-signup="{{onSignup}}"
+                                      on-local-unsignup="{{onUnsignup}}">
+                </local-classroom-card>
+            </template>
+        </div>
     </template>
 
     <script src="local-classroom-manager.js"></script>
