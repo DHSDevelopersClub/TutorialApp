@@ -23,7 +23,7 @@ app.addEventListener("template-bound", function () {
         anim.duration = 200;
 
         var bg = new CoreAnimation();
-        bg.target = app.$.actionBar;
+        bg.target = app.$.actionBarToolbar;
         bg.fill = "forwards";
         bg.keyframes = [{backgroundColor: green},
                         {backgroundColor: grey}];
@@ -41,8 +41,8 @@ app.addEventListener("template-bound", function () {
         nav.fill = "forwards";
         var default_nav_keyframes = [{opacity: 0, left: "-15px"},
                                      {opacity: 1, left: "0px"}];
-        var reverse_nav_keyframes = [{left: "15px"},
-                                     {left: "0px"}];
+        var reverse_nav_keyframes = [{opacity: 0, left: "15px"},
+                                     {opacity: 1, left: "0px"}];
         nav.keyframes = default_nav_keyframes;
         anim.appendChild(nav);
 
@@ -157,10 +157,6 @@ app.addEventListener("template-bound", function () {
     };
     app.refresh = function () {
         app.$.classroomManager.load(true);
-    };
-    app.inflateMoreMenu = function () {
-        // TODO: implement more button
-        console.log("more button pressed");
     };
     app.signIn = function () {
         signIn(false, function() {

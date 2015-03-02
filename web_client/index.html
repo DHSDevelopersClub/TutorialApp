@@ -30,9 +30,13 @@ Author: Alexander Otavka
         <link rel="import" href="/res/components/core-animation/core-animation.html" />
         <link rel="import" href="/res/components/core-animation/core-animation-group.html" />
         <link rel="import" href="/res/components/core-icons/core-icons.html" />
+        <link rel="import" href="/res/components/core-menu/core-menu.html" />
         <link rel="import" href="/res/components/core-toolbar/core-toolbar.html" />
         <link rel="import" href="/res/components/paper-button/paper-button.html" />
+        <link rel="import" href="/res/components/paper-dropdown/paper-dropdown.html" />
         <link rel="import" href="/res/components/paper-icon-button/paper-icon-button.html" />
+        <link rel="import" href="/res/components/paper-item/paper-item.html" />
+        <link rel="import" href="/res/components/paper-menu-button/paper-menu-button.html" />
         <link rel="import" href="/res/components/paper-shadow/paper-shadow.html" />
 
         <!-- Imports to local components at /res/components/local-*. -->
@@ -49,7 +53,7 @@ Author: Alexander Otavka
     <body unresolved fullbleed vertical layout>
         <template id="app" is="auto-binding">
             <paper-shadow id="actionBar" z="1">
-                <core-toolbar>
+                <core-toolbar id="actionBarToolbar">
                     <div id="navWrapper" class="noselect">
                         <div id="navTitle" class="title">Signed</div>
                         <div id="navBack" horizontal center layout hidden>
@@ -69,9 +73,16 @@ Author: Alexander Otavka
                         <paper-icon-button id="refreshButton" icon="refresh"
                                            on-tap="{{refresh}}">
                         </paper-icon-button>
-                        <paper-icon-button id="moreButton" icon="more-vert"
-                                           on-tap="{{inflateMoreMenu}}">
-                        </paper-icon-button>
+                        <paper-menu-button>
+                            <paper-icon-button id="moreButton"
+                                               icon="more-vert">
+                            </paper-icon-button>
+                            <paper-dropdown id="moreMenu" class="dropdown" halign="right"
+                                            transition>
+                                    <paper-item>About &amp; Feedback</paper-item>
+                                    <paper-item>Settings</paper-item>
+                            </paper-dropdown>
+                        </paper-menu-button>
                     </div>
                 </core-toolbar>
             </paper-shadow>

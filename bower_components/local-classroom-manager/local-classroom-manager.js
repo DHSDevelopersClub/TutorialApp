@@ -168,14 +168,18 @@
                 contentAnimation.direction = "normal";
                 contentAnimation.play();
                 this.$.loadingSpinner.active = true;
+                this.$.loadingSpinner.removeAttribute("hidden");
             }
 
             sendGetRequest(this.search, this.date, function(response) {
                 context.classrooms = JSON.parse(response).classrooms;
                 context.updateClassroomCards();
-                contentAnimation.direction = "reverse";
-                contentAnimation.play();
-                context.$.loadingSpinner.active = false;
+                if (animate) {
+                    contentAnimation.direction = "reverse";
+                    contentAnimation.play();
+                    context.$.loadingSpinner.active = false;
+                    context.$.loadingSpinner.setAttribute("hidden", "");
+                }
             });
         },
         updateClassroomCards: function() {

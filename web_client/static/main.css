@@ -74,7 +74,6 @@ body {
 #actionButtons {
   display: inline-block;
   position: relative;
-  overflow: hidden;
   white-space: nowrap;
   text-align: right;
   margin-left: 8px;
@@ -126,4 +125,10 @@ body {
 #classroomManager::shadow local-classroom-card::shadow #button #paperCheckbox::shadow #checkbox.checked {
   border-color: #4cb04f;
   background-color: #4cb04f;
+}
+#moreMenu {
+  border-radius: 3px;
+}
+#moreMenu paper-item {
+  font-weight: 300;
 }
