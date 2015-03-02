@@ -25,7 +25,7 @@ It can respond to a GET request with the classes available on a certain date.
         {
           "classrooms": [
             {
-              "id": "239hsefosFHSO4892",
+              "dsid": "239hsefosFHSO4892",
               "teacher": "Mr. Milstead",
               "profilepic": "http://www.example.com/rmilstead.png",
               "room": "127",
@@ -34,7 +34,7 @@ It can respond to a GET request with the classes available on a certain date.
               "signedup": false
             },
             {
-              "id": "shHUE7e2BF2Hkkeuk",
+              "dsid": "shHUE7e2BF2Hkkeuk",
               "teacher": "Mrs. Example",
               "profilepic": "http://www.example.com/mexample.png",
               "room": "104A",
@@ -57,7 +57,7 @@ date.
         More-Headers:  etc...
 
         {
-          "id": "239hsefosFHSO4892",
+          "dsid": "239hsefosFHSO4892",
           "signup": true
         }
         ---------------------------------------------
@@ -109,12 +109,27 @@ date.
         2: Class Full
     Additional codes can be added as needed.
 '''
-__author__ = 'insert name here'
+__author__ = 'Alexander Otavka', 'Sebastian Boyd'
 
 
 import endpoints
 from protorpc import remote
+from google.appengine.ext import ndb
 
+from libs.endpoints_proto_datastore.ndb import EndpointsModel
+
+
+class Classroom(ndb.Model):
+    """An individual classroom on a specific date."""
+    teacher = ndb.UserProperty()
+    profilepic = ndb.StringProperty()
+    room = ndb.StringProperty()
+    totalseats = ndb.IntegerProperty()
+    takenseats = ndb.IntegerProperty(default=0)
+    signedup = ndb.BooleanProperty(default=False)
+
+class ClassroomCollection(EndpointsModel):
+    classrooms = ndb.StructuredProperty(Classroom)
 
 @endpoints.api(name='tutorialsignup', version='v1')
 class TutorialSignupAPI(remote.Service):

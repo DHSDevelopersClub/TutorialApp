@@ -25,9 +25,9 @@
         }
     };
 
-    var findClassroomById = function(classrooms, id) {
+    var findClassroomById = function(classrooms, dsid) {
         return findClassroom(classrooms, function(classroom) {
-            return classroom.id === id
+            return classroom.dsid === dsid
         });
     };
 
@@ -35,7 +35,7 @@
         data: {
           "classrooms": [
             {
-              "id": "a39hsefosFHSO4892",
+              "dsid": "a39hsefosFHSO4892",
               "teacher": "Mr. Milstead",
               "profilepic": "http://cache3.asset-cache.net/gc/57442583-portrait-of-a-school-teacher-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=Y3hy48kuiy7pabQpAfxaQrcgpfAMUuQ1FcwFl8J80Es%3D",
               "room": "127",
@@ -44,7 +44,7 @@
               "signedup": true
             },
             {
-              "id": "bh9hsefk23hrkO489",
+              "dsid": "bh9hsefk23hrkO489",
               "teacher": "Mrs. Foo",
               "profilepic": "http://mcauliffe.dpsk12.org/wp-content/uploads/2011/09/StephanieGronholz_Retouch-square-crop.jpg",
               "room": "222",
@@ -53,7 +53,7 @@
               "signedup": false
             },
             {
-              "id": "Clghi4k23hrkO4892",
+              "dsid": "Clghi4k23hrkO4892",
               "teacher": "Mr. Bar",
               "profilepic": "http://4.bp.blogspot.com/-sXyOdCbaVi4/UA7dYAwjUCI/AAAAAAAAFmI/tbO4vxpVHS4/s220/nfowkes-square.jpg",
               "room": "409",
@@ -62,7 +62,7 @@
               "signedup": false
             },
             {
-              "id": "d8s4hOFH4h84HOf48",
+              "dsid": "d8s4hOFH4h84HOf48",
               "teacher": "Mrs. Wolfeschlegelsteinhausenbergerdorff",
               "profilepic": "http://cache2.asset-cache.net/gc/dv1313056-portrait-of-a-mature-teacher-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=jDI%2BiZbzwv%2BjFYTsYAzbzRIz392Wxp0jHzYXiV6NO3k%3D",
               "room": "413",
@@ -71,7 +71,7 @@
               "signedup": false
             },
             {
-              "id": "ehHUE7e2BF2Hkkeuk",
+              "dsid": "ehHUE7e2BF2Hkkeuk",
               "teacher": "Mrs. Example",
               "profilepic": "http://cache4.asset-cache.net/gc/57442708-portrait-of-a-female-school-teacher-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=E5y3FqGCZA78hfJC8P3s3hrnAf50DBBxD1Fa1hqvjx8%3D",
               "room": "104A",
@@ -107,14 +107,14 @@
                 status = 1;
             }
         },
-        postData: function(id, signedup, callback) {
+        postData: function(dsid, signedup, callback) {
             if (!window.apiSignedIn) return;
-            var classroom = findClassroomById(this.data.classrooms, id);
+            var classroom = findClassroomById(this.data.classrooms, dsid);
             this._changeEntry(classroom, signedup);
 
             if (signedup) {
                 var previousSignedup = findClassroom(this.data.classrooms, function(classroom) {
-                    return classroom.signedup && (classroom.id !== id);
+                    return classroom.signedup && (classroom.dsid !== dsid);
                 });
                 if (previousSignedup !== undefined) {
                     this._changeEntry(previousSignedup, false);
@@ -138,9 +138,9 @@
         FAKE_SERVER.getData(search, date, callback);
     }
 
-    var sendPostRequest = function(id, signedup, callback) {
+    var sendPostRequest = function(dsid, signedup, callback) {
         // TODO: send a real server request
-        FAKE_SERVER.postData(id, signedup, callback);
+        FAKE_SERVER.postData(dsid, signedup, callback);
     };
 
     Polymer({
@@ -195,11 +195,11 @@
             }
         },
         onSignup: function(event) {
-            findClassroomById(this.classrooms, event.detail.classid).takenseats ++;
-            sendPostRequest(event.detail.classid, true, function(signedup, status) {});
+            findClassroomById(this.classrooms, event.detail.dsid).takenseats ++;
+            sendPostRequest(event.detail.dsid, true, function(signedup, status) {});
 
             var previousSignedupClassroom = findClassroom(this.classrooms, function(classroom) {
-                return classroom.signedup && (classroom.id !== event.detail.classid);
+                return classroom.signedup && (classroom.dsid !== event.detail.dsid);
             });
             if (previousSignedupClassroom !== undefined) {
                 previousSignedupClassroom.signedup = false;
@@ -208,8 +208,8 @@
             this.updateClassroomCards();
         },
         onUnsignup: function(event) {
-            findClassroomById(this.classrooms, event.detail.classid).takenseats --;
-            sendPostRequest(event.detail.classid, false, function(signedup, status) {});
+            findClassroomById(this.classrooms, event.detail.dsid).takenseats --;
+            sendPostRequest(event.detail.dsid, false, function(signedup, status) {});
             this.updateClassroomCards();
         },
     });

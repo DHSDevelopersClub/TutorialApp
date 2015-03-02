@@ -1,9 +1,9 @@
 <!-- An individual classroom card.
 
 Events:
-    local-signup : When sign up button is pressed.  Contains `detail.classid` with the id of the
+    local-signup : When sign up button is pressed.  Contains `detail.dsid` with the id of the
                    classroom.
-    local-unsignup : When a signup is removed.  Contains `detail.classid` with the id of the
+    local-unsignup : When a signup is removed.  Contains `detail.dsid` with the id of the
                      classroom.
 
 Author: Alexander Otavka
@@ -72,7 +72,7 @@ Author: Alexander Otavka
             },
             syncSignup: function() {
                 this.fire(this.data.signedup ? "local-signup" : "local-unsignup",
-                          {classid: this.data.id});
+                          {dsid: this.data.dsid});
             },
         });
     </script>

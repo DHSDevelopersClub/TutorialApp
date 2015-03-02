@@ -1,3 +1,6 @@
 [submodule "bower_components/polymer-ui-card"]
 	path = bower_components/polymer-ui-card
 	url = https://github.com/PolymerLabs/polymer-ui-card.git
+[submodule "server/libs/endpoints_proto_datastore"]
+	path = server/libs/endpoints_proto_datastore
+	url = https://github.com/GoogleCloudPlatform/endpoints-proto-datastore
