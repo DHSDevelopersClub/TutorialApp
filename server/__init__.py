@@ -116,19 +116,24 @@ import endpoints
 from protorpc import remote
 from google.appengine.ext import ndb
 
-from libs.endpoints_proto_datastore.ndb import EndpointsModel
-
+#from libs.endpoints_proto_datastore.ndb import EndpointsModel
 
 class Classroom(ndb.Model):
     """An individual classroom on a specific date."""
     teacher = ndb.UserProperty()
+    teacher = ndb.StructuredProperty()
     profilepic = ndb.StringProperty()
     room = ndb.StringProperty()
     totalseats = ndb.IntegerProperty()
     takenseats = ndb.IntegerProperty(default=0)
     signedup = ndb.BooleanProperty(default=False)
 
-class ClassroomCollection(EndpointsModel):
+
+
+class Teacher(ndb.Model):
+
+
+class ClassroomCollection(ndb.Model):
     classrooms = ndb.StructuredProperty(Classroom)
 
 @endpoints.api(name='tutorialsignup', version='v1')
