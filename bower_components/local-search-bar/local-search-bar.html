@@ -2,13 +2,13 @@
 
 Transitions between button and input states.
 
-Fires Custom Events:
+Events:
     local-search-mode-enable : When search mode is to be enabled.
 
 Author: Alexander Otavka
 -->
 
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer.html" />
 <link rel="import" href="../paper-input/paper-input.html" />
 <link rel="import" href="../paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="../paper-ripple/paper-ripple.html" />
@@ -23,36 +23,40 @@ Author: Alexander Otavka
     <template>
         <link rel="stylesheet" type="text/css" href="local-search-bar.css" />
 
-        <div id="boxWrapper">
-            <paper-shadow id="searchBox" z="1" animated
-                          on-tap="{{enableSearchMode}}">
-                <div horizontal layout>
-                    <core-icon id="boxIcon" class="noselect"
-                               icon="search">
-                    </core-icon>
+        <div id="container">
+            <template if="{{!mediaIsMobile || (mode == MODE_SEARCH)}}">
+                <div id="boxWrapper">
+                    <paper-shadow id="searchBox" z="1" on-tap="{{enableSearchMode}}" animated>
+                        <div horizontal layout>
+                            <core-icon id="boxIcon" class="noselect" icon="search"></core-icon>
 
-                    <div id="boxButtonWrapper" class="button" flex>
-                        <span>Search</span>
-                        <paper-ripple fit></paper-ripple>
-                    </div>
+                            <template if="{{mode != MODE_SEARCH}}">
+                                <div class="button" flex>
+                                    <span>Search</span>
+                                    <paper-ripple fit></paper-ripple>
+                                </div>
+                            </template>
 
-                    <div id="boxInputWrapper" hidden flex
-                         horizontal layout>
-                        <input id="boxInput" is="core-input" flex
-                               committedValue="{{search}}" />
-                        <paper-icon-button id="clearSearchButton" icon="clear"
-                                           on-tap="{{clearInput}}">
-                        </paper-icon-button>
-                    </div>
+                            <div id="boxInputWrapper" horizontal layout flex hidden>
+                                <input id="boxInput" is="core-input"
+                                       committedValue="{{search}}"
+                                       flex />
+                                <paper-icon-button id="clearSearchButton" icon="clear"
+                                                   on-tap="{{clearInput}}">
+                                </paper-icon-button>
+                            </div>
+                        </div>
+                    </paper-shadow>
                 </div>
-            </paper-shadow>
-        </div>
+            </template>
 
-        <div id="iconButtonWrapper" class="noselect" hidden
-             on-tap="{{enableSearchMode}}">
-            <paper-icon-button id="iconButton" icon="search"
-                               on-tap="{{setSearchMode}}">
-            </paper-icon-button>
+            <template if="{{mediaIsMobile && (mode != MODE_SEARCH)}}">
+                <div id="iconButtonWrapper" class="noselect" on-tap="{{enableSearchMode}}">
+                    <paper-icon-button id="iconButton" icon="search"
+                                       on-tap="{{setSearchMode}}">
+                    </paper-icon-button>
+                </div>
+            </template>
         </div>
 
         <local-media mediaIsMobile="{{mediaIsMobile}}"></local-media>

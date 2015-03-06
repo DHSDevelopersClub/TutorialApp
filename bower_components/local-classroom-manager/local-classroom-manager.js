@@ -152,12 +152,15 @@
         classroomsChanged: function() {
             this.updateClassroomCards();
         },
+
         searchChanged: function(oldValue) {
             this.load(true);
         },
+
         dateChanged: function(oldValue) {
             this.load(true);
         },
+
         load: function(animate) {
             var animate = Boolean(animate);
             var context = this;
@@ -182,6 +185,7 @@
                 }
             });
         },
+
         updateClassroomCards: function() {
             for (var i = 0; i < this.classrooms.length; i++) {
                 var remainingSeats = this.classrooms[i].totalseats - this.classrooms[i].takenseats;
@@ -194,6 +198,7 @@
                 }
             }
         },
+
         onSignup: function(event) {
             findClassroomById(this.classrooms, event.detail.dsid).takenseats ++;
             sendPostRequest(event.detail.dsid, true, function(signedup, status) {});
@@ -207,6 +212,7 @@
             }
             this.updateClassroomCards();
         },
+
         onUnsignup: function(event) {
             findClassroomById(this.classrooms, event.detail.dsid).takenseats --;
             sendPostRequest(event.detail.dsid, false, function(signedup, status) {});

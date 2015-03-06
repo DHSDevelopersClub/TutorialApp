@@ -8,94 +8,41 @@
     "use strict";
 
     Polymer({
-        ready: function () {
-            this.MODE_NULL = 0;
-            this.MODE_SEARCH = 1;
-            this.MODE_BUTTON = 2;
-            this.MODE_BOX = 3;
+        MODE_NULL: 0,
+        MODE_SEARCH: 1,
 
-            this.search = "";
-            this.mode = this.MODE_NULL;
+        search: "",
+        mode: 0,
 
-//            this.searchListener = (function (context) {
-//                return function (event) {
-//                    context.search = context.$.boxInput.committedValue;
-//                    context.fire("search-change");
-//                };
-//            }(this));
-        },
-
-        mediaIsMobileChanged: function (oldValue) {
-            if (this.mode === this.MODE_SEARCH) {
-                return;
-            } else if (this.mediaIsMobile) {
-                this.setButtonMode();
-            } else {
-                this.setBoxMode();
-            }
-        },
-
-        setButtonMode: function () {
-            if (this.mode === this.MODE_BUTTON) {
-                return;
-            }
-            this.mode = this.MODE_BUTTON;
-
-            this.$.boxWrapper.setAttribute("hidden", "");
-            this.$.iconButtonWrapper.removeAttribute("hidden");
-        },
-
-        setBoxMode: function () {
-            if (this.mode === this.MODE_BOX) {
-                return;
-            }
-            this.mode = this.MODE_BOX;
-
-            this.$.iconButtonWrapper.setAttribute("hidden", "");
-            this.$.boxWrapper.removeAttribute("hidden");
-        },
-
-        enableSearchMode: function () {
+        enableSearchMode: function() {
             if (this.mode === this.MODE_SEARCH) {
                 return;
             }
-            this.setBoxMode();
+            this.$.container.querySelector("#searchBox").setZ(0);
+            this.$.container.querySelector("#boxInputWrapper").removeAttribute("hidden");
+            this.$.container.querySelector("#boxInput").focus();
+
             this.mode = this.MODE_SEARCH;
-
-            this.$.boxButtonWrapper.setAttribute("hidden", "");
-            this.$.boxInputWrapper.removeAttribute("hidden");
-            this.$.searchBox.setZ(0);
-
-            this.$.boxInput.focus();
-//            this.$.boxInput.addEventListener("change",
-//                                             this.searchListener);
-
             this.fire("local-search-mode-enable");
         },
 
-        disableSearchMode: function () {
+        disableSearchMode: function() {
             if (this.mode !== this.MODE_SEARCH) {
                 return;
             }
+            this.$.container.querySelector("#searchBox").setZ(1);
+            this.$.container.querySelector("#boxInputWrapper").setAttribute("hidden", "");
+
             this.mode = this.MODE_NULL;
-
-            this.$.boxInputWrapper.setAttribute("hidden", "");
-            this.$.boxButtonWrapper.removeAttribute("hidden");
-            this.$.searchBox.setZ(1);
-
-//            this.clearInput();
-//            this.$.boxInput.removeEventListener("change",
-//                                                this.searchListener);
-            this.search = "";
-
-            this.mediaIsMobileChanged();
+            this.clearInput();
         },
 
-        clearInput: function () {
-            this.$.boxInput.value = "";
-            this.$.boxInput.commit();
+        clearInput: function() {
+            var input = this.$.container.querySelector("#boxInput");
+            input.value = "";
+            input.commit();
             if (this.mode === this.MODE_SEARCH) {
-                this.$.boxInput.focus();
+                input.focus();
             }
         }
     });
