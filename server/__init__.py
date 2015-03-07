@@ -157,10 +157,15 @@ class SignupResponse(messages.Message):
     status = messages.IntegerField(2)
     message = messages.StringField(3)
 
-@endpoints.api(name='tutorialsignup', version='v1')
+@endpoints.api(name='tutorialsignup', version='v1',
+               allowed_client_ids=['185595448807-dgcqa85upqo5nqpsglvngb2asjv193ur.apps.googleusercontent.com'])
 class TutorialSignupAPI(remote.Service):
     '''Mediates between client and datastore.'''
-    pass
+    @endpoints.method(SignupRequest, SignupResponse, name='tutorialsignup.signup')
+    def signup(self, request):
+        current_user = endpoints.get_current_user()
+        if raise_unauthorized and current_user is None:
+            raise endpoints.UnauthorizedException('Invalid token.')
 
 
 application = endpoints.api_server([TutorialSignupAPI])

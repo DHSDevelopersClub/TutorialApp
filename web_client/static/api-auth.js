@@ -6,8 +6,8 @@
  */
 
 // TODO: add client id and scopes
-window.CLIENT_ID = null;
-window.SCOPES = [];
+window.CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com';
+window.SCOPES = ['https://www.googleapis.com/auth/userinfo.email'];
 window.API_ROOT = '//' + window.location.host + '/_ah/api';
 window.apiSignedIn = false;
 
