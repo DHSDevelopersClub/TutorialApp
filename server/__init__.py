@@ -113,29 +113,27 @@ __author__ = 'Alexander Otavka', 'Sebastian Boyd'
 
 
 import endpoints
-from protorpc import remote
+from protorpc import messages, message_types, remote
 from google.appengine.ext import ndb
 
 #from libs.endpoints_proto_datastore.ndb import EndpointsModel
-
-class ClassroomNDB(ndb.Model):
-    """An individual classroom on a specific date."""
-    teacher = ndb.StructuredProperty(Teacher)
-    room = ndb.StringProperty()
-    totalseats = ndb.IntegerProperty()
-    takenseats = ndb.IntegerProperty(default=0)
-    signedup = ndb.BooleanProperty(default=False)
-
-
 
 class TeacherNDB(ndb.Model):
     name = ndb.UserProperty()
     profilepic = ndb.StringProperty()
 
+class ClassroomNDB(ndb.Model):
+    """An individual classroom on a specific date."""
+    teacher = ndb.StructuredProperty(TeacherNDB)
+    room = ndb.StringProperty()
+    totalseats = ndb.IntegerProperty()
+    takenseats = ndb.IntegerProperty(default=0)
+    signedup = ndb.BooleanProperty(default=False)
+
 class ClassroomCollectionNDB(ndb.Model):
     classrooms = ndb.StructuredProperty(ClassroomNDB)
 
-class ClassroomMessage(messages.Message)
+class ClassroomMessage(messages.Message):
     dsid = messages.StringField(1)
     teacher = messages.StringField(2)
     profilepic = messages.StringField(3)
@@ -164,8 +162,11 @@ class TutorialSignupAPI(remote.Service):
     @endpoints.method(SignupRequest, SignupResponse, name='tutorialsignup.signup')
     def signup(self, request):
         current_user = endpoints.get_current_user()
-        if raise_unauthorized and current_user is None:
+        if current_user is None:
             raise endpoints.UnauthorizedException('Invalid token.')
+        print current_user
+        dsid = request.dsid
+        return SignupResponse(signedup=True, status=0, message="Testing.. OK")
 
 
 application = endpoints.api_server([TutorialSignupAPI])
