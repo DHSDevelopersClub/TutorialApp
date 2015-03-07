@@ -73,7 +73,7 @@ date.
         More-Headers:  etc...
 
         {
-          "signup": true,
+          "signedup": true,
           "status": 1,
         }
         ---------------------------------------------
@@ -85,7 +85,7 @@ date.
         More-Headers:  etc...
 
         {
-          "signup": false,
+          "signedup": false,
           "status": 2,
           "message": "Failed to sign up: class is full."
         }
@@ -98,7 +98,7 @@ date.
         More-Headers:  etc...
 
         {
-          "signup": true,
+          "signedup": true,
           "status": 0,
           "message": ""
         }
@@ -118,11 +118,9 @@ from google.appengine.ext import ndb
 
 #from libs.endpoints_proto_datastore.ndb import EndpointsModel
 
-class Classroom(ndb.Model):
+class ClassroomNDB(ndb.Model):
     """An individual classroom on a specific date."""
-    teacher = ndb.UserProperty()
-    teacher = ndb.StructuredProperty()
-    profilepic = ndb.StringProperty()
+    teacher = ndb.StructuredProperty(Teacher)
     room = ndb.StringProperty()
     totalseats = ndb.IntegerProperty()
     takenseats = ndb.IntegerProperty(default=0)
@@ -130,11 +128,34 @@ class Classroom(ndb.Model):
 
 
 
-class Teacher(ndb.Model):
+class TeacherNDB(ndb.Model):
+    name = ndb.UserProperty()
+    profilepic = ndb.StringProperty()
+
+class ClassroomCollectionNDB(ndb.Model):
+    classrooms = ndb.StructuredProperty(ClassroomNDB)
+
+class ClassroomMessage(messages.Message)
+    dsid = messages.StringField(1)
+    teacher = messages.StringField(2)
+    profilepic = messages.StringField(3)
+    room = messages.StringField(4)
+    totalseats = messages.IntegerField(5)
+    takenseats = messages.IntegerField(6)
+    signedup = messages.BooleanField(7)
 
 
-class ClassroomCollection(ndb.Model):
-    classrooms = ndb.StructuredProperty(Classroom)
+class ClassroomCollectionMessage(messages.Message):
+    classrooms = messages.MessageField(ClassroomMessage, 1, repeated=True)
+
+class SignupRequest(messages.Message):
+    dsid = messages.StringField(1)
+    signup = messages.BooleanField(2)
+
+class SignupResponse(messages.Message):
+    signedup = messages.BooleanField(1)
+    status = messages.IntegerField(2)
+    message = messages.StringField(3)
 
 @endpoints.api(name='tutorialsignup', version='v1')
 class TutorialSignupAPI(remote.Service):
