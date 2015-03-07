@@ -156,7 +156,7 @@ class SignupResponse(messages.Message):
     message = messages.StringField(3)
 
 @endpoints.api(name='tutorialsignup', version='v1',
-               allowed_client_ids=['185595448807-dgcqa85upqo5nqpsglvngb2asjv193ur.apps.googleusercontent.com'])
+               allowed_client_ids=['185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com', '292824132082.apps.googleusercontent.com'])
 class TutorialSignupAPI(remote.Service):
     '''Mediates between client and datastore.'''
     @endpoints.method(SignupRequest, SignupResponse, name='tutorialsignup.signup')
