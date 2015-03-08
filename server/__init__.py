@@ -166,7 +166,7 @@ class TutorialSignupAPI(remote.Service):
             raise endpoints.UnauthorizedException('Invalid token.')
         print current_user
         dsid = request.dsid
-        return SignupResponse(signedup=True, status=0, message="Testing.. OK")
+        return SignupResponse(signedup=True, status=0, message=current_user)
 
 
 application = endpoints.api_server([TutorialSignupAPI])
