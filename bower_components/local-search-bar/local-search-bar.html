@@ -37,14 +37,16 @@ Author: Alexander Otavka
                                 </div>
                             </template>
 
-                            <div id="boxInputWrapper" horizontal layout flex hidden>
-                                <input id="boxInput" is="core-input"
-                                       committedValue="{{search}}"
-                                       flex />
-                                <paper-icon-button id="clearSearchButton" icon="clear"
-                                                   on-tap="{{clearInput}}">
-                                </paper-icon-button>
-                            </div>
+                            <template if="{{mode == MODE_SEARCH}}">
+                                <div horizontal layout flex>
+                                    <input id="boxInput" is="core-input"
+                                           committedValue="{{search}}"
+                                           flex />
+                                    <paper-icon-button id="clearSearchButton" icon="clear"
+                                                       on-tap="{{clearInput}}">
+                                    </paper-icon-button>
+                                </div>
+                            </template>
                         </div>
                     </paper-shadow>
                 </div>

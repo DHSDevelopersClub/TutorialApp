@@ -91,13 +91,15 @@ Author: Alexander Otavka
                 <div id="contentArea">
                     <div horizontal center layout>
                         <local-date-spinner date="{{date}}" flex></local-date-spinner>
-                        <paper-button id="signIn" on-tap="{{signIn}}">
-                            Sign In
-                        </paper-button>
+                        <template if="{{signedIn}}">
+                            <!-- TODO: Improve this UI to show the current user portrait. -->
+                            <paper-button id="userButton" on-tap="{{signOut}}">
+                                Sign Out
+                            </paper-button>
+                        </template>
                     </div>
-                    <local-classroom-manager id="classroomManager"
-                                             search="{{search}}"
-                                             date="{{date}}">
+                    <local-classroom-manager id="classroomManager" search="{{search}}"
+                                             date="{{date}}" signedIn="{{signedIn}}">
                     </local-classroom-manager>
                 </div>
             </div>

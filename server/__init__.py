@@ -118,12 +118,19 @@ from google.appengine.ext import ndb
 
 #from libs.endpoints_proto_datastore.ndb import EndpointsModel
 
+
+WEB_CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com'
+# I commented this one out, because it seems to work without it.  Sebastian, tell me if I am
+# wrong, but I am guessing that that is the client id of the API explorer.
+#SOME_UNKNOWN_CLIENT_ID = '292824132082.apps.googleusercontent.com',
+
+
 class TeacherNDB(ndb.Model):
     name = ndb.UserProperty()
     profilepic = ndb.StringProperty()
 
 class ClassroomNDB(ndb.Model):
-    """An individual classroom on a specific date."""
+    '''An individual classroom on a specific date.'''
     teacher = ndb.StructuredProperty(TeacherNDB)
     room = ndb.StringProperty()
     totalseats = ndb.IntegerProperty()
@@ -161,19 +168,18 @@ class SignupResponse(messages.Message):
 
 
 @endpoints.api(name='tutorialsignup', version='v1',
-               allowed_client_ids=['185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com', '292824132082.apps.googleusercontent.com'])
+               allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
 class TutorialSignupAPI(remote.Service):
     '''Mediates between client and datastore.'''
-
-    @endpoints.method(SignupRequest, SignupResponse, name='tutorialsignup.signup')
+    @endpoints.method(SignupRequest, SignupResponse, name='signup')
     def signup(self, request):
         current_user = endpoints.get_current_user()
         if current_user is None:
             raise endpoints.UnauthorizedException('Invalid token.')
-        email = current_user.email()
         dsid = request.dsid
-        classrooms = ClassroomCollectionNDB(classrooms = )
-        return SignupResponse(signedup=True, status=0, message=current_user)
+        signup = request.signup
+        print 'DEBUG -', repr(dsid), repr(signup)
+        return SignupResponse(signedup=True, status=0, message=str(current_user))
 
     @endpoints.method(message_types.VoidMessage, ClassroomCollectionMessage, name='tutorialsignup.list_classes')
     def listClasses(self, request):

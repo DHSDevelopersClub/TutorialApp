@@ -19,8 +19,10 @@
                 return;
             }
             this.$.container.querySelector("#searchBox").setZ(0);
-            this.$.container.querySelector("#boxInputWrapper").removeAttribute("hidden");
-            this.$.container.querySelector("#boxInput").focus();
+            var container = this.$.container;
+            setTimeout(function() {
+                container.querySelector("#boxInput").focus();
+            }, 100);
 
             this.mode = this.MODE_SEARCH;
             this.fire("local-search-mode-enable");
@@ -31,7 +33,6 @@
                 return;
             }
             this.$.container.querySelector("#searchBox").setZ(1);
-            this.$.container.querySelector("#boxInputWrapper").setAttribute("hidden", "");
 
             this.mode = this.MODE_NULL;
             this.clearInput();
@@ -44,6 +45,6 @@
             if (this.mode === this.MODE_SEARCH) {
                 input.focus();
             }
-        }
+        },
     });
 }());
