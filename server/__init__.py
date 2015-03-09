@@ -118,6 +118,13 @@ from google.appengine.ext import ndb
 
 #from libs.endpoints_proto_datastore.ndb import EndpointsModel
 
+
+WEB_CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com'
+# I commented this one out, because it seems to work without it.  Sebastian, tell me if I am
+# wrong, but I am guessing that that is the client id of the API explorer.
+#SOME_UNKNOWN_CLIENT_ID = '292824132082.apps.googleusercontent.com',
+
+
 class TeacherNDB(ndb.Model):
     name = ndb.UserProperty()
     profilepic = ndb.StringProperty()
@@ -156,7 +163,7 @@ class SignupResponse(messages.Message):
     message = messages.StringField(3)
 
 @endpoints.api(name='tutorialsignup', version='v1',
-               allowed_client_ids=['185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com', '292824132082.apps.googleusercontent.com'])
+               allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
 class TutorialSignupAPI(remote.Service):
     '''Mediates between client and datastore.'''
     @endpoints.method(SignupRequest, SignupResponse, name='tutorialsignup.signup')
@@ -164,9 +171,8 @@ class TutorialSignupAPI(remote.Service):
         current_user = endpoints.get_current_user()
         if current_user is None:
             raise endpoints.UnauthorizedException('Invalid token.')
-        print current_user
         dsid = request.dsid
-        return SignupResponse(signedup=True, status=0, message=current_user)
+        return SignupResponse(signedup=True, status=0, message=str(current_user))
 
 
 application = endpoints.api_server([TutorialSignupAPI])

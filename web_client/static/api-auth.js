@@ -5,7 +5,6 @@
  * `https://cloud.google.com/appengine/docs/python/endpoints/consume_js`.
  */
 
-// TODO: add client id and scopes
 window.CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com';
 window.SCOPES = ['https://www.googleapis.com/auth/userinfo.email'];
 window.API_ROOT = '//' + window.location.host + '/_ah/api';
@@ -29,7 +28,6 @@ function apiInit() {
 
 function signIn(mode, authorizeCallback) {
     console.log("debug signing in...");
-    gapi.auth.authorize({client_id: CLIENT_ID,
-                         scope: SCOPES, immediate: mode},
+    gapi.auth.authorize({client_id: window.CLIENT_ID, scope: window.SCOPES, immediate: mode},
                         authorizeCallback);
 }
