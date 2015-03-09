@@ -128,10 +128,14 @@ class ClassroomNDB(ndb.Model):
     room = ndb.StringProperty()
     totalseats = ndb.IntegerProperty()
     takenseats = ndb.IntegerProperty(default=0)
-    signedup = ndb.BooleanProperty(default=False)
+    signedup_sudents = ndb.Property(default=False)
 
 class ClassroomCollectionNDB(ndb.Model):
-    classrooms = ndb.StructuredProperty(ClassroomNDB)
+    classrooms = ndb.StructuredProperty(ClassroomNDB,  repeated=True)
+
+class DateNDB(ndb.Model):
+    date = ndb.DateProperty(auto_now_add=True)
+    #classrooms = ndb.StructuredProperty(ClassroomNDB, repeated=True)
 
 class ClassroomMessage(messages.Message):
     dsid = messages.StringField(1)
@@ -141,7 +145,6 @@ class ClassroomMessage(messages.Message):
     totalseats = messages.IntegerField(5)
     takenseats = messages.IntegerField(6)
     signedup = messages.BooleanField(7)
-
 
 class ClassroomCollectionMessage(messages.Message):
     classrooms = messages.MessageField(ClassroomMessage, 1, repeated=True)
@@ -155,18 +158,27 @@ class SignupResponse(messages.Message):
     status = messages.IntegerField(2)
     message = messages.StringField(3)
 
+
+
 @endpoints.api(name='tutorialsignup', version='v1',
                allowed_client_ids=['185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com', '292824132082.apps.googleusercontent.com'])
 class TutorialSignupAPI(remote.Service):
     '''Mediates between client and datastore.'''
+
     @endpoints.method(SignupRequest, SignupResponse, name='tutorialsignup.signup')
     def signup(self, request):
         current_user = endpoints.get_current_user()
         if current_user is None:
             raise endpoints.UnauthorizedException('Invalid token.')
-        print current_user
+        email = current_user.email()
         dsid = request.dsid
+        classrooms = ClassroomCollectionNDB(classrooms = )
         return SignupResponse(signedup=True, status=0, message=current_user)
+
+    @endpoints.method(message_types.VoidMessage, ClassroomCollectionMessage, name='tutorialsignup.list_classes')
+    def listClasses(self, request):
+        init_date()
+        return
 
 
 application = endpoints.api_server([TutorialSignupAPI])
