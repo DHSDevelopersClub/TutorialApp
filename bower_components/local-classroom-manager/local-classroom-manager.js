@@ -82,72 +82,70 @@
           ]
         },
         getData: function(search, date, callback) {
-            if (!window.apiSignedIn) return;
             var data = JSON.stringify(this.data);
-            setTimeout(function() {
-                callback(data);
-            }, 1000);
+            callback(JSON.parse(data));
         },
-        _changeEntry: function(classroom, signedup) {
-            var signedup = Boolean(signedup);
-            var status;
-            if (classroom.signedup !== signedup) {
-                classroom.takenseats += signedup ? 1 : -1;
-                if (classroom.takenseats <= classroom.totalseats) {
-                    if (signedup) {
-                        this.data.classrooms.move(classroom, 0);
-                    }
-                    classroom.signedup = signedup;
-                    status = 0;
-                } else {
-                    classroom.takenseats = classroom.totalseats;
-                    status = 2;
-                }
-            } else {
-                status = 1;
-            }
-        },
-        postData: function(dsid, signedup, callback) {
-            if (!window.apiSignedIn) return;
-            var classroom = findClassroomById(this.data.classrooms, dsid);
-            this._changeEntry(classroom, signedup);
-
-            if (signedup) {
-                var previousSignedup = findClassroom(this.data.classrooms, function(classroom) {
-                    return classroom.signedup && (classroom.dsid !== dsid);
-                });
-                if (previousSignedup !== undefined) {
-                    this._changeEntry(previousSignedup, false);
-                }
-            }
-
-            setTimeout(function() {
-                callback(classroom.signedup, status);
-            }, 1000);
-        }
+//        _changeEntry: function(classroom, signedup) {
+//            var signedup = Boolean(signedup);
+//            var status;
+//            if (classroom.signedup !== signedup) {
+//                classroom.takenseats += signedup ? 1 : -1;
+//                if (classroom.takenseats <= classroom.totalseats) {
+//                    if (signedup) {
+//                        this.data.classrooms.move(classroom, 0);
+//                    }
+//                    classroom.signedup = signedup;
+//                    status = 0;
+//                } else {
+//                    classroom.takenseats = classroom.totalseats;
+//                    status = 2;
+//                }
+//            } else {
+//                status = 1;
+//            }
+//        },
+//        postData: function(dsid, signedup, callback) {
+//            var classroom = findClassroomById(this.data.classrooms, dsid);
+//            this._changeEntry(classroom, signedup);
+//
+//            if (signedup) {
+//                var previousSignedup = findClassroom(this.data.classrooms, function(classroom) {
+//                    return classroom.signedup && (classroom.dsid !== dsid);
+//                });
+//                if (previousSignedup !== undefined) {
+//                    this._changeEntry(previousSignedup, false);
+//                }
+//            }
+//
+//            setTimeout(function() {
+//                callback(classroom.signedup, status);
+//            }, 1000);
+//        }
     }
 
     var sendGetRequest = function(search, date, callback) {
-        // TODO: send an actual request to the server instead of using FAKE_DATA
-        //var request = gapi.client.oauth2.userinfo.get().execute(function(resp) {
-        //    if (!resp.code) {
-        //        // User is signed in, call my Endpoint
-        //        console.log("debug loading...");
-        //    }
-        //});
-        FAKE_SERVER.getData(search, date, callback);
+        if (gapi.client === undefined) return;
+        gapi.client.oauth2.userinfo.get().execute(function(resp) {
+            if (!resp.code) {
+                FAKE_SERVER.getData(search, date, callback);
+            } else {
+                callback(resp);
+            }
+        });
     }
 
-    var sendPostRequest = function(dsid, signedup, callback) {
-        // TODO: send a real server request
-        FAKE_SERVER.postData(dsid, signedup, callback);
+    var sendPostRequest = function(dsid, signup, callback) {
+        gapi.client.tutorialsignup.signup({
+            "dsid": dsid,
+            "signup": signup,
+        }).execute(callback);
     };
 
     Polymer({
         classrooms: [],
         search: "",
         date: "",
-        FAKE_SERVER: FAKE_SERVER,
+        signedIn: null,
 
         classroomsChanged: function() {
             this.updateClassroomCards();
@@ -159,6 +157,14 @@
 
         dateChanged: function(oldValue) {
             this.load(true);
+        },
+
+        signIn: function() {
+            var context = this;
+            this.signedIn = null;
+            window.signIn(false, function() {
+                context.load(true);
+            });
         },
 
         load: function(animate) {
@@ -175,7 +181,13 @@
             }
 
             sendGetRequest(this.search, this.date, function(response) {
-                context.classrooms = JSON.parse(response).classrooms;
+                if (!response.code) {
+                    context.classrooms = response.classrooms;
+                    context.signedIn = true;
+                } else {
+                    context.classrooms = [];
+                    context.signedIn = false;
+                }
                 context.updateClassroomCards();
                 if (animate) {
                     contentAnimation.direction = "reverse";
@@ -201,7 +213,7 @@
 
         onSignup: function(event) {
             findClassroomById(this.classrooms, event.detail.dsid).takenseats ++;
-            sendPostRequest(event.detail.dsid, true, function(signedup, status) {});
+            sendPostRequest(event.detail.dsid, true, function(response) {});
 
             var previousSignedupClassroom = findClassroom(this.classrooms, function(classroom) {
                 return classroom.signedup && (classroom.dsid !== event.detail.dsid);
@@ -215,7 +227,7 @@
 
         onUnsignup: function(event) {
             findClassroomById(this.classrooms, event.detail.dsid).takenseats --;
-            sendPostRequest(event.detail.dsid, false, function(signedup, status) {});
+            sendPostRequest(event.detail.dsid, false, function(response) {});
             this.updateClassroomCards();
         },
     });

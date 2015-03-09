@@ -130,7 +130,7 @@ class TeacherNDB(ndb.Model):
     profilepic = ndb.StringProperty()
 
 class ClassroomNDB(ndb.Model):
-    """An individual classroom on a specific date."""
+    '''An individual classroom on a specific date.'''
     teacher = ndb.StructuredProperty(TeacherNDB)
     room = ndb.StringProperty()
     totalseats = ndb.IntegerProperty()
@@ -166,12 +166,14 @@ class SignupResponse(messages.Message):
                allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
 class TutorialSignupAPI(remote.Service):
     '''Mediates between client and datastore.'''
-    @endpoints.method(SignupRequest, SignupResponse, name='tutorialsignup.signup')
+    @endpoints.method(SignupRequest, SignupResponse, name='signup')
     def signup(self, request):
         current_user = endpoints.get_current_user()
         if current_user is None:
             raise endpoints.UnauthorizedException('Invalid token.')
         dsid = request.dsid
+        signup = request.signup
+        print 'DEBUG -', repr(dsid), repr(signup)
         return SignupResponse(signedup=True, status=0, message=str(current_user))
 
 

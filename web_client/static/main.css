@@ -91,14 +91,14 @@ body {
 #navBackText {
   margin-left: 8px;
 }
-#signIn {
+#userButton {
   font-weight: 300;
   color: #333333;
   background: #dddddd;
   margin: 0px;
   cursor: pointer;
 }
-#signIn:hover {
+#userButton:hover {
   text-decoration: underline;
 }
 #navTitle {

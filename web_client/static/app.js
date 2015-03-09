@@ -10,10 +10,10 @@ var app = document.querySelector("template#app");
 app.search = "";
 app.date = "2015-01-07";
 
-app.addEventListener("template-bound", function () {
+app.addEventListener("template-bound", function() {
     "use strict";
 
-    var actionBarSearchAnimation = (function () {
+    var actionBarSearchAnimation = (function() {
         /* Search transition animation for the action bar. */
         var green = "#4CB04F";
         var grey = "#ABABAB";
@@ -58,7 +58,7 @@ app.addEventListener("template-bound", function () {
 
         return anim;
     }());
-    var searchBoxResizeAnimation = (function () {
+    var searchBoxResizeAnimation = (function() {
         var anim = new CoreAnimationGroup();
         anim.type = "par";
         anim.duration = 200;
@@ -80,7 +80,7 @@ app.addEventListener("template-bound", function () {
         return anim;
     }());
 
-    app.onMediaMobileChange = function () {
+    app.onMediaMobileChange = function() {
         /* Align the search bar based on media and search state. */
 
         var inSearchMode = function () {
@@ -140,14 +140,14 @@ app.addEventListener("template-bound", function () {
             }
         }
     };
-    app.enableSearchMode = function () {
+    app.enableSearchMode = function() {
         actionBarSearchAnimation.play();
 
         app.$.navTitle.setAttribute("hidden", "");
         app.$.navBack.removeAttribute("hidden");
         app.onMediaMobileChange();
     };
-    app.disableSearchMode = function () {
+    app.disableSearchMode = function() {
         app.$.searchBar.disableSearchMode();
         actionBarSearchAnimation.playReverse();
 
@@ -155,15 +155,18 @@ app.addEventListener("template-bound", function () {
         app.$.navTitle.removeAttribute("hidden");
         app.onMediaMobileChange();
     };
-    app.refresh = function () {
+    app.refresh = function() {
         app.$.classroomManager.load(true);
     };
-    app.signIn = function () {
-        signIn(false, function() {
-            window.apiSignedIn = true;
-            app.refresh();
-        });
-    };
+//    app.signIn = function() {
+//        window.signIn(false, function() {
+//            app.refresh();
+//        });
+//    };
+    app.signOut = function() {
+        gapi.auth.setToken(null);
+        app.refresh(true);
+    }
 
     app.onMediaMobileChange();
 });

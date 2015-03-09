@@ -14,12 +14,13 @@ Author: Max Starr
 Author: Alexander Otavka
 -->
 
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../core-animation/core-animation.html">
-<link rel="import" href="../paper-spinner/paper-spinner.html">
-<link rel="import" href="../local-classroom-card/local-classroom-card.html">
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../core-animation/core-animation.html" />
+<link rel="import" href="../paper-button/paper-button.html" />
+<link rel="import" href="../paper-spinner/paper-spinner.html" />
+<link rel="import" href="../local-classroom-card/local-classroom-card.html" />
 
-<polymer-element name="local-classroom-manager" attributes="search date">
+<polymer-element name="local-classroom-manager" attributes="search date signedIn">
     <template>
         <style shim-shadowdom>
             #loadingSpinnerWrapper {
@@ -28,6 +29,10 @@ Author: Alexander Otavka
                 right: 0;
                 top: 20%;
                 padding-top: 64px;
+            }
+
+            #signinPrompt {
+                margin: 32px;
             }
         </style>
 
@@ -40,10 +45,15 @@ Author: Alexander Otavka
             </template>
         </div>
 
-        <div id="loadingSpinnerWrapper"
-             vertical center layout>
+        <div id="loadingSpinnerWrapper" vertical center layout>
             <paper-spinner id="loadingSpinner"></paper-spinner>
         </div>
+
+        <template if="{{signedIn == false}}">
+            <div id="signinPrompt" vertical center layout>
+                <paper-button on-tap="{{signIn}}">Sign In</paper-button>
+            </div>
+        </template>
 
         <core-animation id="contentAnimation" duration="200" fill="forwards">
             <core-animation-keyframe>
