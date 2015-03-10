@@ -135,10 +135,14 @@ class ClassroomNDB(ndb.Model):
     room = ndb.StringProperty()
     totalseats = ndb.IntegerProperty()
     takenseats = ndb.IntegerProperty(default=0)
-    signedup = ndb.BooleanProperty(default=False)
+    signedup_sudents = ndb.Property(default=False)
 
 class ClassroomCollectionNDB(ndb.Model):
-    classrooms = ndb.StructuredProperty(ClassroomNDB)
+    classrooms = ndb.StructuredProperty(ClassroomNDB,  repeated=True)
+
+class DateNDB(ndb.Model):
+    date = ndb.DateProperty(auto_now_add=True)
+    #classrooms = ndb.StructuredProperty(ClassroomNDB, repeated=True)
 
 class ClassroomMessage(messages.Message):
     dsid = messages.StringField(1)
@@ -148,7 +152,6 @@ class ClassroomMessage(messages.Message):
     totalseats = messages.IntegerField(5)
     takenseats = messages.IntegerField(6)
     signedup = messages.BooleanField(7)
-
 
 class ClassroomCollectionMessage(messages.Message):
     classrooms = messages.MessageField(ClassroomMessage, 1, repeated=True)
@@ -161,6 +164,8 @@ class SignupResponse(messages.Message):
     signedup = messages.BooleanField(1)
     status = messages.IntegerField(2)
     message = messages.StringField(3)
+
+
 
 @endpoints.api(name='tutorialsignup', version='v1',
                allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
@@ -175,6 +180,11 @@ class TutorialSignupAPI(remote.Service):
         signup = request.signup
         print 'DEBUG -', repr(dsid), repr(signup)
         return SignupResponse(signedup=True, status=0, message=str(current_user))
+
+    @endpoints.method(message_types.VoidMessage, ClassroomCollectionMessage, name='tutorialsignup.list_classes')
+    def listClasses(self, request):
+        init_date()
+        return
 
 
 application = endpoints.api_server([TutorialSignupAPI])
