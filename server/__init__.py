@@ -30,7 +30,7 @@ It can respond to a GET request with the classes available on a certain date.
               "profilepic": "http://www.example.com/rmilstead.png",
               "room": "127",
               "totalseats": 30,
-              "takenseats": 14,
+              "seats_left": 14,
               "signedup": false
             },
             {
@@ -39,7 +39,7 @@ It can respond to a GET request with the classes available on a certain date.
               "profilepic": "http://www.example.com/mexample.png",
               "room": "104A",
               "totalseats": 33,
-              "takenseats": 19,
+              "seats_left": 19,
               "signedup": true
             }
           ]
@@ -139,7 +139,7 @@ class ClassroomNDB(ndb.Model):
     teacher = ndb.StructuredProperty(TeacherNDB)
     room = ndb.StringProperty()
     totalseats = ndb.IntegerProperty()
-    takenseats = ndb.IntegerProperty(default=0)
+    seats_left = ndb.IntegerProperty()
     signedup_sudents = ndb.StructuredProperty(StudentNDB)
 
 class DateNDB(ndb.Model):
@@ -151,8 +151,8 @@ class ClassroomMessage(messages.Message):
     profilepic = messages.StringField(3)
     room = messages.StringField(4)
     totalseats = messages.IntegerField(5)
-    takenseats = messages.IntegerField(6)
-    signedup = messages.BooleanField(7)
+    seats_left = messages.IntegerField(6)
+    #signedup = messages.BooleanField(7)
 
 class ClassroomCollectionMessage(messages.Message):
     classrooms = messages.MessageField(ClassroomMessage, 1, repeated=True)
@@ -171,7 +171,7 @@ def test_classes():
     date = DateNDB(date = later)
     teacher1 = TeacherNDB(text_name="Mr Milstead")
     key = date.put()
-    class1 = ClassroomNDB(parent=key, teacher=teacher1, room="123", totalseats=12, takenseats=10, signedup_sudents=None)
+    class1 = ClassroomNDB(parent=key, teacher=teacher1, room="123", totalseats=12, seats_left=1, signedup_sudents=None)
     class1.put()
 
 @endpoints.api(name='tutorialsignup', version='v1',
@@ -183,7 +183,7 @@ class TutorialSignupAPI(remote.Service):
         current_user = endpoints.get_current_user()
         if current_user is None:
             raise endpoints.UnauthorizedException('Invalid token.')
-        test_classes()
+        #test_classes()
         dsid = request.dsid
         signup = request.signup
         print 'DEBUG -', repr(dsid), repr(signup)
@@ -198,10 +198,18 @@ class TutorialSignupAPI(remote.Service):
         qry = DateNDB.query(DateNDB.date >= today)
         qry.order(DateNDB.date)
         result = qry.fetch(1)
-        dsid = result[0].key.id()
+        date_key = result[0].key
+        dsid = date_key.id()
         print str(dsid)
+        qry = ClassroomNDB.query(ancestor=date_key).order(-ClassroomNDB.seats_left)
+        classroom_collection = []
+        for classroom in qry:
+            print str(classroom)
+            class_message = ClassroomMessage(dsid=str(classroom.key.id()), teacher=classroom.teacher.text_name, profilepic=classroom.teacher.profilepic, room=classroom.room, totalseats=classroom.totalseats, seats_left=classroom.seats_left)
 
-        return ClassroomCollectionMessage(classrooms = [])
+            classroom_collection.append(class_message)
+
+        return ClassroomCollectionMessage(classrooms = classroom_collection)
 
 
 application = endpoints.api_server([TutorialSignupAPI])
