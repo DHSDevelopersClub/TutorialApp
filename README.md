@@ -22,14 +22,14 @@ We must implement these before we can release Alpha 1.
     - Accept a POST request to signup for a specific class on a certain date.
     - Operate with Google's default OAuth2.0 framework
   - Web client
-    - Mobile optimized
-    - Polished material design
+    - ~~Mobile optimized~~
+    - ~~Polished material design~~
     - Login screen
       - Use Google's default OAuth2.0
-    - Search screen
-      - Displays list of all classes
-      - User cant enter search terms at top
-      - User can click/tap a class to signup for next tutorial
+    - ~~Search screen~~
+      - ~~Displays list of all classes~~
+      - ~~User can enter search terms at top~~
+      - ~~User can click/tap a class to signup for next tutorial~~
   - No admin client
     - No implementation for teachers or admin
     - Datastore viewer must be used to add classes
