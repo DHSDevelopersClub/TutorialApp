@@ -115,6 +115,7 @@ __author__ = 'Alexander Otavka', 'Sebastian Boyd'
 import endpoints
 from protorpc import messages, message_types, remote
 from google.appengine.ext import ndb
+import datetime
 
 #from libs.endpoints_proto_datastore.ndb import EndpointsModel
 
@@ -127,7 +128,11 @@ WEB_CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleuserco
 
 class TeacherNDB(ndb.Model):
     name = ndb.UserProperty()
+    text_name = ndb.StringProperty() # Testing only
     profilepic = ndb.StringProperty()
+
+class StudentNDB(ndb.Model):
+    name = ndb.UserProperty()
 
 class ClassroomNDB(ndb.Model):
     '''An individual classroom on a specific date.'''
@@ -135,14 +140,10 @@ class ClassroomNDB(ndb.Model):
     room = ndb.StringProperty()
     totalseats = ndb.IntegerProperty()
     takenseats = ndb.IntegerProperty(default=0)
-    signedup_sudents = ndb.Property(default=False)
-
-class ClassroomCollectionNDB(ndb.Model):
-    classrooms = ndb.StructuredProperty(ClassroomNDB,  repeated=True)
+    signedup_sudents = ndb.StructuredProperty(StudentNDB)
 
 class DateNDB(ndb.Model):
     date = ndb.DateProperty(auto_now_add=True)
-    #classrooms = ndb.StructuredProperty(ClassroomNDB, repeated=True)
 
 class ClassroomMessage(messages.Message):
     dsid = messages.StringField(1)
@@ -165,7 +166,13 @@ class SignupResponse(messages.Message):
     status = messages.IntegerField(2)
     message = messages.StringField(3)
 
-
+def test_classes():
+    later = datetime.date(2015, 3, 11)
+    date = DateNDB(date = later)
+    teacher1 = TeacherNDB(text_name="Mr Milstead")
+    key = date.put()
+    class1 = ClassroomNDB(parent=key, teacher=teacher1, room="123", totalseats=12, takenseats=10, signedup_sudents=None)
+    class1.put()
 
 @endpoints.api(name='tutorialsignup', version='v1',
                allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
@@ -176,15 +183,25 @@ class TutorialSignupAPI(remote.Service):
         current_user = endpoints.get_current_user()
         if current_user is None:
             raise endpoints.UnauthorizedException('Invalid token.')
+        test_classes()
         dsid = request.dsid
         signup = request.signup
         print 'DEBUG -', repr(dsid), repr(signup)
+        if signup:
+            pass
         return SignupResponse(signedup=True, status=0, message=str(current_user))
 
-    @endpoints.method(message_types.VoidMessage, ClassroomCollectionMessage, name='tutorialsignup.list_classes')
+    @endpoints.method(message_types.VoidMessage, ClassroomCollectionMessage, name='list_classes')
+
     def listClasses(self, request):
-        init_date()
-        return
+        today = datetime.date.today()
+        qry = DateNDB.query(DateNDB.date >= today)
+        qry.order(DateNDB.date)
+        result = qry.fetch(1)
+        dsid = result[0].key.id()
+        print str(dsid)
+
+        return ClassroomCollectionMessage(classrooms = [])
 
 
 application = endpoints.api_server([TutorialSignupAPI])
