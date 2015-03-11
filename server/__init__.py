@@ -116,6 +116,7 @@ import datetime
 
 import endpoints
 from protorpc import message_types, remote
+from google.appengine.ext import ndb
 
 #from libs.endpoints_proto_datastore.ndb import EndpointsModel
 
@@ -125,10 +126,6 @@ from messages import (ClassroomQueryMessage, ClassroomMessage, ClassroomCollecti
 
 
 WEB_CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com'
-# I commented this one out, because it seems to work without it.  Sebastian, tell me if I am
-# wrong, but I am guessing that that is the client id of the API explorer.
-#SOME_UNKNOWN_CLIENT_ID = '292824132082.apps.googleusercontent.com',
-
 
 def test_classes(name='Mr. Milstead', profilepic='', room='123', totalseats=12, seats_left=0):
     later = datetime.date(2015, 3, 11)
@@ -148,7 +145,7 @@ def test_gen_classes():
               "profilepic": "http://cache3.asset-cache.net/gc/57442583-portrait-of-a-school-teacher-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=Y3hy48kuiy7pabQpAfxaQrcgpfAMUuQ1FcwFl8J80Es%3D",
               "room": "127",
               "totalseats": 30,
-              "takenseats": 14,
+              "takenseats": 0,
               "signedup": True
             },
             {
@@ -157,7 +154,7 @@ def test_gen_classes():
               "profilepic": "http://mcauliffe.dpsk12.org/wp-content/uploads/2011/09/StephanieGronholz_Retouch-square-crop.jpg",
               "room": "222",
               "totalseats": 28,
-              "takenseats": 28,
+              "takenseats": 0,
               "signedup": False
             },
             {
@@ -166,7 +163,7 @@ def test_gen_classes():
               "profilepic": "http://4.bp.blogspot.com/-sXyOdCbaVi4/UA7dYAwjUCI/AAAAAAAAFmI/tbO4vxpVHS4/s220/nfowkes-square.jpg",
               "room": "409",
               "totalseats": 30,
-              "takenseats": 28,
+              "takenseats": 0,
               "signedup": False
             },
             {
@@ -175,7 +172,7 @@ def test_gen_classes():
               "profilepic": "http://cache2.asset-cache.net/gc/dv1313056-portrait-of-a-mature-teacher-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=jDI%2BiZbzwv%2BjFYTsYAzbzRIz392Wxp0jHzYXiV6NO3k%3D",
               "room": "413",
               "totalseats": 18,
-              "takenseats": 17,
+              "takenseats": 0,
               "signedup": False
             },
             {
@@ -184,7 +181,7 @@ def test_gen_classes():
               "profilepic": "http://cache4.asset-cache.net/gc/57442708-portrait-of-a-female-school-teacher-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=E5y3FqGCZA78hfJC8P3s3hrnAf50DBBxD1Fa1hqvjx8%3D",
               "room": "104A",
               "totalseats": 33,
-              "takenseats": 3,
+              "takenseats": 0,
               "signedup": False
             }
           ]
@@ -225,6 +222,7 @@ class TutorialSignupAPI(remote.Service):
         classroom = ClassroomNDB.get_by_id(int(dsid), parent=parent_key)
         if classroom == None:
             return SignupResponse(signedup=False, status=3, message='Invalid id')
+        print str(classroom)
 
         #Check if signedup
         qry = ClassroomNDB.query(ClassroomNDB.signedup_sudents.name == current_user).fetch()
@@ -240,19 +238,19 @@ class TutorialSignupAPI(remote.Service):
 
         if signedup_here == signup: # Already have what you want
             return SignupResponse(signedup=signedup_here, status=0, message='Already done')
-
         elif signedup == False: # Not signed up but want to be
             print str(classroom)
             person = StudentNDB(name=current_user)
             classroom.signedup_sudents.append(person)
             classroom.seats_left = classroom.seats_left - 1
+            print 'Debug key = ' + str(classroom.key)
             classroom.put()
         elif signedup_here == True: # Already signedup here don't want to be
             person = StudentNDB(name=current_user)
             classroom.signedup.remove(current_user)
             classroom.seats_left = classroom.seats_left + 1
             classroom.put()
-        elif signedup == True: #Signed up in diffrent classrom somthing is wrong
+        elif signedup == True: #Signed up in diffrent classroom somthing is wrong
             return SignupResponse(signedup=False, status=1, message='')
 
         print 'DEBUG -', repr(dsid), repr(signup)
@@ -260,6 +258,9 @@ class TutorialSignupAPI(remote.Service):
 
     @endpoints.method(ClassroomQueryMessage, ClassroomCollectionMessage, name='list_classes')
     def listClasses(self, request):
+        current_user = endpoints.get_current_user()
+        if current_user is None:
+            raise endpoints.UnauthorizedException('Invalid token.')
         date = datetime.datetime.strptime(request.date, '%Y-%m-%d')
         qry = DateNDB.query(DateNDB.date == date)
         result = qry.fetch(1)[0]
@@ -274,7 +275,8 @@ class TutorialSignupAPI(remote.Service):
                 profilepic=classroom.teacher.profilepic,
                 room=classroom.room,
                 totalseats=classroom.totalseats,
-                takenseats=(classroom.totalseats - classroom.seats_left))
+                takenseats=(classroom.totalseats - classroom.seats_left),
+                parent_id=str(date_key.id()))
             for classroom in qry])
 
 

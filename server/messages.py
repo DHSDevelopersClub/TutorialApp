@@ -5,7 +5,7 @@ from protorpc import messages
 
 
 class ClassroomQueryMessage(messages.Message):
-    date = messages.StringField(1)
+    date = messages.StringField(1, required=True)
     search = messages.StringField(2)
 
 class ClassroomMessage(messages.Message):
@@ -23,7 +23,8 @@ class ClassroomCollectionMessage(messages.Message):
 
 class SignupRequest(messages.Message):
     dsid = messages.StringField(1)
-    signup = messages.BooleanField(2)
+    parent_id = messages.StringField(2)
+    signup = messages.BooleanField(3)
 
 class SignupResponse(messages.Message):
     signedup = messages.BooleanField(1)
