@@ -23,6 +23,7 @@ It can respond to a GET request with the classes available on a certain date.
           "classrooms": [
             {
               "dsid": "239hsefosFHSO4892",
+              "parent_id": "3284928340284",
               "teacher": "Mr. Milstead",
               "profilepic": "http://www.example.com/rmilstead.png",
               "room": "127",
@@ -55,6 +56,7 @@ date.
 
         {
           "dsid": "239hsefosFHSO4892",
+          "parent_id": "83984294820834994",
           "signup": true
         }
         ---------------------------------------------
@@ -104,6 +106,7 @@ date.
         0: Successful
         1: Already Signed Up
         2: Class Full
+        3: Invalid ID
     Additional codes can be added as needed.
 '''
 __author__ = 'Sebastian Boyd'
@@ -194,7 +197,7 @@ def test_gen_classes():
         class1 = ClassroomNDB(parent=key, teacher=teacher1, room=i['room'],
                               totalseats=i['totalseats'],
                               seats_left=i['totalseats'] - i['takenseats'],
-                              signedup_sudents=None)
+                              signedup_sudents=[])
         class1.put()
 
 
@@ -202,6 +205,12 @@ def test_gen_classes():
                allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
 class TutorialSignupAPI(remote.Service):
     '''Mediates between client and datastore.'''
+
+    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
+                      name='gen_debug_classes')
+    def gen_debug_classes(self, request):
+        test_gen_classes()
+        return message_types.VoidMessage()
 
     @endpoints.method(SignupRequest, SignupResponse, name='signup')
     def signup(self, request):
@@ -212,9 +221,29 @@ class TutorialSignupAPI(remote.Service):
         test_gen_classes()
         dsid = request.dsid
         signup = request.signup
-        print 'DEBUG -', repr(dsid), repr(signup)
+
+        #Check if signedup
+        qry = ClassroomNDB.query(ClassroomNDB.signedup_sudents.name == current_user).fetch()
+        if qry[0] == None:
+            signedup = False
+            signedup_here = False
+        else:
+            signedup = True
+        print signedup
+        if signedup == signup:
+            return SignupResponse(signedup=signedup_here, status=0, message='Already signed up here')
+        else:
+            parent_key = ndb.key('DateNDB', request.parent_id)
+        try:
+            classroom = ClassroomNDB.get_by_id(int(dsid), parent=parent_key)
+        except:
+            return SignupResponse(signedup=False, status=3, message='Invalid id')
+
+        print str(result)
+
         if signup:
-            pass
+            classroom.signedup_sudents.append()
+        print 'DEBUG -', repr(dsid), repr(signup)
         return SignupResponse(signedup=True, status=0, message=str(current_user))
 
     @endpoints.method(ClassroomQueryMessage, ClassroomCollectionMessage, name='list_classes')

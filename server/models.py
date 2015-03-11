@@ -18,7 +18,7 @@ class ClassroomNDB(ndb.Model):
     room = ndb.StringProperty()
     totalseats = ndb.IntegerProperty()
     seats_left = ndb.IntegerProperty()
-    signedup_sudents = ndb.StructuredProperty(StudentNDB)
+    signedup_sudents = ndb.StructuredProperty(StudentNDB, repeated=True)
 
 class DateNDB(ndb.Model):
     date = ndb.DateProperty(auto_now_add=True)

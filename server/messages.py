@@ -10,12 +10,13 @@ class ClassroomQueryMessage(messages.Message):
 
 class ClassroomMessage(messages.Message):
     dsid = messages.StringField(1)
-    teacher = messages.StringField(2)
-    profilepic = messages.StringField(3)
-    room = messages.StringField(4)
-    totalseats = messages.IntegerField(5)
-    takenseats = messages.IntegerField(6)
-    #signedup = messages.BooleanField(7)
+    parent_id = messages.StringField(2)
+    teacher = messages.StringField(3)
+    profilepic = messages.StringField(4)
+    room = messages.StringField(5)
+    totalseats = messages.IntegerField(6)
+    takenseats = messages.IntegerField(7)
+    signedup = messages.BooleanField(8)
 
 class ClassroomCollectionMessage(messages.Message):
     classrooms = messages.MessageField(ClassroomMessage, 1, repeated=True)
