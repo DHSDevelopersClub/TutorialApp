@@ -128,6 +128,7 @@ from auth_decorators import require_student
 
 WEB_CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com'
 
+
 def test_classes(name='Mr. Milstead', profilepic='', room='123', totalseats=12, seats_left=0):
     later = datetime.date(2015, 3, 11)
     date = DateNDB(date=later)
@@ -206,6 +207,7 @@ class TutorialSignupAPI(remote.Service):
 
     @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
                       name='gen_debug_classes')
+    @require_student
     def gen_debug_classes(self, request):
         test_gen_classes()
         return message_types.VoidMessage()
@@ -213,9 +215,6 @@ class TutorialSignupAPI(remote.Service):
     @endpoints.method(SignupRequest, SignupResponse, name='signup')
     @require_student
     def signup(self, request):
-#        current_user = endpoints.get_current_user()
-#        if current_user is None:
-#            raise endpoints.UnauthorizedException('Invalid token.')
         dsid = request.dsid
         signup = request.signup
 
@@ -259,6 +258,7 @@ class TutorialSignupAPI(remote.Service):
         return SignupResponse(signedup=signup, status=0, message=str(current_user))
 
     @endpoints.method(ClassroomQueryMessage, ClassroomCollectionMessage, name='list_classes')
+    @require_student
     def listClasses(self, request):
         current_user = endpoints.get_current_user()
         if current_user is None:
