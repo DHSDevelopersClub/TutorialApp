@@ -26,6 +26,7 @@ It can respond to a GET request with the classes available on a certain date.
           "classrooms": [
             {
               "dsid": "239hsefosFHSO4892",
+              "parent_id": "3284928340284",
               "teacher": "Mr. Milstead",
               "profilepic": "http://www.example.com/rmilstead.png",
               "room": "127",
@@ -58,6 +59,7 @@ date.
 
         {
           "dsid": "239hsefosFHSO4892",
+          "parent_id": "83984294820834994",
           "signup": true
         }
         ---------------------------------------------
@@ -107,6 +109,7 @@ date.
         0: Successful
         1: Already Signed Up
         2: Class Full
+        3: Invalid ID
     Additional codes can be added as needed.
 '''
 __author__ = 'Alexander Otavka', 'Sebastian Boyd'
@@ -147,12 +150,13 @@ class DateNDB(ndb.Model):
 
 class ClassroomMessage(messages.Message):
     dsid = messages.StringField(1)
-    teacher = messages.StringField(2)
-    profilepic = messages.StringField(3)
-    room = messages.StringField(4)
-    totalseats = messages.IntegerField(5)
-    seats_left = messages.IntegerField(6)
-    #signedup = messages.BooleanField(7)
+    parent_id = messages.StringField(2)
+    teacher = messages.StringField(3)
+    profilepic = messages.StringField(4)
+    room = messages.StringField(5)
+    totalseats = messages.IntegerField(6)
+    seats_left = messages.IntegerField(7)
+    signedup = messages.BooleanField(8)
 
 class ClassroomCollectionMessage(messages.Message):
     classrooms = messages.MessageField(ClassroomMessage, 1, repeated=True)
@@ -186,9 +190,29 @@ class TutorialSignupAPI(remote.Service):
         #test_classes()
         dsid = request.dsid
         signup = request.signup
-        print 'DEBUG -', repr(dsid), repr(signup)
+
+        #Check if signedup
+        qry = ClassroomNDB.query(ClassroomNDB.signedup_sudents.name == current_user).fetch()
+        if qry[0] == None:
+            signedup = False
+            signedup_here = False
+        else:
+            signedup = True
+        print signedup
+        if signedup == signup:
+            return SignupResponse(signedup=signedup_here, status=0, message='Already signed up here')
+        else:
+        parent_key = ndb.key('DateNDB', request.parent_id)
+        try:
+            classroom = ClassroomNDB.get_by_id(int(dsid), parent=parent_key)
+        except:
+            return SignupResponse(signedup=False, status=3, message='Invalid id')
+
+        print str(result)
+
         if signup:
-            pass
+            classroom.signedup_sudents.append()
+        print 'DEBUG -', repr(dsid), repr(signup)
         return SignupResponse(signedup=True, status=0, message=str(current_user))
 
     @endpoints.method(message_types.VoidMessage, ClassroomCollectionMessage, name='list_classes')
