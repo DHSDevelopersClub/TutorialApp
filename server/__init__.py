@@ -137,7 +137,7 @@ def test_classes(name='Mr. Milstead', profilepic='', room='123', totalseats=12, 
     key = date.put()
     class1 = ClassroomNDB(parent=key, teacher=teacher1, room=room,
                           totalseats=totalseats, seats_left=seats_left,
-                          signedup_sudents=None)
+                          signedup_sudents=[])
     class1.put()
 
 def test_gen_classes():
@@ -217,34 +217,46 @@ class TutorialSignupAPI(remote.Service):
         current_user = endpoints.get_current_user()
         if current_user is None:
             raise endpoints.UnauthorizedException('Invalid token.')
-#        test_classes()
-        test_gen_classes()
         dsid = request.dsid
         signup = request.signup
 
+        parent_key = ndb.Key('DateNDB', int(request.parent_id))
+        print parent_key
+        classroom = ClassroomNDB.get_by_id(int(dsid), parent=parent_key)
+        if classroom == None:
+            return SignupResponse(signedup=False, status=3, message='Invalid id')
+
         #Check if signedup
         qry = ClassroomNDB.query(ClassroomNDB.signedup_sudents.name == current_user).fetch()
-        if qry[0] == None:
+        if qry == []:
             signedup = False
             signedup_here = False
         else:
             signedup = True
-        print signedup
-        if signedup == signup:
-            return SignupResponse(signedup=signedup_here, status=0, message='Already signed up here')
-        else:
-            parent_key = ndb.key('DateNDB', request.parent_id)
-        try:
-            classroom = ClassroomNDB.get_by_id(int(dsid), parent=parent_key)
-        except:
-            return SignupResponse(signedup=False, status=3, message='Invalid id')
+            signedup_here = False
+            for student in classroom.signedup_sudents:
+                if student.name == current_user:
+                    signedup_here = True
 
-        print str(result)
+        if signedup_here == signup: # Already have what you want
+            return SignupResponse(signedup=signedup_here, status=0, message='Already done')
 
-        if signup:
-            classroom.signedup_sudents.append()
+        elif signedup == False: # Not signed up but want to be
+            print str(classroom)
+            person = StudentNDB(name=current_user)
+            classroom.signedup_sudents.append(person)
+            classroom.seats_left = classroom.seats_left - 1
+            classroom.put()
+        elif signedup_here == True: # Already signedup here don't want to be
+            person = StudentNDB(name=current_user)
+            classroom.signedup.remove(current_user)
+            classroom.seats_left = classroom.seats_left + 1
+            classroom.put()
+        elif signedup == True: #Signed up in diffrent classrom somthing is wrong
+            return SignupResponse(signedup=False, status=1, message='')
+
         print 'DEBUG -', repr(dsid), repr(signup)
-        return SignupResponse(signedup=True, status=0, message=str(current_user))
+        return SignupResponse(signedup=signup, status=0, message=str(current_user))
 
     @endpoints.method(ClassroomQueryMessage, ClassroomCollectionMessage, name='list_classes')
     def listClasses(self, request):
