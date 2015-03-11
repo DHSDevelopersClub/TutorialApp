@@ -2,13 +2,15 @@
 
 It can respond to a GET request with the classes available on a certain date.
 
-    A GET request sent to the path "classes" in "v1" of the api named
+    A request sent to the path "classes" in "v1" of the api named
     "tutorialsignup" with the date parameter "2015-01-04" and search parameter
     "mr".
         ---------------------------------------------
-        GET /_ah/api/tutorialsignup/v1/classes?date=2015-01-04&search=mr HTTP/1.1
-        Example-Header:  Foo Example Header
-        Other-Header:  etc, etc...
+        tutorialsignup.list_classes:
+        {
+          "date": "2015-01-04",
+          "search": "mr"
+        }
         ---------------------------------------------
 
     Should return a response with a list of classrooms available for tutorial
@@ -17,11 +19,6 @@ It can respond to a GET request with the classes available on a certain date.
     available, and whether the student has signed up already.  It should also
     include an ID, namely the datastore key.
         ---------------------------------------------
-        200 OK
-        Date:  Mon, 05 Jan 2015 01:48:57 GMT
-        Content-Type:  application/json
-        More-Headers:  etc...
-
         {
           "classrooms": [
             {
@@ -109,15 +106,19 @@ date.
         2: Class Full
     Additional codes can be added as needed.
 '''
-__author__ = 'Alexander Otavka', 'Sebastian Boyd'
+__author__ = 'Sebastian Boyd'
 
 
-import endpoints
-from protorpc import messages, message_types, remote
-from google.appengine.ext import ndb
 import datetime
 
+import endpoints
+from protorpc import message_types, remote
+
 #from libs.endpoints_proto_datastore.ndb import EndpointsModel
+
+from models import TeacherNDB, StudentNDB, ClassroomNDB, DateNDB
+from messages import (ClassroomQueryMessage, ClassroomMessage, ClassroomCollectionMessage,
+                      SignupRequest, SignupResponse)
 
 
 WEB_CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com'
@@ -126,64 +127,89 @@ WEB_CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleuserco
 #SOME_UNKNOWN_CLIENT_ID = '292824132082.apps.googleusercontent.com',
 
 
-class TeacherNDB(ndb.Model):
-    name = ndb.UserProperty()
-    text_name = ndb.StringProperty() # Testing only
-    profilepic = ndb.StringProperty()
-
-class StudentNDB(ndb.Model):
-    name = ndb.UserProperty()
-
-class ClassroomNDB(ndb.Model):
-    '''An individual classroom on a specific date.'''
-    teacher = ndb.StructuredProperty(TeacherNDB)
-    room = ndb.StringProperty()
-    totalseats = ndb.IntegerProperty()
-    seats_left = ndb.IntegerProperty()
-    signedup_sudents = ndb.StructuredProperty(StudentNDB)
-
-class DateNDB(ndb.Model):
-    date = ndb.DateProperty(auto_now_add=True)
-
-class ClassroomMessage(messages.Message):
-    dsid = messages.StringField(1)
-    teacher = messages.StringField(2)
-    profilepic = messages.StringField(3)
-    room = messages.StringField(4)
-    totalseats = messages.IntegerField(5)
-    seats_left = messages.IntegerField(6)
-    #signedup = messages.BooleanField(7)
-
-class ClassroomCollectionMessage(messages.Message):
-    classrooms = messages.MessageField(ClassroomMessage, 1, repeated=True)
-
-class SignupRequest(messages.Message):
-    dsid = messages.StringField(1)
-    signup = messages.BooleanField(2)
-
-class SignupResponse(messages.Message):
-    signedup = messages.BooleanField(1)
-    status = messages.IntegerField(2)
-    message = messages.StringField(3)
-
-def test_classes():
+def test_classes(name='Mr. Milstead', profilepic='', room='123', totalseats=12, seats_left=0):
     later = datetime.date(2015, 3, 11)
-    date = DateNDB(date = later)
-    teacher1 = TeacherNDB(text_name="Mr Milstead")
+    date = DateNDB(date=later)
+    teacher1 = TeacherNDB(text_name=name)
     key = date.put()
-    class1 = ClassroomNDB(parent=key, teacher=teacher1, room="123", totalseats=12, seats_left=1, signedup_sudents=None)
+    class1 = ClassroomNDB(parent=key, teacher=teacher1, room=room,
+                          totalseats=totalseats, seats_left=seats_left,
+                          signedup_sudents=None)
     class1.put()
+
+def test_gen_classes():
+    classlist = [
+            {
+              "dsid": "a39hsefosFHSO4892",
+              "teacher": "Mr. Milstead",
+              "profilepic": "http://cache3.asset-cache.net/gc/57442583-portrait-of-a-school-teacher-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=Y3hy48kuiy7pabQpAfxaQrcgpfAMUuQ1FcwFl8J80Es%3D",
+              "room": "127",
+              "totalseats": 30,
+              "takenseats": 14,
+              "signedup": True
+            },
+            {
+              "dsid": "bh9hsefk23hrkO489",
+              "teacher": "Mrs. Foo",
+              "profilepic": "http://mcauliffe.dpsk12.org/wp-content/uploads/2011/09/StephanieGronholz_Retouch-square-crop.jpg",
+              "room": "222",
+              "totalseats": 28,
+              "takenseats": 28,
+              "signedup": False
+            },
+            {
+              "dsid": "Clghi4k23hrkO4892",
+              "teacher": "Mr. Bar",
+              "profilepic": "http://4.bp.blogspot.com/-sXyOdCbaVi4/UA7dYAwjUCI/AAAAAAAAFmI/tbO4vxpVHS4/s220/nfowkes-square.jpg",
+              "room": "409",
+              "totalseats": 30,
+              "takenseats": 28,
+              "signedup": False
+            },
+            {
+              "dsid": "d8s4hOFH4h84HOf48",
+              "teacher": "Mrs. Wolfeschlegelsteinhausenbergerdorff",
+              "profilepic": "http://cache2.asset-cache.net/gc/dv1313056-portrait-of-a-mature-teacher-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=jDI%2BiZbzwv%2BjFYTsYAzbzRIz392Wxp0jHzYXiV6NO3k%3D",
+              "room": "413",
+              "totalseats": 18,
+              "takenseats": 17,
+              "signedup": False
+            },
+            {
+              "dsid": "ehHUE7e2BF2Hkkeuk",
+              "teacher": "Mrs. Example",
+              "profilepic": "http://cache4.asset-cache.net/gc/57442708-portrait-of-a-female-school-teacher-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=E5y3FqGCZA78hfJC8P3s3hrnAf50DBBxD1Fa1hqvjx8%3D",
+              "room": "104A",
+              "totalseats": 33,
+              "takenseats": 3,
+              "signedup": False
+            }
+          ]
+    later = datetime.date(2015, 3, 11)
+    date = DateNDB(date=later)
+    key = date.put()
+    for i in classlist:
+        teacher1 = TeacherNDB(text_name=i['teacher'], profilepic=i['profilepic'])
+
+        class1 = ClassroomNDB(parent=key, teacher=teacher1, room=i['room'],
+                              totalseats=i['totalseats'],
+                              seats_left=i['totalseats'] - i['takenseats'],
+                              signedup_sudents=None)
+        class1.put()
+
 
 @endpoints.api(name='tutorialsignup', version='v1',
                allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
 class TutorialSignupAPI(remote.Service):
     '''Mediates between client and datastore.'''
+
     @endpoints.method(SignupRequest, SignupResponse, name='signup')
     def signup(self, request):
         current_user = endpoints.get_current_user()
         if current_user is None:
             raise endpoints.UnauthorizedException('Invalid token.')
-        #test_classes()
+#        test_classes()
+        test_gen_classes()
         dsid = request.dsid
         signup = request.signup
         print 'DEBUG -', repr(dsid), repr(signup)
@@ -191,25 +217,24 @@ class TutorialSignupAPI(remote.Service):
             pass
         return SignupResponse(signedup=True, status=0, message=str(current_user))
 
-    @endpoints.method(message_types.VoidMessage, ClassroomCollectionMessage, name='list_classes')
-
+    @endpoints.method(ClassroomQueryMessage, ClassroomCollectionMessage, name='list_classes')
     def listClasses(self, request):
-        today = datetime.date.today()
-        qry = DateNDB.query(DateNDB.date >= today)
-        qry.order(DateNDB.date)
-        result = qry.fetch(1)
-        date_key = result[0].key
-        dsid = date_key.id()
-        print str(dsid)
-        qry = ClassroomNDB.query(ancestor=date_key).order(-ClassroomNDB.seats_left)
-        classroom_collection = []
-        for classroom in qry:
-            print str(classroom)
-            class_message = ClassroomMessage(dsid=str(classroom.key.id()), teacher=classroom.teacher.text_name, profilepic=classroom.teacher.profilepic, room=classroom.room, totalseats=classroom.totalseats, seats_left=classroom.seats_left)
+        date = datetime.datetime.strptime(request.date, '%Y-%m-%d')
+        qry = DateNDB.query(DateNDB.date == date)
+        result = qry.fetch(1)[0]
+        date_key = result.key
 
-            classroom_collection.append(class_message)
-
-        return ClassroomCollectionMessage(classrooms = classroom_collection)
+        qry = ClassroomNDB.query(ancestor=date_key).order(-ClassroomNDB.seats_left).fetch(20)
+        print qry
+        return ClassroomCollectionMessage(classrooms=[
+            ClassroomMessage(
+                dsid=str(classroom.key.id()),
+                teacher=classroom.teacher.text_name,
+                profilepic=classroom.teacher.profilepic,
+                room=classroom.room,
+                totalseats=classroom.totalseats,
+                takenseats=(classroom.totalseats - classroom.seats_left))
+            for classroom in qry])
 
 
 application = endpoints.api_server([TutorialSignupAPI])
