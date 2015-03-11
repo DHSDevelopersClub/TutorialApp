@@ -176,7 +176,7 @@ def test_classes():
     date = DateNDB(date = later)
     teacher1 = TeacherNDB(text_name="Mr Milstead")
     key = date.put()
-    class1 = ClassroomNDB(parent=key, teacher=teacher1, room="123", totalseats=12, seats_left=1, signedup_sudents=[])
+    class1 = ClassroomNDB(parent=key, teacher=teacher1, room="123", totalseats=12, seats_left=12, signedup_sudents=[])
     class1.put()
 
 @endpoints.api(name='tutorialsignup', version='v1',
@@ -206,10 +206,10 @@ class TutorialSignupAPI(remote.Service):
             signedup_here = False
         else:
             signedup = True
-            if classroom.signedup_sudents.name == current_user: # Need to fix
-                signedup_here = False
-            else:
-                signedup_here = True
+            signedup_here = False
+            for student in classroom.signedup_sudents:
+                if student.name == current_user:
+                    signedup_here = True
 
         if signedup_here == signup: # Already have what you want
             return SignupResponse(signedup=signedup_here, status=0, message='Already done')
