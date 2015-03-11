@@ -116,12 +116,14 @@ import datetime
 
 import endpoints
 from protorpc import message_types, remote
+from google.appengine.ext import ndb
 
 #from libs.endpoints_proto_datastore.ndb import EndpointsModel
 
 from models import TeacherNDB, StudentNDB, ClassroomNDB, DateNDB
 from messages import (ClassroomQueryMessage, ClassroomMessage, ClassroomCollectionMessage,
                       SignupRequest, SignupResponse)
+from auth_decorators import require_student
 
 
 WEB_CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com'
@@ -213,10 +215,11 @@ class TutorialSignupAPI(remote.Service):
         return message_types.VoidMessage()
 
     @endpoints.method(SignupRequest, SignupResponse, name='signup')
+    @require_student
     def signup(self, request):
-        current_user = endpoints.get_current_user()
-        if current_user is None:
-            raise endpoints.UnauthorizedException('Invalid token.')
+#        current_user = endpoints.get_current_user()
+#        if current_user is None:
+#            raise endpoints.UnauthorizedException('Invalid token.')
         dsid = request.dsid
         signup = request.signup
 
