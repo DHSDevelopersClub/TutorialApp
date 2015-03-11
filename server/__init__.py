@@ -260,9 +260,6 @@ class TutorialSignupAPI(remote.Service):
     @endpoints.method(ClassroomQueryMessage, ClassroomCollectionMessage, name='list_classes')
     @require_student
     def listClasses(self, request):
-        current_user = endpoints.get_current_user()
-        if current_user is None:
-            raise endpoints.UnauthorizedException('Invalid token.')
         date = datetime.datetime.strptime(request.date, '%Y-%m-%d')
         qry = DateNDB.query(DateNDB.date == date)
         result = qry.fetch(1)[0]
