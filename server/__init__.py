@@ -208,13 +208,13 @@ class TutorialSignupAPI(remote.Service):
     @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
                       name='gen_debug_classes')
     @require_student
-    def gen_debug_classes(self, request):
+    def gen_debug_classes(self, request, current_user):
         test_gen_classes()
         return message_types.VoidMessage()
 
     @endpoints.method(SignupRequest, SignupResponse, name='signup')
     @require_student
-    def signup(self, request):
+    def signup(self, request, current_user):
         dsid = request.dsid
         signup = request.signup
 
@@ -254,15 +254,11 @@ class TutorialSignupAPI(remote.Service):
         elif signedup == True: #Signed up in diffrent classroom somthing is wrong
             return SignupResponse(signedup=False, status=1, message='')
 
-        print 'DEBUG -', repr(dsid), repr(signup)
         return SignupResponse(signedup=signup, status=0, message=str(current_user))
 
     @endpoints.method(ClassroomQueryMessage, ClassroomCollectionMessage, name='list_classes')
     @require_student
-    def listClasses(self, request):
-        current_user = endpoints.get_current_user()
-        if current_user is None:
-            raise endpoints.UnauthorizedException('Invalid token.')
+    def listClasses(self, request, current_user):
         date = datetime.datetime.strptime(request.date, '%Y-%m-%d')
         qry = DateNDB.query(DateNDB.date == date)
         result = qry.fetch(1)[0]
