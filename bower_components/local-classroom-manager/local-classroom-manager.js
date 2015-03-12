@@ -5,7 +5,8 @@
 (function () {
     "use strict";
 
-    Array.prototype.move = function (item, new_index) {
+    // TODO: remove with fake server
+    /*Array.prototype.move = function (item, new_index) {
         var old_index = this.indexOf(item);
         if (new_index >= this.length) {
             var k = new_index - this.length;
@@ -15,7 +16,7 @@
         }
         this.splice(new_index, 0, this.splice(old_index, 1)[0]);
         return this; // for testing purposes
-    };
+    };*/
 
     var findClassroom = function(classrooms, isCorrect) {
         for (var i = 0; i < classrooms.length; i++) {
@@ -31,6 +32,8 @@
         });
     };
 
+    // TODO: remove fake server
+    /*
     var FAKE_SERVER = {
         data: {
           "classrooms": [
@@ -85,57 +88,51 @@
             var data = JSON.stringify(this.data);
             callback(JSON.parse(data));
         },
-//        _changeEntry: function(classroom, signedup) {
-//            var signedup = Boolean(signedup);
-//            var status;
-//            if (classroom.signedup !== signedup) {
-//                classroom.takenseats += signedup ? 1 : -1;
-//                if (classroom.takenseats <= classroom.totalseats) {
-//                    if (signedup) {
-//                        this.data.classrooms.move(classroom, 0);
-//                    }
-//                    classroom.signedup = signedup;
-//                    status = 0;
-//                } else {
-//                    classroom.takenseats = classroom.totalseats;
-//                    status = 2;
-//                }
-//            } else {
-//                status = 1;
-//            }
-//        },
-//        postData: function(dsid, signedup, callback) {
-//            var classroom = findClassroomById(this.data.classrooms, dsid);
-//            this._changeEntry(classroom, signedup);
-//
-//            if (signedup) {
-//                var previousSignedup = findClassroom(this.data.classrooms, function(classroom) {
-//                    return classroom.signedup && (classroom.dsid !== dsid);
-//                });
-//                if (previousSignedup !== undefined) {
-//                    this._changeEntry(previousSignedup, false);
-//                }
-//            }
-//
-//            setTimeout(function() {
-//                callback(classroom.signedup, status);
-//            }, 1000);
-//        }
+        _changeEntry: function(classroom, signedup) {
+            var signedup = Boolean(signedup);
+            var status;
+            if (classroom.signedup !== signedup) {
+                classroom.takenseats += signedup ? 1 : -1;
+                if (classroom.takenseats <= classroom.totalseats) {
+                    if (signedup) {
+                        this.data.classrooms.move(classroom, 0);
+                    }
+                    classroom.signedup = signedup;
+                    status = 0;
+                } else {
+                    classroom.takenseats = classroom.totalseats;
+                    status = 2;
+                }
+            } else {
+                status = 1;
+            }
+        },
+        postData: function(dsid, signedup, callback) {
+            var classroom = findClassroomById(this.data.classrooms, dsid);
+            this._changeEntry(classroom, signedup);
+
+            if (signedup) {
+                var previousSignedup = findClassroom(this.data.classrooms, function(classroom) {
+                    return classroom.signedup && (classroom.dsid !== dsid);
+                });
+                if (previousSignedup !== undefined) {
+                    this._changeEntry(previousSignedup, false);
+                }
+            }
+
+            setTimeout(function() {
+                callback(classroom.signedup, status);
+            }, 1000);
+        }
     }
+    */
 
     var sendGetRequest = function(search, date, callback) {
         if (gapi.client === undefined) return;
-//        gapi.client.oauth2.userinfo.get().execute(function(resp) {
-//            if (!resp.code) {
-//                FAKE_SERVER.getData(search, date, callback);
-                gapi.client.tutorialsignup.list_classes({
-                    "search": search,
-                    "date": date
-                }).execute(callback);
-//            } else {
-//                callback(resp);
-//            }
-//        });
+        gapi.client.tutorialsignup.list_classes({
+            "search": search,
+            "date": date
+        }).execute(callback);
     }
 
     var sendPostRequest = function(dsid, signup, callback) {
@@ -231,8 +228,12 @@
         },
 
         onSignup: function(event) {
+            var context = this;
+
             findClassroomById(this.classrooms, event.detail.dsid).takenseats ++;
-            sendPostRequest(event.detail.dsid, true, function(response) {});
+            sendPostRequest(event.detail.dsid, true, function(response) {
+                context.signedIn = checkSignedIn(response);
+            });
 
             var previousSignedupClassroom = findClassroom(this.classrooms, function(classroom) {
                 return classroom.signedup && (classroom.dsid !== event.detail.dsid);
@@ -245,8 +246,12 @@
         },
 
         onUnsignup: function(event) {
+            var context = this;
+
             findClassroomById(this.classrooms, event.detail.dsid).takenseats --;
-            sendPostRequest(event.detail.dsid, false, function(response) {});
+            sendPostRequest(event.detail.dsid, false, function(response) {
+                context.signedIn = checkSignedIn(response);
+            });
             this.updateClassroomCards();
         },
     });
