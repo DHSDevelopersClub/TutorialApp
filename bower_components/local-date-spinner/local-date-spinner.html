@@ -1,52 +1,45 @@
 <!--Display the current date.
 
-Has data bound published property 'date' with the date being displayed.  `date`
-is a string in the format 'yyyy-mm-dd'.  The date displayed should look like
-'Wednesday, January 7'.  Right now, the date cannot be changed.
+Has data bound published property "date" with the date being displayed.  `date`
+is a string in the format "yyyy-mm-dd".  The date displayed should look like
+"Wednesday, January 7".  Right now, the date cannot be changed.
 
-Author: Max Starr
-Date algorythem taken from http://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week#Other_purely_mathematical_algorithms
+Author: Max Starr, Alexander Otavka
 -->
 
 <link rel="import" href="../polymer/polymer.html">
 
-<polymer-element name="locaL-date-spinner" attributes="date">
+<polymer-element name="local-date-spinner" attributes="date">
     <template>
-        <style type="text/css">
+        <style>
             #dateContainer {
                 font-weight: 300;
             }
         </style>
-        <div id="dateContainer">{{dayStr}}, {{month}} {{dayNum}}</div>
+
+        <template if="{{date}}">
+            <div id="dateContainer">{{dayStr}}, {{month}} {{dayNum}}</div>
+        </template>
     </template>
+
     <script>
         (function () {
-            // Run once. Private and static to the element.
-            var MONTHS_NUM = [11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-            var MONTHS_STR = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July',
-                              'August', 'September', 'October', 'November', 'December'];
-            var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednessday', 'Thursday', 'Friday', 'Saturday'];
+            var MONTHS = ["January", "Febuary", "March", "April", "May", "June", "July",
+                              "August", "September", "October", "November", "December"];
+            var DAYS = ["Sunday", "Monday", "Tuesday", "Wednessday", "Thursday", "Friday",
+                        "Saturday"];
 
-            // Run for every instance of the element that's created.
             Polymer({
-                date: '2015-01-20',
-                ready: function () {
-                    dateArr = this.date.split('-');
-                    if (dateArr[1] == 1 || dateArr[1] == 2) {
-                        Y = dateArr[0] - 1;
-                    } else {
-                        Y = dateArr[0];
-                    }
-                    y = parseInt(Y.toString().slice(2, 4));
-                    c = parseInt(Y.toString().slice(0, 2));
-                    d = parseInt(dateArr[2]);
-                    m = MONTHS_NUM[parseInt(dateArr[1])-1];
-                    dayNum = (d + (2.6 * m - 0.2) + y + (y / 4) + (c / 4) - 2 * c)%7;
-                    dayStr = DAYS[Math.floor(dayNum)];
-                    this.dayStr = dayStr;
-                    this.month = MONTHS_STR[parseInt(dateArr[1])-1];
-                    this.dayNum = d;
-                }
+                date: "",
+
+                dateChanged: function() {
+                    var dateArr = this.date.split("-");
+                    var dateObj = new Date(
+                        Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]));
+                    this.dayStr = DAYS[dateObj.getDay()];
+                    this.month = MONTHS[Number(dateArr[1]) - 1];
+                    this.dayNum = dateArr[2];
+                },
             });
         })();
     </script>

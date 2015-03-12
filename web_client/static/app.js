@@ -8,7 +8,7 @@
 
 var app = document.querySelector("template#app");
 app.search = "";
-app.date = "2015-03-11";
+app.date = "";
 
 app.addEventListener("template-bound", function() {
     "use strict";
@@ -79,6 +79,13 @@ app.addEventListener("template-bound", function() {
 
         return anim;
     }());
+
+    app.onReady = function() {
+        gapi.client.tutorialsignup.next_tutorial().execute(function(response) {
+            console.log(response.date);
+            app.date = "2015-03-11";
+        });
+    };
 
     app.onMediaMobileChange = function() {
         /* Align the search bar based on media and search state. */
@@ -168,5 +175,5 @@ app.addEventListener("template-bound", function() {
     app.signOut = function() {
         gapi.auth.setToken(null);
         app.refresh(true);
-    }
+    };
 });

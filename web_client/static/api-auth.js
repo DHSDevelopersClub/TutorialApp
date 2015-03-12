@@ -14,7 +14,7 @@ function apiInit() {
     var loadCallback = function() {
         if (--apisToLoad == 0) {
             signIn(true, function() {
-                app.refresh();
+                app.onReady();
             });
         }
     };
