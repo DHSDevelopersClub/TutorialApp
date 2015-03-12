@@ -198,7 +198,7 @@
                 contentAnimation.direction = "normal";
                 contentAnimation.play();
                 this.$.loadingSpinner.active = true;
-                this.$.loadingSpinner.removeAttribute("hidden");
+                this.$.loadingSpinnerWrapper.removeAttribute("hidden");
             }
 
             sendGetRequest(this.search, this.date, function(response) {
@@ -211,7 +211,7 @@
                     contentAnimation.direction = "reverse";
                     contentAnimation.play();
                     context.$.loadingSpinner.active = false;
-                    context.$.loadingSpinner.setAttribute("hidden", "");
+                    context.$.loadingSpinnerWrapper.setAttribute("hidden", "");
                 }
             });
         },
