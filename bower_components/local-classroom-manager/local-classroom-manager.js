@@ -135,9 +135,10 @@
         }).execute(callback);
     }
 
-    var sendPostRequest = function(dsid, signup, callback) {
+    var sendPostRequest = function(dsid, parent_id, signup, callback) {
         gapi.client.tutorialsignup.signup({
             "dsid": dsid,
+            "parent_id": parent_id,
             "signup": signup,
         }).execute(callback);
     };
@@ -231,7 +232,7 @@
             var context = this;
 
             findClassroomById(this.classrooms, event.detail.dsid).takenseats ++;
-            sendPostRequest(event.detail.dsid, true, function(response) {
+            sendPostRequest(event.detail.dsid, event.detail.parent_id, true, function(response) {
                 context.signedIn = checkSignedIn(response);
             });
 
@@ -249,7 +250,7 @@
             var context = this;
 
             findClassroomById(this.classrooms, event.detail.dsid).takenseats --;
-            sendPostRequest(event.detail.dsid, false, function(response) {
+            sendPostRequest(event.detail.dsid, event.detail.parent_id, false, function(response) {
                 context.signedIn = checkSignedIn(response);
             });
             this.updateClassroomCards();
