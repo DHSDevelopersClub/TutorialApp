@@ -139,7 +139,7 @@ def test_classes(name='Mr. Milstead', profilepic='', room='123', totalseats=12, 
                           signedup_sudents=[])
     class1.put()
 
-def test_gen_classes():
+def test_gen_classes(later=datetime.date(2015, 3, 13)):
     classlist = [
             {
               "dsid": "a39hsefosFHSO4892",
@@ -187,7 +187,6 @@ def test_gen_classes():
               "signedup": False
             }
           ]
-    later = datetime.date(2015, 3, 11)
     date = DateNDB(date=later)
     key = date.put()
     for i in classlist:
@@ -198,6 +197,7 @@ def test_gen_classes():
                               seats_left=i['totalseats'] - i['takenseats'],
                               signedup_sudents=[])
         class1.put()
+
 
 def check_signup(classroom, current_user):
     signedup = False
@@ -236,6 +236,16 @@ def next_weekday(d, weekday):
         days_ahead += 7
     return d + datetime.timedelta(days_ahead)
 
+def get_next_tutorial():
+    d = datetime.date.today()
+    next_wednesday = next_weekday(d, 2)
+    next_friday = next_weekday(d, 4)
+    if next_wednesday < next_friday:
+        return next_wednesday
+    else:
+        return next_friday
+
+
 @endpoints.api(name='tutorialsignup', version='v1',
                allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
 class TutorialSignupAPI(remote.Service):
@@ -245,7 +255,7 @@ class TutorialSignupAPI(remote.Service):
                       name='gen_debug_classes')
     @require_student
     def gen_debug_classes(self, request, current_user):
-        test_gen_classes()
+        test_gen_classes(get_next_tutorial())
         return message_types.VoidMessage()
 
     @endpoints.method(SignupRequest, SignupResponse, name='signup')
@@ -284,7 +294,10 @@ class TutorialSignupAPI(remote.Service):
     def listClasses(self, request, current_user):
         date = datetime.datetime.strptime(request.date, '%Y-%m-%d')
         qry = DateNDB.query(DateNDB.date == date)
-        result = qry.fetch(1)[0]
+        try:
+            result = qry.fetch(1)[0]
+        except IndexError:
+            return ClassroomCollectionMessage(classrooms=[])
         date_key = result.key
         qry = ClassroomNDB.query(ancestor=date_key).order(-ClassroomNDB.seats_left).fetch()
         filtered = search(request.search, qry)
@@ -305,13 +318,6 @@ class TutorialSignupAPI(remote.Service):
 
     @endpoints.method(message_types.VoidMessage, NextTutorialResponse, name='next_tutorial')
     def nextTutorial(self, request):
-        d = datetime.date.today()
-        next_wednesday = next_weekday(d, 2)
-        next_friday = next_weekday(d, 4)
-        if next_wednesday < next_friday:
-            tutorial = next_wednesday
-        else:
-            tutorial = next_friday
         str_date = tutorial.strftime('%Y-%m-%d')
         return NextTutorialResponse(date=str_date)
 
