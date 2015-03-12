@@ -282,6 +282,9 @@ class TutorialSignupAPI(remote.Service):
         date_key = result.key
         qry = ClassroomNDB.query(ancestor=date_key).order(-ClassroomNDB.seats_left).fetch()
         filtered = search(request.search, qry)
+        for classroom in filtered:
+            if check_signup(classroom, current_user):
+                filtered.insert(0, filtered.pop(filtered.index(classroom)))
         return ClassroomCollectionMessage(classrooms=[
             ClassroomMessage(
                 dsid=str(classroom.key.id()),
