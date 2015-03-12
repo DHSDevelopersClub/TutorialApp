@@ -72,7 +72,8 @@ Author: Alexander Otavka
             },
             syncSignup: function() {
                 this.fire(this.data.signedup ? "local-signup" : "local-unsignup",
-                          {dsid: this.data.dsid});
+                          {dsid: this.data.dsid,
+                           parent_id: this.data.parent_id});
             },
         });
     </script>
