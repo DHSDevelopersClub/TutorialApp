@@ -30,3 +30,6 @@ class SignupResponse(messages.Message):
     signedup = messages.BooleanField(1)
     status = messages.IntegerField(2)
     message = messages.StringField(3)
+
+class NextTutorialResponse(messages.Message):
+    date = messages.StringField(1)
