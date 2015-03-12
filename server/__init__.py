@@ -207,6 +207,14 @@ def check_signup(classroom, current_user):
             break
     return signedup
 
+def search(search, classrooms):
+    if (search != None and search != ''):
+        filtered = []
+        for classroom in classrooms:
+            if search.lower() in classroom.room.lower(): filtered.append(classroom)
+            if search.lower() in classroom.teacher.text_name.lower(): filtered.append(classroom)
+        return filtered
+    else: return classrooms
 
 @endpoints.api(name='tutorialsignup', version='v1',
                allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
@@ -269,12 +277,7 @@ class TutorialSignupAPI(remote.Service):
         result = qry.fetch(1)[0]
         date_key = result.key
         qry = ClassroomNDB.query(ancestor=date_key).order(-ClassroomNDB.seats_left).fetch()
-        print qry
-        print "YOLO" + str(current_user)
-        if request.search != None:
-            filtered = []
-        else: filtered = qry
-
+        filtered = search(request.search, qry)
         return ClassroomCollectionMessage(classrooms=[
             ClassroomMessage(
                 dsid=str(classroom.key.id()),
