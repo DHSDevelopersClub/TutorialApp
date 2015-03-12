@@ -195,7 +195,6 @@
             var contentAnimation = this.$.contentAnimation;
             contentAnimation.target = this.$.container;
             if (!this.pendingRequests++ && animate) {
-                this.loading = true;
                 contentAnimation.direction = "normal";
                 contentAnimation.play();
                 this.$.loadingSpinner.active = true;

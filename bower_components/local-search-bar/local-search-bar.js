@@ -12,16 +12,28 @@
         MODE_SEARCH: 1,
 
         search: "",
+        inputValue: "",
         mode: 0,
+
+        inputValueChanged: function(oldValue) {
+            var context = this;
+            var startValue = this.inputValue;
+            setTimeout(function() {
+                if (context.inputValue == startValue) {
+                    context.search = context.inputValue;
+                }
+            }, 1000);
+        },
 
         enableSearchMode: function() {
             if (this.mode === this.MODE_SEARCH) {
                 return;
             }
             this.$.container.querySelector("#searchBox").setZ(0);
-            var container = this.$.container;
+            var context = this;
             setTimeout(function() {
-                container.querySelector("#boxInput").focus();
+//                container.querySelector("#boxInput").focus();
+                context.focusInput();
             }, 100);
 
             this.mode = this.MODE_SEARCH;
@@ -39,12 +51,13 @@
         },
 
         clearInput: function() {
-            var input = this.$.container.querySelector("#boxInput");
-            input.value = "";
-            input.commit();
-            if (this.mode === this.MODE_SEARCH) {
-                input.focus();
-            }
+            this.inputValue = "";
+            this.search = "";
+            this.focusInput();
         },
+
+        focusInput: function() {
+            this.$.container.querySelector("#boxInput").focus();
+        }
     });
 }());
