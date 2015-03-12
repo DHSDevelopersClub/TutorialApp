@@ -216,6 +216,20 @@ def search(search, classrooms):
         return filtered
     else: return classrooms
 
+def signup_simple(current_user, classroom):
+    person = StudentNDB(name=current_user)
+    classroom.signedup_sudents.append(person)
+    classroom.seats_left = classroom.seats_left - 1
+    classroom.put()
+
+def unsignup_simple(current_user, classroom):
+    person = StudentNDB(name=current_user)
+    for student in classroom.signedup_sudents:
+        if student.name == current_user:
+            classroom.signedup_sudents.remove(student)
+    classroom.seats_left = classroom.seats_left + 1
+    classroom.put()
+
 @endpoints.api(name='tutorialsignup', version='v1',
                allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
 class TutorialSignupAPI(remote.Service):
@@ -247,25 +261,15 @@ class TutorialSignupAPI(remote.Service):
         else:
             signedup = True
             signedup_here = check_signup(classroom, current_user)
-
         if signedup_here == signup: # Already have what you want
             return SignupResponse(signedup=signedup_here, status=0, message='Already done')
         elif signedup == False: # Not signed up but want to be
-            person = StudentNDB(name=current_user)
-            classroom.signedup_sudents.append(person)
-            classroom.seats_left = classroom.seats_left - 1
-            classroom.put()
+            signup_simple(current_user, classroom)
         elif signedup_here == True: # Already signedup here don't want to be
-            person = StudentNDB(name=current_user)
-            print str(classroom.signedup_sudents)
-            print str(current_user)
-            for student in classroom.signedup_sudents:
-                if student.name == current_user:
-                    classroom.signedup_sudents.remove(student)
-            classroom.seats_left = classroom.seats_left + 1
-            classroom.put()
+            unsignup_simple(current_user, classroom)
         elif signedup == True: #Signed up in diffrent classroom somthing is wrong
-            return SignupResponse(signedup=False, status=1, message='')
+            unsignup_simple(current_user, qry[0])
+            signup_simple(current_user, classroom)
 
         return SignupResponse(signedup=signup, status=0, message=str(current_user))
 
