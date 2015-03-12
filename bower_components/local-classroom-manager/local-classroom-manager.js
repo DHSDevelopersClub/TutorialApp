@@ -200,11 +200,8 @@
 
             sendGetRequest(this.search, this.date, function(response) {
                 context.signedIn = checkSignedIn(response);
-                if (!response.code) {
-                    context.classrooms = response.classrooms;
-                } else {
-                    context.classrooms = [];
-                }
+                context.classrooms = (response.classrooms !== undefined) ?
+                                     response.classrooms : [];
                 context.updateClassroomCards();
                 if (animate) {
                     contentAnimation.direction = "reverse";
