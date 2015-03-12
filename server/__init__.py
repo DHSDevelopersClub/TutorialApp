@@ -123,15 +123,15 @@ from google.appengine.ext import ndb
 from models import TeacherNDB, StudentNDB, ClassroomNDB, DateNDB
 from messages import (ClassroomQueryMessage, ClassroomMessage, ClassroomCollectionMessage,
                       SignupRequest, SignupResponse, NextTutorialResponse)
-from auth_decorators import require_student
+from auth_decorators import requires_student
 
 
 WEB_CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com'
 
 
-def test_classes(name='Mr. Milstead', profilepic='', room='123', totalseats=12, seats_left=0):
-    later = datetime.date(2015, 3, 11)
-    date = DateNDB(date=later)
+def test_classes(next_tutorial,
+                 name='Mr. Milstead', profilepic='', room='123', totalseats=12, seats_left=0):
+    date = DateNDB(date=next_tutorial)
     teacher1 = TeacherNDB(text_name=name)
     key = date.put()
     class1 = ClassroomNDB(parent=key, teacher=teacher1, room=room,
@@ -139,7 +139,7 @@ def test_classes(name='Mr. Milstead', profilepic='', room='123', totalseats=12, 
                           signedup_sudents=[])
     class1.put()
 
-def test_gen_classes(later=datetime.date(2015, 3, 13)):
+def test_gen_classes(next_tutorial):
     classlist = [
             {
               "dsid": "a39hsefosFHSO4892",
@@ -187,7 +187,7 @@ def test_gen_classes(later=datetime.date(2015, 3, 13)):
               "signedup": False
             }
           ]
-    date = DateNDB(date=later)
+    date = DateNDB(date=next_tutorial)
     key = date.put()
     for i in classlist:
         teacher1 = TeacherNDB(text_name=i['teacher'], profilepic=i['profilepic'])
@@ -208,13 +208,21 @@ def check_signup(classroom, current_user):
     return signedup
 
 def search(search, classrooms):
-    if (search != None and search != ''):
-        filtered = []
-        for classroom in classrooms:
-            if search.lower() in classroom.room.lower(): filtered.append(classroom)
-            if search.lower() in classroom.teacher.text_name.lower(): filtered.append(classroom)
-        return filtered
-    else: return classrooms
+    if (search == None or search == ''):
+        return classrooms
+
+    search_list = search.split()
+    def key (classroom):
+        searched_properties = classroom.room, classroom.teacher.text_name
+        match_count = 0
+        for string in searched_properties:
+            for search in search_list:
+                if search.lower() in string.lower():
+                    match_count += 1
+        return -match_count
+
+    return [i[2] for i in sorted((key(c), -c.seats_left, c) for c in classrooms)
+            if abs(i[0]) > len(search_list) / 2]
 
 def signup_simple(current_user, classroom):
     person = StudentNDB(name=current_user)
@@ -253,13 +261,13 @@ class TutorialSignupAPI(remote.Service):
 
     @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
                       name='gen_debug_classes')
-    @require_student
+    @requires_student
     def gen_debug_classes(self, request, current_user):
         test_gen_classes(get_next_tutorial())
         return message_types.VoidMessage()
 
     @endpoints.method(SignupRequest, SignupResponse, name='signup')
-    @require_student
+    @requires_student
     def signup(self, request, current_user):
         dsid = request.dsid
         signup = request.signup
@@ -290,7 +298,7 @@ class TutorialSignupAPI(remote.Service):
         return SignupResponse(signedup=signup, status=0, message=str(current_user))
 
     @endpoints.method(ClassroomQueryMessage, ClassroomCollectionMessage, name='list_classes')
-    @require_student
+    @requires_student
     def listClasses(self, request, current_user):
         date = datetime.datetime.strptime(request.date, '%Y-%m-%d')
         qry = DateNDB.query(DateNDB.date == date)

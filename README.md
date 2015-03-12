@@ -18,14 +18,14 @@ We must implement these before we can release Alpha 1.
 
   - ~~Completed Task~~
   - Server
-    - Respond to a GET request with the classes avalible on a certain date.
-    - Accept a POST request to signup for a specific class on a certain date.
-    - Operate with Google's default OAuth2.0 framework
+    - ~~Respond to a POST request with the classes avalible on a certain date.~~
+    - ~~Accept a POST request to signup for a specific class on a certain date.~~
+    - ~~Operate with Google's default OAuth2.0 framework.~~
   - Web client
     - ~~Mobile optimized~~
     - ~~Polished material design~~
     - Login screen
-      - Use Google's default OAuth2.0
+      - ~~Use Google's default OAuth2.0~~
     - ~~Search screen~~
       - ~~Displays list of all classes~~
       - ~~User can enter search terms at top~~

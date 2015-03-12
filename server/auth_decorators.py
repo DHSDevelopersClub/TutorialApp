@@ -3,7 +3,7 @@
 This decorator must be applied before the `endpoints.method` decorator.  So:
 
     @endpoints.method(...)
-    @require_student
+    @requires_student
     def foo(self, request):
         ...
 '''
@@ -14,7 +14,7 @@ from libs import wrapt
 
 
 @wrapt.decorator
-def require_student(func, instance, args, kwargs):
+def requires_student(func, instance, args, kwargs):
     current_user = endpoints.get_current_user()
     if current_user is None:
         raise endpoints.UnauthorizedException('Invalid token.')
