@@ -199,6 +199,14 @@ def test_gen_classes():
                               signedup_sudents=[])
         class1.put()
 
+def check_signup(classroom, current_user):
+    signedup = False
+    for student in classroom.signedup_sudents:
+        if student.name == current_user:
+            signedup = True
+            break
+    return signedup
+
 
 @endpoints.api(name='tutorialsignup', version='v1',
                allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
@@ -230,10 +238,7 @@ class TutorialSignupAPI(remote.Service):
             signedup_here = False
         else:
             signedup = True
-            signedup_here = False
-            for student in classroom.signedup_sudents:
-                if student.name == current_user:
-                    signedup_here = True
+            signedup_here = check_signup(classroom, current_user)
 
         if signedup_here == signup: # Already have what you want
             return SignupResponse(signedup=signedup_here, status=0, message='Already done')
@@ -263,9 +268,13 @@ class TutorialSignupAPI(remote.Service):
         qry = DateNDB.query(DateNDB.date == date)
         result = qry.fetch(1)[0]
         date_key = result.key
-
-        qry = ClassroomNDB.query(ancestor=date_key).order(-ClassroomNDB.seats_left).fetch(20)
+        qry = ClassroomNDB.query(ancestor=date_key).order(-ClassroomNDB.seats_left).fetch()
         print qry
+        print "YOLO" + str(current_user)
+        if request.search != None:
+            filtered = []
+        else: filtered = qry
+
         return ClassroomCollectionMessage(classrooms=[
             ClassroomMessage(
                 dsid=str(classroom.key.id()),
@@ -274,8 +283,9 @@ class TutorialSignupAPI(remote.Service):
                 room=classroom.room,
                 totalseats=classroom.totalseats,
                 takenseats=(classroom.totalseats - classroom.seats_left),
-                parent_id=str(date_key.id()))
-            for classroom in qry])
+                parent_id=str(date_key.id()),
+                signedup=check_signup(classroom, current_user))
+            for classroom in filtered])
 
 
 application = endpoints.api_server([TutorialSignupAPI])
