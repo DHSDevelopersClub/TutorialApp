@@ -125,13 +125,17 @@
 
     var sendGetRequest = function(search, date, callback) {
         if (gapi.client === undefined) return;
-        gapi.client.oauth2.userinfo.get().execute(function(resp) {
-            if (!resp.code) {
-                FAKE_SERVER.getData(search, date, callback);
-            } else {
-                callback(resp);
-            }
-        });
+//        gapi.client.oauth2.userinfo.get().execute(function(resp) {
+//            if (!resp.code) {
+//                FAKE_SERVER.getData(search, date, callback);
+                gapi.client.tutorialsignup.list_classes({
+                    "search": search,
+                    "date": date
+                }).execute(callback);
+//            } else {
+//                callback(resp);
+//            }
+//        });
     }
 
     var sendPostRequest = function(dsid, signup, callback) {
@@ -140,6 +144,22 @@
             "signup": signup,
         }).execute(callback);
     };
+
+    var checkSignedIn = function(response) {
+        if (!response.code) {
+            return true;
+        } else if (response.code === 401) {
+            return false;
+        } else if (response.code === 503) {
+            gapi.client.oauth2.userinfo.get().execute(function(resp) {
+                if (response.code === 401) {
+                    return false;
+                }
+            });
+        }
+        return null;
+    };
+
 
     Polymer({
         classrooms: [],
@@ -181,12 +201,11 @@
             }
 
             sendGetRequest(this.search, this.date, function(response) {
+                context.signedIn = checkSignedIn(response);
                 if (!response.code) {
                     context.classrooms = response.classrooms;
-                    context.signedIn = true;
                 } else {
                     context.classrooms = [];
-                    context.signedIn = false;
                 }
                 context.updateClassroomCards();
                 if (animate) {

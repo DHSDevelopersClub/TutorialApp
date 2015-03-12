@@ -8,7 +8,7 @@
 
 var app = document.querySelector("template#app");
 app.search = "";
-app.date = "2015-01-07";
+app.date = "2015-03-11";
 
 app.addEventListener("template-bound", function() {
     "use strict";
