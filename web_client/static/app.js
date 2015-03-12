@@ -82,8 +82,7 @@ app.addEventListener("template-bound", function() {
 
     app.onReady = function() {
         gapi.client.tutorialsignup.next_tutorial().execute(function(response) {
-            console.log(response.date);
-            app.date = "2015-03-11";
+            app.date = response.date;
         });
     };
 
