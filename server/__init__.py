@@ -305,7 +305,7 @@ class TutorialSignupAPI(remote.Service):
 
     @endpoints.method(message_types.VoidMessage, NextTutorialResponse, name='next_tutorial')
     def nextTutorial(self, request):
-        d = datetime.date(2015, 3, 13)
+        d = datetime.date.today()
         next_wednesday = next_weekday(d, 2)
         next_friday = next_weekday(d, 4)
         if next_wednesday < next_friday:
