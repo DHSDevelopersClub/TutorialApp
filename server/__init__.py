@@ -318,7 +318,7 @@ class TutorialSignupAPI(remote.Service):
 
     @endpoints.method(message_types.VoidMessage, NextTutorialResponse, name='next_tutorial')
     def nextTutorial(self, request):
-        str_date = tutorial.strftime('%Y-%m-%d')
+        str_date = get_next_tutorial().strftime('%Y-%m-%d')
         return NextTutorialResponse(date=str_date)
 
 application = endpoints.api_server([TutorialSignupAPI])
