@@ -140,6 +140,8 @@ app.addEventListener("template-bound", function() {
             }
         }
     };
+    app.onMediaMobileChange();
+
     app.enableSearchMode = function() {
         actionBarSearchAnimation.play();
 
@@ -147,7 +149,10 @@ app.addEventListener("template-bound", function() {
         app.$.navBack.removeAttribute("hidden");
         app.onMediaMobileChange();
     };
+
     app.disableSearchMode = function() {
+        if (app.$.searchBar.mode !== app.$.searchBar.MODE_SEARCH) return;
+
         app.$.searchBar.disableSearchMode();
         actionBarSearchAnimation.playReverse();
 
@@ -155,18 +160,13 @@ app.addEventListener("template-bound", function() {
         app.$.navTitle.removeAttribute("hidden");
         app.onMediaMobileChange();
     };
+
     app.refresh = function() {
         app.$.classroomManager.load(true);
     };
-//    app.signIn = function() {
-//        window.signIn(false, function() {
-//            app.refresh();
-//        });
-//    };
+
     app.signOut = function() {
         gapi.auth.setToken(null);
         app.refresh(true);
     }
-
-    app.onMediaMobileChange();
 });
