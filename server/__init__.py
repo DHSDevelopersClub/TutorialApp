@@ -122,7 +122,7 @@ from google.appengine.ext import ndb
 
 from models import TeacherNDB, StudentNDB, ClassroomNDB, DateNDB
 from messages import (ClassroomQueryMessage, ClassroomMessage, ClassroomCollectionMessage,
-                      SignupRequest, SignupResponse)
+                      SignupRequest, SignupResponse, NextTutorialResponse)
 from auth_decorators import require_student
 
 
@@ -230,6 +230,12 @@ def unsignup_simple(current_user, classroom):
     classroom.seats_left = classroom.seats_left + 1
     classroom.put()
 
+def next_weekday(d, weekday):
+    days_ahead = weekday - d.weekday()
+    if days_ahead <= 0: # Target day already happened this week
+        days_ahead += 7
+    return d + datetime.timedelta(days_ahead)
+
 @endpoints.api(name='tutorialsignup', version='v1',
                allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
 class TutorialSignupAPI(remote.Service):
@@ -297,5 +303,16 @@ class TutorialSignupAPI(remote.Service):
                 signedup=check_signup(classroom, current_user))
             for classroom in filtered])
 
+    @endpoints.method(message_types.VoidMessage, NextTutorialResponse, name='next_tutorial')
+    def nextTutorial(self, request):
+        d = datetime.date(2015, 3, 13)
+        next_wednesday = next_weekday(d, 2)
+        next_friday = next_weekday(d, 4)
+        if next_wednesday < next_friday:
+            tutorial = next_wednesday
+        else:
+            tutorial = next_friday
+        str_date = tutorial.strftime('%Y-%m-%d')
+        return NextTutorialResponse(date=str_date)
 
 application = endpoints.api_server([TutorialSignupAPI])
