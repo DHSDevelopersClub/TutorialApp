@@ -164,6 +164,7 @@
         search: "",
         date: "",
         signedIn: null,
+        pendingRequests: 0,
 
         classroomsChanged: function() {
             this.updateClassroomCards();
@@ -186,12 +187,15 @@
         },
 
         load: function(animate) {
+            if (gapi.client === undefined) return;
+
             var animate = Boolean(animate);
             var context = this;
 
             var contentAnimation = this.$.contentAnimation;
             contentAnimation.target = this.$.container;
-            if (animate) {
+            if (!this.pendingRequests++ && animate) {
+                this.loading = true;
                 contentAnimation.direction = "normal";
                 contentAnimation.play();
                 this.$.loadingSpinner.active = true;
@@ -203,7 +207,8 @@
                 context.classrooms = (response.classrooms !== undefined) ?
                                      response.classrooms : [];
                 context.updateClassroomCards();
-                if (animate) {
+                if (!--context.pendingRequests && animate) {
+                    context.loading = false;
                     contentAnimation.direction = "reverse";
                     contentAnimation.play();
                     context.$.loadingSpinner.active = false;
