@@ -129,7 +129,10 @@ from libs.dateutil.tz import tzutc, tzlocal
 
 
 
-WEB_CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com'
+WEB_CLIENT_ID = '912907751553-lb6mvsskb62dpre0kje7fbvriracme0m.apps.googleusercontent.com'
+ANDROID_CLIENT_ID = ''
+IOS_CLIENT_ID = ''
+ANDROID_AUDIENCE = ANDROID_CLIENT_ID
 
 
 def test_classes(next_tutorial,
