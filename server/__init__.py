@@ -124,7 +124,9 @@ from models import TeacherNDB, StudentNDB, ClassroomNDB, DateNDB
 from messages import (ClassroomQueryMessage, ClassroomMessage, ClassroomCollectionMessage,
                       SignupRequest, SignupResponse, NextTutorialResponse)
 from auth_decorators import requires_student
-#import pytz
+
+from libs.dateutil.tz import tzutc, tzlocal
+
 
 
 WEB_CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com'
@@ -246,7 +248,8 @@ def next_weekday(d, weekday):
     return d + datetime.timedelta(days_ahead)
 
 def get_next_tutorial():
-    d = datetime.date.today()
+    d = datetime.datetime.now(tzlocal())
+    print str(d)
     next_wednesday = next_weekday(d, 2)
     next_friday = next_weekday(d, 4)
     if next_wednesday < next_friday:
