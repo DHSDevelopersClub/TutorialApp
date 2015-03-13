@@ -6,7 +6,7 @@
  */
 
 window.CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com';
-window.SCOPES = ['https://www.googleapis.com/auth/userinfo.email'];
+window.SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/plus.me'];
 window.API_ROOT = '//' + window.location.host + '/_ah/api';
 
 function apiInit() {
