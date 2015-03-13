@@ -5,8 +5,9 @@
  * `https://cloud.google.com/appengine/docs/python/endpoints/consume_js`.
  */
 
-window.CLIENT_ID = '185595448807-h36t655f1phh27l4jp9pfkmu4legbkro.apps.googleusercontent.com';
-window.SCOPES = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/plus.me'];
+window.CLIENT_ID = '912907751553-lb6mvsskb62dpre0kje7fbvriracme0m.apps.googleusercontent.com';
+window.SCOPES = ['https://www.googleapis.com/auth/userinfo.email',
+                 'https://www.googleapis.com/auth/plus.me'];
 window.API_ROOT = '//' + window.location.host + '/_ah/api';
 
 function apiInit() {
