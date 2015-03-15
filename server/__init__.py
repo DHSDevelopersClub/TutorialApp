@@ -9,7 +9,7 @@ from protorpc import message_types, remote
 from google.appengine.ext import ndb
 
 #from libs.endpoints_proto_datastore.ndb import EndpointsModel
-#import pytz
+import libs.pytz as pytz
 
 import models
 from messages import (ClassroomQueryMessage, ClassroomMessage, ClassroomListMessage,
@@ -74,7 +74,9 @@ def next_weekday(d, weekday):
     return d + datetime.timedelta(days_ahead)
 
 def get_next_tutorial():
-    d = datetime.date.today()
+    local_tz = pytz.timezone('America/Los_Angeles')
+    d = datetime.datetime.now().replace(tzinfo=pytz.utc)
+    d = d.astimezone(local_tz)
     next_wednesday = next_weekday(d, 2)
     next_friday = next_weekday(d, 4)
     if next_wednesday < next_friday:
