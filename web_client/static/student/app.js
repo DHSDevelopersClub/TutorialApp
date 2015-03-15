@@ -1,7 +1,7 @@
 /**
  * app.js
  *
- * Javascript for app template in index.html.
+ * Javascript for app auto-binding template in student.html.
  *
  * Author: Alexander Otavka
  */

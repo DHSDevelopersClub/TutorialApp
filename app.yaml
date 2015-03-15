@@ -13,16 +13,26 @@ handlers:
 - url: /_ah/spi/.*
   script: server.application
 
-# Main page
-- url: /
-  static_files: web_client/index.html
-  upload: web_client/index.html
+# Student client page
+- url: /s
+  static_files: web_client/student.html
+  upload: web_client/student.html
+
+# Teacher client page
+- url: /t
+  static_files: web_client/teacher.html
+  upload: web_client/teacher.html
 
 # Web client resources
 - url: /res/web_client
   static_dir: web_client/static
 - url: /res/components
   static_dir: bower_components
+
+# Main login/redirect page
+- url: /.*
+  static_files: web_client/index.html
+  upload: web_client/index.html
 
 
 libraries:
