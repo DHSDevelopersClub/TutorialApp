@@ -125,7 +125,7 @@ from messages import (ClassroomQueryMessage, ClassroomMessage, ClassroomCollecti
                       SignupRequest, SignupResponse, NextTutorialResponse)
 from auth_decorators import requires_student
 
-from libs.dateutil.tz import tzutc, tzlocal
+import libs.pytz as pytz
 
 
 
@@ -251,8 +251,9 @@ def next_weekday(d, weekday):
     return d + datetime.timedelta(days_ahead)
 
 def get_next_tutorial():
-    d = datetime.datetime.now(tzlocal())
-    print str(d)
+    local_tz = pytz.timezone('America/Los_Angeles')
+    d = datetime.datetime.now().replace(tzinfo=pytz.utc)
+    d = d.astimezone(local_tz)
     next_wednesday = next_weekday(d, 2)
     next_friday = next_weekday(d, 4)
     if next_wednesday < next_friday:
