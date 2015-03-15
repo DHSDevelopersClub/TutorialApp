@@ -13,6 +13,11 @@ handlers:
 - url: /_ah/spi/.*
   script: server.application
 
+# Login page
+- url: /welcome
+  static_files: web_client/login.html
+  upload: web_client/login.html
+
 # Student client page
 - url: /s
   static_files: web_client/student.html
@@ -29,10 +34,9 @@ handlers:
 - url: /res/components
   static_dir: bower_components
 
-# Main login/redirect page
+# Redirect handler
 - url: /.*
-  static_files: web_client/index.html
-  upload: web_client/index.html
+  script: server.redirect
 
 
 libraries:
@@ -40,3 +44,5 @@ libraries:
   version: latest
 - name: endpoints
   version: 1.0
+- name: webapp2
+  version: latest

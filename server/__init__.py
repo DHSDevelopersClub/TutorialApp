@@ -11,6 +11,7 @@ from google.appengine.ext import ndb
 #from libs.endpoints_proto_datastore.ndb import EndpointsModel
 import libs.pytz as pytz
 
+from redirect_handler import redirect
 import models
 from messages import (ClassroomQueryMessage, ClassroomMessage, ClassroomListMessage,
                       SignupCommandMessage, SignupStateMessage, NextTutorialDateMessage)
