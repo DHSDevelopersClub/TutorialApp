@@ -4,21 +4,28 @@
 from google.appengine.ext import ndb
 
 
-class TeacherNDB(ndb.Model):
-    name = ndb.UserProperty()
-    text_name = ndb.StringProperty() # Testing only
+class Teacher(ndb.Model):
+    '''Represents a teacher with associated OAuth account.'''
+    user = ndb.UserProperty()
+    name_prefix = ndb.StringProperty()
+    name_text = ndb.StringProperty()
     profilepic = ndb.StringProperty()
 
-class StudentNDB(ndb.Model):
-    name = ndb.UserProperty()
+class Student(ndb.Model):
+    '''Represents a student with associated OAuth account.'''
+    user = ndb.UserProperty()
 
-class ClassroomNDB(ndb.Model):
+class Classroom(ndb.Model):
     '''An individual classroom on a specific date.'''
-    teacher = ndb.StructuredProperty(TeacherNDB)
+    teacher = ndb.StructuredProperty(Teacher)
     room = ndb.StringProperty()
     totalseats = ndb.IntegerProperty()
-    seats_left = ndb.IntegerProperty()
-    signedup_sudents = ndb.StructuredProperty(StudentNDB, repeated=True)
+    takenseats = ndb.ComputedProperty(lambda self: len(self.signedup_sudents))
+    signedup_sudents = ndb.StructuredProperty(Student, repeated=True)
 
-class DateNDB(ndb.Model):
+class Date(ndb.Model):
+    '''The date of a tutorial.
+
+    Serves as a parent for Classroom entities.
+    '''
     date = ndb.DateProperty(auto_now_add=True)

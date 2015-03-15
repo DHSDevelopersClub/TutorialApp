@@ -129,14 +129,14 @@
 
     var sendGetRequest = function(search, date, callback) {
         if (gapi.client === undefined) return;
-        gapi.client.tutorialsignup.list_classes({
+        gapi.client.dhstutorial.list_classes({
             "search": search,
-            "date": date
+            "date": date,
         }).execute(callback);
     }
 
     var sendPostRequest = function(dsid, parent_id, signup, callback) {
-        gapi.client.tutorialsignup.signup({
+        gapi.client.dhstutorial.signup({
             "dsid": dsid,
             "parent_id": parent_id,
             "signup": signup,

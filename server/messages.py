@@ -18,18 +18,34 @@ class ClassroomMessage(messages.Message):
     takenseats = messages.IntegerField(7)
     signedup = messages.BooleanField(8)
 
-class ClassroomCollectionMessage(messages.Message):
+class ClassroomListMessage(messages.Message):
     classrooms = messages.MessageField(ClassroomMessage, 1, repeated=True)
 
-class SignupRequest(messages.Message):
+class SignupCommandMessage(messages.Message):
     dsid = messages.StringField(1)
     parent_id = messages.StringField(2)
     signup = messages.BooleanField(3)
 
-class SignupResponse(messages.Message):
+class SignupStateMessage(messages.Message):
+    '''The status of a classroom's signedup state.
+
+    Status codes:
+        0: Successful
+        1: Already Signed Up
+        2: Class Full
+        3: Invalid ID
+    Additional codes can be added as needed.
+    '''
+
+    class Status(messages.Enum):
+        SUCCESS = 0
+        ALREADY_DONE = 1
+        CLASS_FULL = 2
+        INVALID_ID = 3
+
     signedup = messages.BooleanField(1)
-    status = messages.IntegerField(2)
+    status = messages.EnumField(Status, 2, default=0)
     message = messages.StringField(3)
 
-class NextTutorialResponse(messages.Message):
+class NextTutorialDateMessage(messages.Message):
     date = messages.StringField(1)

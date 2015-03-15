@@ -10,8 +10,33 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-- kind: ClassroomNDB
+- kind: Classroom
+  ancestor: yes
+  properties:
+  - name: teacher.name_text
+
+- kind: ClassroomModel
   ancestor: yes
   properties:
   - name: seats_left
     direction: desc
+
+- kind: ClassroomModel
+  ancestor: yes
+  properties:
+  - name: takenseats
+
+- kind: ClassroomModel
+  ancestor: yes
+  properties:
+  - name: teacher.name_text
+
+- kind: ClassroomModel
+  ancestor: yes
+  properties:
+  - name: teacher.text_name
+
+- kind: ClassroomNDB
+  ancestor: yes
+  properties:
+  - name: teacher.name_text

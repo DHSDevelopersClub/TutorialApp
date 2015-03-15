@@ -1,16 +1,13 @@
 <!-- Use ajax to pull a list of classrooms and then display them.
 
-Has data bound published properties 'search' and 'date'.  Whenever they change,
-the `load()` function is called.  `load()` sends an ajax request to
-`/_ah/api/tutorialsignup/v1/classes` with search and date parameters equal to
-the respective published properties.  `load()` then updates the
+Has data bound published properties 'search' and 'date'.  Whenever they change, the `load()`
+function is called.  `load()` sends an endpoints request to dhstutorial.list_classes with search
+and date parameters equal to the respective published properties.  `load()` then updates the
 `local-classroom-manager` element's data.
 
-Changes to the `local-classroom-manager` element's data are reflected in its
-shadow DOM via Polymer magic.  All of the styling of the data is handled
-within the `local-classroom-manager` element.
+Changes to the `local-classroom-manager` element's data are reflected in its shadow DOM via Polymer
+magic.
 
-Author: Max Starr
 Author: Alexander Otavka
 -->
 

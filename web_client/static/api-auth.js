@@ -21,7 +21,7 @@ function apiInit() {
     };
 
     apisToLoad = 2; // must match number of calls to gapi.client.load()
-    gapi.client.load('tutorialsignup', 'v1', loadCallback, API_ROOT);
+    gapi.client.load('dhstutorial', 'v1', loadCallback, API_ROOT);
     gapi.client.load('oauth2', 'v2', loadCallback);
 }
 
