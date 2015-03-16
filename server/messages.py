@@ -37,14 +37,14 @@ class SignupStateMessage(messages.Message):
     Additional codes can be added as needed.
     '''
 
-    class Status(messages.Enum):
+    class State(messages.Enum):
         SUCCESS = 0
         ALREADY_DONE = 1
         CLASS_FULL = 2
         INVALID_ID = 3
 
     signedup = messages.BooleanField(1)
-    status = messages.EnumField(Status, 2, default=0)
+    status = messages.EnumField(State, 2, default=0)
     message = messages.StringField(3)
 
 class NextTutorialDateMessage(messages.Message):
