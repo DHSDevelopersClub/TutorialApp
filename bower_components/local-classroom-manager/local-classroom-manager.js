@@ -165,16 +165,19 @@
         date: "",
         signedIn: null,
         pendingRequests: 0,
+        loaded: false,
 
         classroomsChanged: function() {
             this.updateClassroomCards();
         },
 
         searchChanged: function(oldValue) {
+            this.loaded = true;
             this.load(true);
         },
 
         dateChanged: function(oldValue) {
+            this.loaded = true;
             this.load(true);
         },
 
@@ -187,7 +190,7 @@
         },
 
         load: function(animate) {
-            if (gapi.client === undefined) return;
+            if (gapi.client === undefined || !this.loaded) return;
 
             var animate = Boolean(animate);
             var context = this;
@@ -197,8 +200,9 @@
             if (!this.pendingRequests++ && animate) {
                 contentAnimation.direction = "normal";
                 contentAnimation.play();
-                this.$.loadingSpinner.active = true;
-                this.$.loadingSpinnerWrapper.removeAttribute("hidden");
+                this.loaded = false;
+//                this.$.loadingSpinner.active = true;
+//                this.$.loadingSpinnerWrapper.removeAttribute("hidden");
             }
 
             sendGetRequest(this.search, this.date, function(response) {
@@ -210,8 +214,9 @@
                     context.loading = false;
                     contentAnimation.direction = "reverse";
                     contentAnimation.play();
-                    context.$.loadingSpinner.active = false;
-                    context.$.loadingSpinnerWrapper.setAttribute("hidden", "");
+                    context.loaded = true;
+//                    context.$.loadingSpinner.active = false;
+//                    context.$.loadingSpinnerWrapper.setAttribute("hidden", "");
                 }
             });
         },

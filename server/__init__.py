@@ -113,9 +113,9 @@ class DHSTutorialAPI(remote.Service):
         classroom = models.Classroom.get_by_id(int(dsid), parent=parent_key)
         if classroom == None:
             return SignupStateMessage(signedup=False,
-                                      status=SignupStateMessage.State.INVALID_ID)
+                                      status=SignupStateMessage.Status.INVALID_ID)
 
-        #Check if signedup
+        # Check if signedup
         qry = models.Classroom.query(models.Classroom.signedup_sudents.user == current_user).fetch()
         if qry == []:
             signedup = False
@@ -126,7 +126,7 @@ class DHSTutorialAPI(remote.Service):
         if signedup_here == signup:
             # Already have what you want
             return SignupStateMessage(signedup=signedup_here,
-                                      status=SignupStateMessage.State.ALREADY_DONE)
+                                      status=SignupStateMessage.Status.ALREADY_DONE)
         elif signedup == False:
             # Not signed up but want to be
             signup_simple(current_user, classroom)

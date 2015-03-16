@@ -42,9 +42,11 @@ Author: Alexander Otavka
             </template>
         </div>
 
-        <div id="loadingSpinnerWrapper" vertical center layout>
-            <paper-spinner id="loadingSpinner" active></paper-spinner>
-        </div>
+        <template if="{{!loaded}}">
+            <div id="loadingSpinnerWrapper" vertical center layout>
+                <paper-spinner id="loadingSpinner" active></paper-spinner>
+            </div>
+        </template>
 
         <template if="{{signedIn == false}}">
             <div id="signinPrompt" vertical center layout>

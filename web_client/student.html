@@ -27,6 +27,7 @@ Author: Alexander Otavka
         <link rel="import" href="/res/components/paper-icon-button/paper-icon-button.html" />
         <link rel="import" href="/res/components/paper-item/paper-item.html" />
         <link rel="import" href="/res/components/paper-menu-button/paper-menu-button.html" />
+        <link rel="import" href="/res/components/paper-ripple/paper-ripple.html" />
         <link rel="import" href="/res/components/paper-shadow/paper-shadow.html" />
 
         <!-- Imports to local components at /res/components/local-*. -->
@@ -45,7 +46,11 @@ Author: Alexander Otavka
             <paper-shadow id="actionBar" z="1">
                 <core-toolbar id="actionBarToolbar">
                     <div id="navWrapper" class="noselect">
-                        <div id="navTitle" class="title">Signed</div>
+                        <div id="navTitle" class="title">
+                            <span on-tap="{{refresh}}">
+                                Signed
+                            </span>
+                        </div>
                         <div id="navBack" horizontal center layout hidden>
                             <paper-icon-button id="backButton" icon="arrow-back"
                                                on-tap="{{disableSearchMode}}">
