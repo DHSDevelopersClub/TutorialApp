@@ -23,6 +23,9 @@ class Classroom(ndb.Model):
     takenseats = ndb.ComputedProperty(lambda self: len(self.signedup_sudents))
     signedup_sudents = ndb.StructuredProperty(Student, repeated=True)
 
+class Prefs(ndb.Model):
+    enable_register_student = ndb.BooleanProperty(default=False)
+
 class Date(ndb.Model):
     '''The date of a tutorial.
 
