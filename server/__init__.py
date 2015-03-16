@@ -85,17 +85,6 @@ def get_next_tutorial():
     else:
         return next_friday
 
-def register_student(student_user):
-    qry = models.Student.query(models.Student.user == student_user).fetch(1)
-    results = models.Prefs.query().fetch(1)
-    if results == []:
-        new_prefs = models.Prefs()
-        new_prefs.put()
-        results = models.Prefs.query().fetch(1)
-    prefs = results[0]
-    if qry == [] and prefs.enable_register_student == True:
-        student = models.Student(user=student_user)
-        student.put()
 
 @endpoints.api(name='dhstutorial', version='v1',
                allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
@@ -112,7 +101,6 @@ class DHSTutorialAPI(remote.Service):
     @endpoints.method(SignupCommandMessage, SignupStateMessage, name='signup')
     @requires_student
     def signup(self, request, current_user):
-        register_student(current_user)
         '''Add or remove a signup for the current user on a specific date.
 
         If the current user is already signedup for another class on the specified date, their

@@ -10,14 +10,27 @@ This decorator must be applied before the `endpoints.method` decorator.  So:
 
 
 import endpoints
+import models
 from libs import wrapt
-
+#from google.appengine.ext import ndb
 
 @wrapt.decorator
 def requires_student(func, instance, args, kwargs):
     current_user = endpoints.get_current_user()
-    if current_user is None:
-        raise endpoints.UnauthorizedException('Invalid token.')
+    if current_user == None:
+        raise endpoints.UnauthorizedException('Invalid token')
+    qry = models.Student.query(models.Student.user == current_user).fetch(1)
+    results = models.Prefs.query().fetch(1)
+    if results == []:
+        new_prefs = models.Prefs()
+        new_prefs.put()
+        results = models.Prefs.query().fetch(1)
+    prefs = results[0]
+    if qry == [] and prefs.enable_register_student == True:
+        student = models.Student(user=current_user)
+        student.put()
+    elif qry == [] and prefs.enable_register_student == False:
+        raise endpoints.UnauthorizedException('Invalid token')
     kwargs['current_user'] = current_user
     return func(*args, **kwargs)
 
