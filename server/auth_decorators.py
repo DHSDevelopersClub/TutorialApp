@@ -67,7 +67,7 @@ def auth_requires(allowed, error_message='Invalid token.'):
     @wrapt.decorator
     def decorator(func, instance, args, kwargs):
         current_user = endpoints.get_current_user()
-        if not allowed(current_user):
+        if not is_root(current_user) and not allowed(current_user):
             raise endpoints.UnauthorizedException(error_message)
         kwargs['current_user'] = current_user
         return func(*args, **kwargs)
