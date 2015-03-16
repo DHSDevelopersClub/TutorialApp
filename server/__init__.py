@@ -1,6 +1,6 @@
 '''The endpoints server.'''
 __author__ = 'Sebastian Boyd', 'Alexander Otavka'
-
+__copyright__ = "Copyright (C) 2015 DHS Developers Club"
 
 import datetime
 
@@ -15,7 +15,7 @@ from redirect_handler import redirect
 import models
 from messages import (ClassroomQueryMessage, ClassroomMessage, ClassroomListMessage,
                       SignupCommandMessage, SignupStateMessage, NextTutorialDateMessage)
-from auth_decorators import requires_student
+from auth_decorators import requires_student, requires_root
 from debug_class_gen import test_gen_classes
 
 
@@ -141,7 +141,7 @@ class DHSTutorialAPI(remote.Service):
         return SignupStateMessage(signedup=signup)
 
     @endpoints.method(ClassroomQueryMessage, ClassroomListMessage, name='list_classes')
-    @requires_student
+    @requires_root
     def list_classes(self, request, current_user):
         '''List classes on a given date that match the given search.
 

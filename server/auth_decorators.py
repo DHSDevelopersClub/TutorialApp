@@ -10,6 +10,7 @@ This decorator must be applied before the `endpoints.method` decorator.  So:
 
 
 import endpoints
+import google.appengine.api.users
 import models
 from libs import wrapt
 #from google.appengine.ext import ndb
@@ -48,6 +49,16 @@ def requires_admin(func, instance, args, kwargs):
     current_user = endpoints.get_current_user()
     teacher_list = [] # TODO for Sebastian: make datastore object
     if current_user not in teacher_list:
+        raise endpoints.UnauthorizedException('Invalid token')
+    kwargs['current_user'] = current_user
+    return func(*args, **kwargs)
+
+@wrapt.decorator
+def requires_root(func, instance, args, kwargs):
+    current_user = endpoints.get_current_user()
+    if current_user == None:
+        raise endpoints.UnauthorizedException('Invalid token')
+    if current_user.email() != 'lord.of.all.sebastian@gmail.com':
         raise endpoints.UnauthorizedException('Invalid token')
     kwargs['current_user'] = current_user
     return func(*args, **kwargs)
