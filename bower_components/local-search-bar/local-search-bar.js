@@ -29,10 +29,15 @@
             if (this.mode === this.MODE_SEARCH) {
                 return;
             }
-            this.$.container.querySelector("#searchBox").setZ(0);
             var context = this;
+            try {
+                this.$.container.querySelector("#searchBox").setZ(0);
+            } catch(e) {
+                setTimeout(function() {
+                    context.$.container.querySelector("#searchBox").setZ(0);
+                }, 100);
+            }
             setTimeout(function() {
-//                container.querySelector("#boxInput").focus();
                 context.focusInput();
             }, 100);
 

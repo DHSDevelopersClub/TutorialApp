@@ -48,7 +48,7 @@ body {
     margin-left: 24px;
 
     @media screen and (max-width: @threshold_mobile_width) {
-        margin-left: 8px;
+        margin-left: 16px;
     }
 }
 
@@ -103,7 +103,7 @@ body {
 
     @media screen and (max-width: @threshold_mobile_width) {
         margin-left: 0;
-        margin-right: 0;
+        margin-right: 8px;
     }
 }
 
@@ -131,6 +131,7 @@ body {
         cursor: pointer;
         border-radius: 2px;
         padding: 4px;
+        margin-left: -4px;
 
         &:active {
             background: rgba(0, 0, 0, .05);
