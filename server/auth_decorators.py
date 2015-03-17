@@ -61,8 +61,11 @@ def auth_requires(allowed, error_message='Invalid token.'):
 
     Also passes the current user as keyword argument 'current_user'.
 
-    @param allowed:
-        Function that accepts a user as an argument, and returns boolean whether the user is valid.
+    Args:
+        allowed (function):
+            Accepts a user as an argument, and returns boolean whether the user is valid.
+        error_message (str):
+            Message to be sent with the 401 should validation fail.
     '''
     @wrapt.decorator
     def decorator(func, instance, args, kwargs):
