@@ -1,6 +1,6 @@
 '''The endpoints server.'''
 __author__ = 'Sebastian Boyd', 'Alexander Otavka'
-__copyright__ = "Copyright (C) 2015 DHS Developers Club"
+__copyright__ = 'Copyright (C) 2015 DHS Developers Club'
 
 import datetime
 
@@ -25,10 +25,10 @@ IOS_CLIENT_ID = ''
 ANDROID_AUDIENCE = ANDROID_CLIENT_ID
 
 
-def check_signup(classroom, current_user):
+def check_signup(classroom, student):
     signedup = False
-    for student in classroom.signedup_sudents:
-        if student.user == current_user:
+    for dsid in classroom.signedup_students:
+        if dsid == student.key.id():
             signedup = True
             break
     return signedup
@@ -56,17 +56,18 @@ def search(search, classrooms):
         shaved_classrooms = [i[2] for i in sorted_classrooms if abs(i[0]) > len(search_list) / 2]
     return shaved_classrooms
 
-def signup_simple(current_user, classroom):
-    person = models.Student(user=current_user)
-    classroom.signedup_sudents.append(person)
+def signup_simple(student, classroom):
+    person = student.key.id()
+    classroom.signedup_students.append(person)
     classroom.put()
 
-def unsignup_simple(current_user, classroom):
-    person = models.Student(user=current_user)
-    for student in classroom.signedup_sudents:
-        if student.user == current_user:
-            classroom.signedup_sudents.remove(student)
-    classroom.put()
+def unsignup_simple(student, classroom):
+    person = student.key.id()
+    try:
+        classroom.signedup_students.remove(person)
+        classroom.put()
+    except:
+        pass
 
 def next_weekday(d, weekday):
     days_ahead = weekday - d.weekday()
@@ -93,14 +94,14 @@ class DHSTutorialAPI(remote.Service):
 
     @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
                       name='gen_debug_classes')
-    @requires_student
+    @requires_root
     def gen_debug_classes(self, request, current_user):
         test_gen_classes(get_next_tutorial())
         return message_types.VoidMessage()
 
     @endpoints.method(SignupCommandMessage, SignupStateMessage, name='signup')
     @requires_student
-    def signup(self, request, current_user):
+    def signup(self, request, current_user, student):
         '''Add or remove a signup for the current user on a specific date.
 
         If the current user is already signedup for another class on the specified date, their
@@ -116,33 +117,33 @@ class DHSTutorialAPI(remote.Service):
                                       status=SignupStateMessage.State.INVALID_ID)
 
         #Check if signedup
-        qry = models.Classroom.query(models.Classroom.signedup_sudents.user == current_user).fetch()
+        qry = models.Classroom.query(models.Classroom.signedup_students == student.key.id()).fetch()
         if qry == []:
             signedup = False
             signedup_here = False
         else:
             signedup = True
-            signedup_here = check_signup(classroom, current_user)
+            signedup_here = check_signup(classroom, student)
         if signedup_here == signup:
             # Already have what you want
             return SignupStateMessage(signedup=signedup_here,
                                       status=SignupStateMessage.State.ALREADY_DONE)
         elif signedup == False:
             # Not signed up but want to be
-            signup_simple(current_user, classroom)
+            signup_simple(student, classroom)
         elif signedup_here == True:
             # Already signedup here don't want to be
-            unsignup_simple(current_user, classroom)
+            unsignup_simple(student, classroom)
         elif signedup == True:
             # Signed up in diffrent classroom somthing is wrong
-            unsignup_simple(current_user, qry[0])
-            signup_simple(current_user, classroom)
+            unsignup_simple(student, qry[0])
+            signup_simple(student, classroom)
 
         return SignupStateMessage(signedup=signup)
 
     @endpoints.method(ClassroomQueryMessage, ClassroomListMessage, name='list_classes')
-    @requires_root
-    def list_classes(self, request, current_user):
+    @requires_student
+    def list_classes(self, request, current_user, student):
         '''List classes on a given date that match the given search.
 
         A search of either '' or None will return all classes.
@@ -157,7 +158,7 @@ class DHSTutorialAPI(remote.Service):
         qry = models.Classroom.query(ancestor=date_key).order(models.Classroom.teacher.name_text).fetch()
         filtered = search(request.search, qry)
         for classroom in filtered:
-            if check_signup(classroom, current_user):
+            if check_signup(classroom, student):
                 filtered.insert(0, filtered.pop(filtered.index(classroom)))
         return ClassroomListMessage(classrooms=[
             ClassroomMessage(
@@ -168,7 +169,7 @@ class DHSTutorialAPI(remote.Service):
                 totalseats=classroom.totalseats,
                 takenseats=classroom.takenseats,
                 parent_id=str(date_key.id()),
-                signedup=check_signup(classroom, current_user))
+                signedup=check_signup(classroom, student))
             for classroom in filtered])
 
     @endpoints.method(message_types.VoidMessage, NextTutorialDateMessage, name='next_tutorial')

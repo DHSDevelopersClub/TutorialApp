@@ -20,8 +20,8 @@ class Classroom(ndb.Model):
     teacher = ndb.StructuredProperty(Teacher)
     room = ndb.StringProperty()
     totalseats = ndb.IntegerProperty()
-    takenseats = ndb.ComputedProperty(lambda self: len(self.signedup_sudents))
-    signedup_sudents = ndb.StructuredProperty(Student, repeated=True)
+    takenseats = ndb.ComputedProperty(lambda self: len(self.signedup_students))
+    signedup_students = ndb.IntegerProperty(repeated=True)
 
 class Prefs(ndb.Model):
     enable_register_student = ndb.BooleanProperty(default=False)

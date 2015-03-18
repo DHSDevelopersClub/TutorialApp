@@ -10,7 +10,7 @@ def test_gen_class(next_tutorial, name='Mr. Milstead', profilepic='', room='123'
     key = date.put()
     class1 = models.Classroom(parent=key, teacher=teacher1, room=room,
                                    totalseats=totalseats,
-                                   signedup_sudents=[])
+                                   signedup_students=[])
     class1.put()
 
 def test_gen_classes(next_tutorial):
@@ -59,6 +59,5 @@ def test_gen_classes(next_tutorial):
                              profilepic=i['profilepic'])
         students = [models.Student() for j in range(i['takenseats'])]
         classroom = models.Classroom(parent=key, teacher=teacher, room=i['room'],
-                                 totalseats=i['totalseats'],
-                                 signedup_sudents=students)
+                                 totalseats=i['totalseats'])
         classroom.put()
