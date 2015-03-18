@@ -29,15 +29,19 @@ def is_student(user):
         if prefs.enable_register_student:
             student = models.Student(user=user)
             student.put()
+            student_list.append(student)
         else:
             return False
-    return True
+    print student_list
+    return student_list[0]
 
 def is_teacher(user):
     if user is None:
         return False
-    teacher_list = [] # TODO for Sebastian: make datastore object
-    return user in teacher_list
+    teacher_list = models.Teacher.query(models.Teacher.user == user).fetch(1)
+    if not len(teacher_list):
+        return False
+    return teacher_list[0]
 
 def is_admin(user):
     if user is None:
@@ -70,9 +74,10 @@ def auth_requires(allowed, error_message='Invalid token.'):
     @wrapt.decorator
     def decorator(func, instance, args, kwargs):
         current_user = endpoints.get_current_user()
-        if not is_root(current_user) and not allowed(current_user):
+        user_entity = allowed(current_user)
+        if is_root(current_user) == False and user_entity == False:
             raise endpoints.UnauthorizedException(error_message)
-        kwargs['current_user'] = current_user
+        kwargs['user_entity'] = user_entity
         return func(*args, **kwargs)
     return decorator
 

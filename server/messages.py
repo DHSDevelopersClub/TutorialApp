@@ -49,3 +49,9 @@ class SignupStateMessage(messages.Message):
 
 class NextTutorialDateMessage(messages.Message):
     date = messages.StringField(1)
+
+class StudentMessage(messages.Message):
+    name = messages.StringField(1)
+
+class StudentListMessage(messages.Message):
+    students = messages.MessageField(StudentMessage, 1, repeated=True)
