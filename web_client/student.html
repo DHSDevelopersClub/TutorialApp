@@ -7,45 +7,51 @@ Author: Alexander Otavka
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
 
         <title>Signed - Drake High School</title>
 
         <!-- Polymer setup. -->
         <script src="/res/components/webcomponentsjs/webcomponents.min.js"></script>
-        <link rel="import" href="res/components/polymer/polymer.html" />
+        <link rel="import" href="res/components/polymer/polymer.html">
 
         <!-- Imports to third party components. -->
-        <link rel="import" href="/res/components/font-roboto/roboto.html" />
-        <link rel="import" href="/res/components/core-animation/core-animation.html" />
-        <link rel="import" href="/res/components/core-animation/core-animation-group.html" />
-        <link rel="import" href="/res/components/core-icons/core-icons.html" />
-        <link rel="import" href="/res/components/core-menu/core-menu.html" />
-        <link rel="import" href="/res/components/core-toolbar/core-toolbar.html" />
-        <link rel="import" href="/res/components/paper-button/paper-button.html" />
-        <link rel="import" href="/res/components/paper-dropdown/paper-dropdown.html" />
-        <link rel="import" href="/res/components/paper-icon-button/paper-icon-button.html" />
-        <link rel="import" href="/res/components/paper-item/paper-item.html" />
-        <link rel="import" href="/res/components/paper-menu-button/paper-menu-button.html" />
-        <link rel="import" href="/res/components/paper-shadow/paper-shadow.html" />
+        <link rel="import" href="/res/components/font-roboto/roboto.html">
+        <link rel="import" href="/res/components/core-animation/core-animation.html">
+        <link rel="import" href="/res/components/core-animation/core-animation-group.html">
+        <link rel="import" href="/res/components/core-icons/core-icons.html">
+        <link rel="import" href="/res/components/core-menu/core-menu.html">
+        <link rel="import" href="/res/components/core-toolbar/core-toolbar.html">
+        <link rel="import" href="/res/components/paper-button/paper-button.html">
+        <link rel="import" href="/res/components/paper-dropdown/paper-dropdown.html">
+        <link rel="import" href="/res/components/paper-icon-button/paper-icon-button.html">
+        <link rel="import" href="/res/components/paper-item/paper-item.html">
+        <link rel="import" href="/res/components/paper-menu-button/paper-menu-button.html">
+        <link rel="import" href="/res/components/paper-ripple/paper-ripple.html">
+        <link rel="import" href="/res/components/paper-shadow/paper-shadow.html">
 
         <!-- Imports to local components at /res/components/local-*. -->
         <link rel="import"
-              href="/res/components/local-classroom-manager/local-classroom-manager.html" />
-        <link rel="import" href="/res/components/local-date-spinner/local-date-spinner.html" />
-        <link rel="import" href="/res/components/local-media/local-media.html" />
-        <link rel="import" href="/res/components/local-search-bar/local-search-bar.html" />
+              href="/res/components/local-classroom-manager/local-classroom-manager.html">
+        <link rel="import" href="/res/components/local-date-spinner/local-date-spinner.html">
+        <link rel="import" href="/res/components/local-media/local-media.html">
+        <link rel="import" href="/res/components/local-search-bar/local-search-bar.html">
 
         <!-- Local stylesheets. -->
-        <link rel="stylesheet" type="text/css" href="/res/web_client/main.css" shim-shadowdom />
+        <link rel="stylesheet" type="text/css" href="/res/web_client/main.css" shim-shadowdom>
     </head>
 
     <body unresolved fullbleed vertical layout>
         <template id="app" is="auto-binding">
             <paper-shadow id="actionBar" z="1">
-                <core-toolbar id="actionBarToolbar">
+                <core-toolbar id="actionBarToolbar"
+                              class="{{{'core-narrow': mediaIsMobile} | tokenList}}">
                     <div id="navWrapper" class="noselect">
-                        <div id="navTitle" class="title">Signed</div>
+                        <div id="navTitle" class="title">
+                            <span on-tap="{{refresh}}">Signed</span>
+                        </div>
                         <div id="navBack" horizontal center layout hidden>
                             <paper-icon-button id="backButton" icon="arrow-back"
                                                on-tap="{{disableSearchMode}}">

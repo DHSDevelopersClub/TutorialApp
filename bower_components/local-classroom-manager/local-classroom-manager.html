@@ -11,11 +11,11 @@ magic.
 Author: Alexander Otavka
 -->
 
-<link rel="import" href="../polymer/polymer.html" />
-<link rel="import" href="../core-animation/core-animation.html" />
-<link rel="import" href="../paper-button/paper-button.html" />
-<link rel="import" href="../paper-spinner/paper-spinner.html" />
-<link rel="import" href="../local-classroom-card/local-classroom-card.html" />
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-animation/core-animation.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
+<link rel="import" href="../local-classroom-card/local-classroom-card.html">
 
 <polymer-element name="local-classroom-manager" attributes="search date signedIn">
     <template>
@@ -42,9 +42,11 @@ Author: Alexander Otavka
             </template>
         </div>
 
-        <div id="loadingSpinnerWrapper" vertical center layout>
-            <paper-spinner id="loadingSpinner" active></paper-spinner>
-        </div>
+        <template if="{{!loaded}}">
+            <div id="loadingSpinnerWrapper" vertical center layout>
+                <paper-spinner id="loadingSpinner" active></paper-spinner>
+            </div>
+        </template>
 
         <template if="{{signedIn == false}}">
             <div id="signinPrompt" vertical center layout>

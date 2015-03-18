@@ -57,7 +57,7 @@ app.addEventListener("template-bound", function() {
         };
 
         return anim;
-    }());
+    })();
     var searchBoxResizeAnimation = (function() {
         var anim = new CoreAnimationGroup();
         anim.type = "par";
@@ -78,7 +78,7 @@ app.addEventListener("template-bound", function() {
         };
 
         return anim;
-    }());
+    })();
 
     app.onReady = function() {
         gapi.client.dhstutorial.next_tutorial().execute(function(response) {
