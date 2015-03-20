@@ -1,5 +1,7 @@
 /** local-search-bar.less */
 
+@import "../local-media/media";
+
 .noselect {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -35,6 +37,11 @@
     font-size: 14px;
     border-radius: 4px;
     background-color: white;
+
+    @media screen and (max-width: @threshold_mobile_width) {
+        width: auto;
+        margin-right: 8px;
+    }
 }
 
 #boxIcon {

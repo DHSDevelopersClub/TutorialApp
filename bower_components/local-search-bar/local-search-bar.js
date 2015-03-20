@@ -34,7 +34,11 @@
                 this.$.container.querySelector("#searchBox").setZ(0);
             } catch(e) {
                 setTimeout(function() {
-                    context.$.container.querySelector("#searchBox").setZ(0);
+                    try {
+                        context.$.container.querySelector("#searchBox").setZ(0);
+                    } catch(e) {
+                        console.log(e);
+                    }
                 }, 100);
             }
             setTimeout(function() {
@@ -49,7 +53,11 @@
             if (this.mode !== this.MODE_SEARCH) {
                 return;
             }
-            this.$.container.querySelector("#searchBox").setZ(1);
+            try {
+                this.$.container.querySelector("#searchBox").setZ(1);
+            } catch(e) {
+                console.log(e);
+            }
 
             this.mode = this.MODE_NULL;
             this.clearInput();
