@@ -18,14 +18,13 @@ Author: Alexander Otavka
 <link rel="import" href="../core-input/core-input.html">
 <link rel="import" href="../local-media/local-media.html">
 
-<polymer-element name="local-search-bar" constructor="LocalSearchBar"
-                 attributes="search">
+<polymer-element name="local-search-bar" attributes="search">
     <template>
         <link rel="stylesheet" type="text/css" href="local-search-bar.css">
 
-        <div id="container">
+        <div id="container" horizontal center layout>
             <template if="{{!mediaIsMobile}}">
-                <div id="boxWrapper">
+                <div id="boxWrapper" flex>
                     <paper-shadow id="searchBox" z="1" on-tap="{{enableSearchMode}}" animated>
                         <div horizontal layout>
                             <core-icon id="boxIcon" class="noselect" icon="search"></core-icon>
@@ -54,16 +53,15 @@ Author: Alexander Otavka
 
             <template if="{{mediaIsMobile}}">
                 <template if="{{mode != MODE_SEARCH}}">
-                    <div id="iconButtonWrapper" class="noselect" on-tap="{{enableSearchMode}}">
-                        <paper-icon-button id="iconButton" icon="search"
-                                           on-tap="{{setSearchMode}}">
-                        </paper-icon-button>
-                    </div>
+                    <span flex></span>
+                    <paper-icon-button id="iconButton" icon="search"
+                                       on-tap="{{enableSearchMode}}">
+                    </paper-icon-button>
                 </template>
 
                 <template if="{{mode == MODE_SEARCH}}">
-                    <div id="searchBox">
-                        <div horizontal layout flex>
+                    <div id="searchBox" flex>
+                        <div horizontal layout>
                             <input id="boxInput" is="core-input"
                                    value="{{inputValue}}"
                                    flex>
