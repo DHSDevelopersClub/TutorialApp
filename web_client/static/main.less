@@ -66,23 +66,17 @@ body {
     }
 }
 
-#searchBar::shadow {
-    #searchBox {
-        background-color: @color_medium_grey;
-        padding: @dimen_padding_search;
-        max-width: @dimen_max_content_width - (2 * @dimen_padding_search);
+#searchBar::shadow #searchBox {
+    background-color: @color_medium_grey;
+    padding: @dimen_padding_search;
+    max-width: @dimen_max_content_width - (2 * @dimen_padding_search);
 
-        &:hover {
-            background-color: lighten(@color_medium_grey, 2%);
-        }
-
-        paper-ripple {
-            color: @color_touch_accent;
-        }
+    &:hover {
+        background-color: lighten(@color_medium_grey, 2%);
     }
 
-    #iconButton {
-        .actionButton;
+    paper-ripple {
+        color: @color_touch_accent;
     }
 }
 
