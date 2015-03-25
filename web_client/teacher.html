@@ -31,10 +31,11 @@ Author: Alexander Otavka
 
         <!-- Imports to local components at /res/components/local-*. -->
         <link rel="import"
-              href="/res/components/local-classroom-manager/local-classroom-manager.html">
+              href="/res/components/local-student-manager/local-student-manager.html">
         <link rel="import" href="/res/components/local-date-spinner/local-date-spinner.html">
         <link rel="import" href="/res/components/local-media/local-media.html">
         <link rel="import" href="/res/components/local-search-bar/local-search-bar.html">
+        <link rel="import" href="/res/components/local-api-loader/local-api-loader.html">
 
         <!-- Local stylesheets. -->
         <link rel="stylesheet" type="text/css" href="/res/web_client/main.css" shim-shadowdom>
@@ -90,7 +91,7 @@ Author: Alexander Otavka
                             </paper-button>
                         </template>
                     </div>
-                    <local-student-manager id="classroomManager" search="{{search}}"
+                    <local-student-manager id="studentManager" search="{{search}}"
                                            date="{{date}}" signedIn="{{signedIn}}">
                     </local-student-manager>
                 </div>
@@ -99,10 +100,10 @@ Author: Alexander Otavka
             <local-media mediaIsMobile="{{mediaIsMobile}}"
                          on-local-media-mobile-change="{{onMediaMobileChange}}">
             </local-media>
+            <local-api-loader id="apiLoader"></local-api-loader>
         </template>
 
-        <script src="/res/web_client/api-auth.js"></script>
+        <script src="/res/web_client/app.js"></script>
         <script src="/res/web_client/teacher/app.js"></script>
-        <script src="https://apis.google.com/js/client.js?onload=apiInit"></script>
     </body>
 </html>
