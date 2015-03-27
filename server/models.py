@@ -17,7 +17,7 @@ class Student(ndb.Model):
 
 class Classroom(ndb.Model):
     '''An individual classroom on a specific date.'''
-    teacher = ndb.StructuredProperty(Teacher)
+    teacher = ndb.IntegerProperty()
     room = ndb.StringProperty()
     totalseats = ndb.IntegerProperty()
     takenseats = ndb.ComputedProperty(lambda self: len(self.signedup_students))

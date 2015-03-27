@@ -29,19 +29,20 @@ ANDROID_AUDIENCE = ANDROID_CLIENT_ID
 def check_signup(classroom, student):
     signedup = False
     for dsid in classroom.signedup_students:
-        if dsid == student.key.id():
+        if student is not None and dsid == student.key.id():
             signedup = True
             break
     return signedup
 
 def search(search, classrooms):
     if search == None: search = ''
-
     search_list = search.split()
     print len(search_list)
+    for c in classrooms:
+        c.teacher_object = models.Teacher.get_by_id(c.teacher)
     def match_count(classroom):
-        searched_properties = (classroom.room, classroom.teacher.name_text,
-                               classroom.teacher.name_prefix)
+        searched_properties = (classroom.room, classroom.teacher_object.name_text,
+        classroom.teacher_object.name_prefix)
         match_count = 0
         for string in searched_properties:
             for search in search_list:
@@ -50,7 +51,7 @@ def search(search, classrooms):
         return match_count
 
     # Sort the list of classrooms, then shave off anything with too few search results
-    sorted_classrooms = sorted((-match_count(c), c.teacher.name_text, c) for c in classrooms)
+    sorted_classrooms = sorted((-match_count(c), c.teacher_object.name_text, c) for c in classrooms)
     if search == '':
         shaved_classrooms = [i[2] for i in sorted_classrooms]
     else:
@@ -118,7 +119,9 @@ class DHSTutorialAPI(remote.Service):
                                       status=SignupStateMessage.Status.INVALID_ID)
 
         #Check if signedup
-        qry = models.Classroom.query(models.Classroom.signedup_students == user_entity.key.id()).fetch()
+        dsid = user_entity.key.id()
+        print dsid
+        qry = models.Classroom.query(models.Classroom.signedup_students == dsid).fetch()
         if qry == []:
             signedup = False
             signedup_here = False
@@ -156,16 +159,17 @@ class DHSTutorialAPI(remote.Service):
         except IndexError:
             return ClassroomListMessage(classrooms=[])
         date_key = result.key
-        qry = models.Classroom.query(ancestor=date_key).order(models.Classroom.teacher.name_text).fetch()
-        filtered = search(request.search, qry)
+        qry_result = models.Classroom.query(ancestor=date_key).fetch()
+        filtered = search(request.search, qry_result)
+        # Move signup class to top
         for classroom in filtered:
             if check_signup(classroom, user_entity):
                 filtered.insert(0, filtered.pop(filtered.index(classroom)))
         return ClassroomListMessage(classrooms=[
             ClassroomMessage(
                 dsid=str(classroom.key.id()),
-                teacher='{} {}'.format(classroom.teacher.name_prefix, classroom.teacher.name_text),
-                profilepic=classroom.teacher.profilepic,
+                teacher='{} {}'.format(classroom.teacher_object.name_prefix, classroom.teacher_object.name_text),
+                profilepic=classroom.teacher_object.profilepic,
                 room=classroom.room,
                 totalseats=classroom.totalseats,
                 takenseats=classroom.takenseats,
@@ -186,5 +190,14 @@ class DHSTutorialAPI(remote.Service):
     @endpoints.method(message_types.VoidMessage, StudentListMessage, name='list_students')
     @requires_teacher
     def list_students(self, request, user_entity):
-        pass
+        date = datetime.datetime.strptime(request.date, '%Y-%m-%d')
+        qry = models.Date.query(models.Date.date == date)
+        try:
+            result = qry.fetch(1)[0]
+        except IndexError:
+            return StudentListMessage(students=[])
+        date_key = result.key
+        user_dsid = user_entity.key.id()
+        print user_dsid
+        qry = models.Classroom.query(models.Classroom.teacher == user_dsid).fetch()
 application = endpoints.api_server([DHSTutorialAPI])
