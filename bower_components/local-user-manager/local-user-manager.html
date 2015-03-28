@@ -1,0 +1,44 @@
+<!-- Know who the current user is.
+
+Author: Alexander Otavka
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<polymer-element name="local-user-manager" constructor="LocalUserManager" attributes="currentUser">
+    <script>
+        (function() {
+            "use strict";
+
+            var isSignedIn = function() {
+                gapi.client.oauth2.userinfo.get().execute(function(resp) {
+                    if (!response.code) {
+                        return true;
+                    } else if (response.code === 401) {
+                        return false;
+                    } else {
+                        return null;
+                    }
+                });
+            }
+
+            var responseIsSignedIn = function(response) {
+                if (!response.code) {
+                    return true;
+                } else if (response.code === 401) {
+                    return false;
+                } else {
+                    return isSignedIn();
+                }
+            };
+
+            var currentUser = {};
+
+            Polymer({
+                currentUser: currentUser,
+                isSignedIn: isSignedIn,
+                responseIsSignedIn: responseIsSignedIn,
+            });
+        })();
+    </script>
+</polymer-element>

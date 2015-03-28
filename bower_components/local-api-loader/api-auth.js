@@ -9,13 +9,14 @@ window.CLIENT_ID = '912907751553-lb6mvsskb62dpre0kje7fbvriracme0m.apps.googleuse
 window.SCOPES = ['https://www.googleapis.com/auth/userinfo.email',
                  'https://www.googleapis.com/auth/plus.me'];
 window.API_ROOT = '//' + window.location.host + '/_ah/api';
+window.ON_API_LOAD = null;
 
 function apiInit() {
     var apisToLoad;
     var loadCallback = function() {
         if (--apisToLoad == 0) {
             signIn(true, function() {
-                app.onReady();
+                window.ON_API_LOAD();
             });
         }
     };

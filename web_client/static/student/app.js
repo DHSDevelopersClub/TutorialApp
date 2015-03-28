@@ -80,11 +80,11 @@ app.addEventListener("template-bound", function() {
         return anim;
     })();
 
-    app.onReady = function() {
+    app.$.apiLoader.setOnload(function() {
         gapi.client.dhstutorial.next_tutorial().execute(function(response) {
             app.date = response.date;
         });
-    };
+    });
 
     app.onMediaMobileChange = function() {
         /* Align the search bar based on media and search state. */

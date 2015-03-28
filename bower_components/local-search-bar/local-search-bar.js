@@ -7,6 +7,16 @@
 (function () {
     "use strict";
 
+    var trySetZ = function(context, newZ) {
+        try {
+            context.$.container.querySelector("#searchBox").setZ(newZ);
+        } catch(e) {
+            if (!context.mediaIsMobile || !(e instanceof TypeError)) {
+                throw e;
+            }
+        }
+    };
+
     Polymer({
         MODE_NULL: 0,
         MODE_SEARCH: 1,
@@ -26,15 +36,14 @@
         },
 
         enableSearchMode: function() {
-            if (this.mode === this.MODE_SEARCH) {
-                return;
-            }
+            if (this.mode === this.MODE_SEARCH) return;
+
             var context = this;
             try {
                 this.$.container.querySelector("#searchBox").setZ(0);
             } catch(e) {
                 setTimeout(function() {
-                    context.$.container.querySelector("#searchBox").setZ(0);
+                    trySetZ(context, 0);
                 }, 100);
             }
             setTimeout(function() {
@@ -49,7 +58,7 @@
             if (this.mode !== this.MODE_SEARCH) {
                 return;
             }
-            this.$.container.querySelector("#searchBox").setZ(1);
+            trySetZ(this, 1);
 
             this.mode = this.MODE_NULL;
             this.clearInput();

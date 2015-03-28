@@ -1,3 +1,4 @@
+// out: main.css, compress: true
 /**
  * main.less
  *
@@ -27,6 +28,10 @@ body {
     user-select: none;
 
     cursor: default;
+}
+
+.actionButton {
+    margin: 2px 0px 0px 8px;
 }
 
 #actionBar {
@@ -98,7 +103,7 @@ body {
     margin-right: 16px;
 
     paper-icon-button {
-        margin: 2px 0px 0px 8px;
+        .actionButton;
     }
 
     @media screen and (max-width: @threshold_mobile_width) {
