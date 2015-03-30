@@ -119,7 +119,10 @@ class DHSTutorialAPI(remote.Service):
                                       status=SignupStateMessage.Status.INVALID_ID)
 
         #Check if signedup
-        dsid = user_entity.key.id()
+        try:
+            dsid = user_entity.key.id()
+        except:
+            raise endpoints.UnauthorizedException("Not student")
         print dsid
         qry = models.Classroom.query(models.Classroom.signedup_students == dsid).fetch()
         if qry == []:
