@@ -18,15 +18,10 @@ handlers:
   static_files: web_client/login.html
   upload: web_client/login.html
 
-# Student client page
-- url: /s
-  static_files: web_client/student.html
-  upload: web_client/student.html
-
-# Teacher client page
-- url: /t
-  static_files: web_client/teacher.html
-  upload: web_client/teacher.html
+# Client page
+- url: /c
+  static_files: web_client/app.html
+  upload: web_client/app.html
 
 # Web client resources
 - url: /res/web_client
