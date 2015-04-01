@@ -51,11 +51,11 @@ def search(search, classrooms):
         return match_count
 
     # Sort the list of classrooms, then shave off anything with too few search results
-    sorted_classrooms = sorted((-match_count(c), c.teacher_object.name_text, c) for c in classrooms)
+    sorted_classrooms = sorted((-match_count(c), c.totalseats - c.takenseats == 0, c.teacher_object.name_text, c) for c in classrooms)
     if search == '':
-        shaved_classrooms = [i[2] for i in sorted_classrooms]
+        shaved_classrooms = [i[3] for i in sorted_classrooms]
     else:
-        shaved_classrooms = [i[2] for i in sorted_classrooms if abs(i[0]) > len(search_list) / 2]
+        shaved_classrooms = [i[3] for i in sorted_classrooms if abs(i[0]) > len(search_list) / 2]
     return shaved_classrooms
 
 def signup_simple(student, classroom):
