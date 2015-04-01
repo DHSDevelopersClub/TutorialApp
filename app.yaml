@@ -19,7 +19,7 @@ handlers:
   upload: web_client/login.html
 
 # Client page
-- url: /c
+- url: /app
   static_files: web_client/app.html
   upload: web_client/app.html
 

@@ -8,6 +8,6 @@ class RootHandler(webapp2.RequestHandler):
         if current_user is None:
             self.redirect('/welcome')
         else:
-            self.redirect('/c')
+            self.redirect('/app')
 
 redirect =  webapp2.WSGIApplication([("/", RootHandler)])
