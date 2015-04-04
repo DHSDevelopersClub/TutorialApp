@@ -3,6 +3,11 @@
 
 from protorpc import messages
 
+class State(messages.Enum):
+    SUCCESS = 0
+    ALREADY_DONE = 1
+    CLASS_FULL = 2
+    INVALID_ID = 3
 
 class ClassroomQueryMessage(messages.Message):
     date = messages.StringField(1, required=True)
@@ -27,8 +32,7 @@ class SignupCommandMessage(messages.Message):
     signup = messages.BooleanField(3)
 
 class SignupStateMessage(messages.Message):
-    '''The status of a classroom's signedup state.
-
+    '''
     Status codes:
         0: Successful
         1: Already Signed Up
@@ -37,11 +41,7 @@ class SignupStateMessage(messages.Message):
     Additional codes can be added as needed.
     '''
 
-    class State(messages.Enum):
-        SUCCESS = 0
-        ALREADY_DONE = 1
-        CLASS_FULL = 2
-        INVALID_ID = 3
+
 
     signedup = messages.BooleanField(1)
     status = messages.EnumField(State, 2, default=0)
@@ -55,3 +55,31 @@ class StudentMessage(messages.Message):
 
 class StudentListMessage(messages.Message):
     students = messages.MessageField(StudentMessage, 1, repeated=True)
+
+class VerifyStudentMessage(messages.Message):
+    '''
+    Status Codes:
+        0: Present
+        1: Tardy
+        2: Absent
+    '''
+
+    class Verification(messages.Enum):
+        PRESENT = 0
+        TARDY = 1
+        ABSENT = 2
+
+    student_id = messages.StringField(1)
+    presence_state = messages.EnumField(Verification, 2)
+
+class VerifyStudentMessageResponse(messages.Message):
+    status = messages.EnumField(State, 1)
+
+class GetAuthMessage(messages.Message):
+    class AuthLevel(messages.Enum):
+        NO_USER = 0
+        STUDENT = 1
+        TEACHER = 2
+        ADMIN = 3
+        ROOT = 4
+    auth = messages.EnumField(AuthLevel, 1)

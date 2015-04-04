@@ -15,8 +15,11 @@ from redirect_handler import redirect
 import models
 from messages import (ClassroomQueryMessage, ClassroomMessage, ClassroomListMessage,
                       SignupCommandMessage, SignupStateMessage, NextTutorialDateMessage,
-                      StudentMessage, StudentListMessage)
-from auth_decorators import requires_student, requires_teacher, requires_root
+                      StudentMessage, StudentListMessage, VerifyStudentMessage,
+                      VerifyStudentMessageResponse, GetAuthMessage, State)
+from auth_decorators import (requires_student, requires_teacher, requires_root,
+                            is_student, is_teacher, is_admin, is_root)
+
 from debug_class_gen import test_gen_classes
 
 
@@ -116,7 +119,7 @@ class DHSTutorialAPI(remote.Service):
         classroom = models.Classroom.get_by_id(int(dsid), parent=parent_key)
         if classroom == None:
             return SignupStateMessage(signedup=False,
-                                      status=SignupStateMessage.Status.INVALID_ID)
+                                      status=Status.INVALID_ID)
 
         #Check if signedup
         try:
@@ -134,7 +137,7 @@ class DHSTutorialAPI(remote.Service):
         if signedup_here == signup:
             # Already have what you want
             return SignupStateMessage(signedup=signedup_here,
-                                      status=SignupStateMessage.Status.ALREADY_DONE)
+                                      status=Status.ALREADY_DONE)
         elif signedup == False:
             # Not signed up but want to be
             signup_simple(user_entity, classroom)
@@ -203,4 +206,21 @@ class DHSTutorialAPI(remote.Service):
         user_dsid = user_entity.key.id()
         print user_dsid
         qry = models.Classroom.query(models.Classroom.teacher == user_dsid).fetch()
+
+    @endpoints.method(VerifyStudentMessage, VerifyStudentMessageResponse, name='verify_student')
+    @requires_teacher
+    def verify_student(self, request, user_entity):
+        pass
+    @endpoints.method(message_types.VoidMessage, GetAuthMessage, name='get_auth')
+    def get_auth(self, request):
+        current_user = endpoints.get_current_user()
+        if is_student(current_user) != None:
+            return GetAuthMessage(auth=GetAuthMessage.AuthLevel.STUDENT)
+        if is_teacher(current_user) != None:
+            return GetAuthMessage(auth=GetAuthMessage.AuthLevel.TEACHER)
+        if is_admin(current_user) != None:
+            return GetAuthMessage(auth=GetAuthMessage.AuthLevel.ADMIN)
+        if is_root(current_user) != None:
+            return GetAuthMessage(auth=GetAuthMessage.AuthLevel.ROOT)
+        return GetAuthMessage(auth=GetAuthMessage.AuthLevel.NO_USER)
 application = endpoints.api_server([DHSTutorialAPI])

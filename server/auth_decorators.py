@@ -50,7 +50,7 @@ def is_admin(user):
     admin_list = [] # TODO for Sebastian: make datastore object
     if not len(admin_list):
         return None
-    return teacher_list[0]
+    return admin_list[0]
 
 def is_root(user):
     if user is None:
