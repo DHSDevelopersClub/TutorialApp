@@ -57,7 +57,10 @@ Author: Alexander Otavka
                             <paper-icon-button id="backButton" icon="arrow-back"
                                                on-tap="{{disableSearchMode}}">
                             </paper-icon-button>
-                            <div id="navBackText" class="title">Search</div>
+                            <div id="navBackText" class="title"
+                                 on-tap="{{disableSearchMode}}">
+                                Search
+                            </div>
                         </div>
                     </div>
 

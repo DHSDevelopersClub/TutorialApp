@@ -71,8 +71,8 @@ body {
     padding: @dimen_padding_search;
     max-width: @dimen_max_content_width - (2 * @dimen_padding_search);
 
-    &:hover {
-        background-color: lighten(@color_medium_grey, 2%);
+    .button paper-ripple:hover {
+        background-color: rgba(255, 255, 255, .05);
     }
 
     paper-ripple {
