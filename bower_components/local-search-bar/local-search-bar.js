@@ -24,13 +24,16 @@
         search: "",
         inputValue: "",
         mode: 0,
+        searching: false,
 
         inputValueChanged: function(oldValue) {
             var context = this;
             var startValue = this.inputValue;
+            this.searching = true;
             setTimeout(function() {
                 if (context.inputValue == startValue) {
                     context.search = context.inputValue;
+                    context.searching = false;
                 }
             }, 1000);
         },
