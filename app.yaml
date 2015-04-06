@@ -9,6 +9,15 @@ threadsafe: true
 
 handlers:
 
+
+# Favicon
+- url: /favicon\.ico
+  static_files: web_client/static/images/favicon.ico
+  upload: web_client/static/images/favicon\.ico
+- url: /favicon\.png
+  static_files: web_client/static/images/favicon.png
+  upload: web_client/static/images/favicon.png
+
 # Endpoints api
 - url: /_ah/spi/.*
   script: server.application
