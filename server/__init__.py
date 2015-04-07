@@ -211,6 +211,7 @@ class DHSTutorialAPI(remote.Service):
     @requires_teacher
     def verify_student(self, request, user_entity):
         pass
+        
     @endpoints.method(message_types.VoidMessage, GetAuthMessage, name='get_auth')
     def get_auth(self, request):
         current_user = endpoints.get_current_user()

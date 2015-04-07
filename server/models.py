@@ -15,6 +15,10 @@ class Student(ndb.Model):
     '''Represents a student with associated OAuth account.'''
     user = ndb.UserProperty()
 
+class StudentID(ndb.Model):
+    dsid = ndb.IntegerProperty()
+    attendence_status = ndb.IntegerProperty()
+
 class Classroom(ndb.Model):
     '''An individual classroom on a specific date.'''
     teacher = ndb.IntegerProperty()

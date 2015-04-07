@@ -9,7 +9,6 @@ threadsafe: true
 
 handlers:
 
-
 # Favicon
 - url: /favicon\.ico
   static_files: web_client/static/images/favicon.ico
