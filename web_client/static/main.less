@@ -197,3 +197,19 @@ body {
         }
     }
 }
+// Sebastian's settings stuff:
+
+#settingsWrapper {
+  background-color: #FFF;
+    margin: 64px
+            15%
+            0px
+            15%;
+
+    @media screen and (max-width: @threshold_mobile_width) {
+        margin: @dimen_mobile_screen_vertical_margin + 64px
+                @dimen_mobile_screen_horizontal_margin
+                @dimen_mobile_screen_vertical_margin
+                @dimen_mobile_screen_horizontal_margin;
+    }
+}

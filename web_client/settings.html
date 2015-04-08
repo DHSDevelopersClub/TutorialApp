@@ -27,7 +27,7 @@ Author: Sebastian Boyd
     <link rel="stylesheet" type="text/css" href="/res/web_client/main.css" shim-shadowdom>
 
   </head>
-  <body unresolved fullbleed>
+  <body unresolved fullbleed vertical layout>
     <template id="settings" is="auto-binding">
       <paper-shadow id="actionBar">
         <core-toolbar>
@@ -35,6 +35,11 @@ Author: Sebastian Boyd
           <div class="title">Settings</div>
         </core-toolbar>
       </paper-shadow>
+      <div id="settingsWrapper" flex vertical center layout >
+        <div style="margin-top: 44px;">
+
+        </div>
+      </div>
     </template>
 
     <script src="/res/web_client/settings.js"></script>
