@@ -36,6 +36,10 @@ handlers:
   static_files: web_client/settings.html
   upload: web_client/settings.html
 
+# Grades
+- url: /app/grades
+  static_files: web_client/grades.html
+  upload: web_client/grades.html
 
 # Web client resources
 - url: /res/web_client
