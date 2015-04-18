@@ -8,30 +8,35 @@
       <Title>Home Access</Title>
 
       <!-- Polymer setup. -->
-      <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
-      <link rel="import" href="bower_components/polymer/polymer.html" />
+      <script src="/res/components/webcomponentsjs/webcomponents.min.js"></script>
+      <link rel="import" href="/res/components/polymer/polymer.html" />
 
       <!-- Imports to third party components. -->
-      <link rel="import" href="bower_components/font-roboto/roboto.html" />
-      <link rel="import" href="bower_components/core-toolbar/core-toolbar.html" />
-      <link rel="import" href="bower_components/core-overlay/core-overlay.html">
-      <link rel="stylesheet" type="text/css" href="main.css">
+      <link rel="import" href="/res/components/core-toolbar/core-toolbar.html">
+      <link rel="import" href="/res/components/core-icons/core-icons.html">
+      <link rel="import" href="/res/components/font-roboto/roboto.html">
+      <link rel="import" href="/res/components/paper-shadow/paper-shadow.html">
+      <link rel="import" href="/res/components/paper-icon-button/paper-icon-button.html">
+      <link rel="import" href="/res/components/core-ajax/core-ajax.html">
+
+      <link rel="stylesheet" type="text/css" href="/res/web_client/main.css" shim-shadowdom>
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
     </head>
     <body unresolved fullbleed vertical layout>
-      <script src="main.js"></script>
+      <template id="grades" is="auto-binding">
+        <script src="/res/web_client/grades.js"></script>
+        <paper-shadow id="actionBar" z="1">
+          <core-toolbar>
+            <paper-icon-button icon="arrow-back" on-tap="{{Back}}"></paper-icon-button>
+            <div class="title">Grades</div>
+          </core-toolbar>
+        </paper-shadow>
+        <iframe id="iframe" height=100 src="/res/web_client/form.html"></iframe>
+        <script>
+          console.log(document.getElementById('iframe').contentWindow.document);
+        </script>
 
-      <core-overlay>
-        <h2>Login</h2>
-        <input placeholder="say something..." autofocus>
-        <div>I agree with this wholeheartedly.</div>
-        <button core-overlay-close>OK</button>
-      </core-overlay>
-
-      <core-toolbar>
-        <div>
-          Home Access
-        </div>
-      </core-toolbar>
+      </template>
     </body>
 </html>

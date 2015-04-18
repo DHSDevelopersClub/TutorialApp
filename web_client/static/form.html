@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+      <meta charset="UTF-8">
+
+      <Title>Home Access</Title>
+
+      <!-- Polymer setup. -->
+      <script src="/res/components/webcomponentsjs/webcomponents.min.js"></script>
+      <link rel="import" href="/res/components/polymer/polymer.html" />
+
+      <!-- Imports to third party components. -->
+      <link rel="import" href="/res/components/core-toolbar/core-toolbar.html">
+      <link rel="import" href="/res/components/core-icons/core-icons.html">
+      <link rel="import" href="/res/components/font-roboto/roboto.html">
+      <link rel="import" href="/res/components/paper-shadow/paper-shadow.html">
+      <link rel="import" href="/res/components/paper-icon-button/paper-icon-button.html">
+      <link rel="import" href="/res/components/core-ajax/core-ajax.html">
+
+      <link rel="stylesheet" type="text/css" href="/res/web_client/main.css" shim-shadowdom>
+
+    </head>
+    <body unresolved fullbleed vertical layout>
+      //<script src="/res/web_client/form.js"></script>
+      <form action="https://home.tamdistrict.org/HomeAccess/Account/LogOn?ReturnUrl=%2fHomeAccess%2f" method="post" novalidate="novalidate">
+        <div>
+            <div>Please enter your account information for Home Access Center.</div>
+            <div>
+              <input data-val="true"id="Database" name="Database" type="hidden" value="10">
+            <div>
+                <label for="LogOnDetails_UserName">User Name:</label>
+                <input data-val="true" data-val-required="The User Name: field is required." id="LogOnDetails_UserName" name="LogOnDetails.UserName" type="text" value="">
+                <span data-valmsg-for="LogOnDetails.UserName" data-valmsg-replace="true"></span>
+            </div>
+            <div>
+                <label for="LogOnDetails_Password">Password:</label>
+                <input data-val="true" data-val-required="The Password: field is required." id="LogOnDetails_Password" name="LogOnDetails.Password" type="password">
+                <span  data-valmsg-for="LogOnDetails.Password" data-valmsg-replace="true"></span>
+            </div>
+            <div>
+
+            </div>
+            <button role="button" aria-disabled="false"><span>Login</span></button>
+        </div>
+    </div>
+
+    </form>
+    </body>
+</html>
