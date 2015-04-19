@@ -18,8 +18,10 @@
       <link rel="import" href="/res/components/paper-shadow/paper-shadow.html">
       <link rel="import" href="/res/components/paper-icon-button/paper-icon-button.html">
       <link rel="import" href="/res/components/core-ajax/core-ajax.html">
+      <link rel="import" href="/res/components/sortable-table/sortable-table.html">
 
       <link rel="stylesheet" type="text/css" href="/res/web_client/main.css" shim-shadowdom>
+      <link rel="stylesheet" type="text/css" href="/res/components/sortable-table/css/bootstrap.css" shim-shadowdom>
       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
     </head>
@@ -32,11 +34,9 @@
             <div class="title">Grades</div>
           </core-toolbar>
         </paper-shadow>
-        <iframe id="iframe" height=100 src="/res/web_client/form.html"></iframe>
-        <script>
-          console.log(document.getElementById('iframe').contentWindow.document);
-        </script>
-
+        <template repeat="{{classroom in classrooms}}" style="margin-top: 64px">
+            <sortable-table class="bootstrap" data="{{classroom}}"> </sortable-table>
+        </template>
       </template>
     </body>
 </html>

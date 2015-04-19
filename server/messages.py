@@ -84,12 +84,23 @@ class GetAuthMessage(messages.Message):
         ROOT = 4
     auth = messages.EnumField(AuthLevel, 1)
 
+#New stuff for HAC client
 
+class AssigmentHAC(messages.Message):
+    title = messages.StringField(1)
+    category = messages.StringField(2)
+    date_assigned = messages.StringField(3)
+    date_due = messages.StringField(4)
+    score = messages.FloatField(5)
+    max_score = messages.FloatField(6)
+
+class ClassHAC(messages.Message):
+    title = messages.StringField(1)
+    assignments = messages.MessageField(AssigmentHAC, 2, repeated=True)
 
 class LoginHAC(messages.Message):
     username = messages.StringField(1)
     password = messages.StringField(2)
 
 class ClassesHAC(messages.Message):
-    tables = messages.StringField(1, repeated=True)
-    json = messages.StringField(2)
+    classes = messages.MessageField(ClassHAC, 1, repeated=True)

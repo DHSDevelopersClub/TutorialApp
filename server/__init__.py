@@ -3,7 +3,7 @@ __author__ = 'Sebastian Boyd', 'Alexander Otavka'
 __copyright__ = 'Copyright (C) 2015 DHS Developers Club'
 
 import datetime
-import urllib, urllib2, cookielib
+import urllib, urllib2, cookielib, sys
 
 import endpoints
 from protorpc import message_types, remote
@@ -20,7 +20,7 @@ from messages import (ClassroomQueryMessage, ClassroomMessage, ClassroomListMess
                       SignupCommandMessage, SignupStateMessage, NextTutorialDateMessage,
                       StudentMessage, StudentListMessage, VerifyStudentMessage,
                       VerifyStudentMessageResponse, GetAuthMessage, State, LoginHAC,
-                      LoginHAC, ClassesHAC)
+                      LoginHAC, ClassesHAC, AssigmentHAC, ClassHAC)
 from auth_decorators import (requires_student, requires_teacher, requires_root,
                             is_student, is_teacher, is_admin, is_root)
 
@@ -240,13 +240,37 @@ class HomeAccessClientApi(remote.Service):
         password = request.password
         database = '10'
         login_data = urllib.urlencode({'Database' : database, 'LogOnDetails.UserName' : username, 'LogOnDetails.Password' : password})
-        print login_data
         opener.open('https://home.tamdistrict.org/HomeAccess/Account/LogOn', login_data)
         resp = opener.open('https://home.tamdistrict.org/HomeAccess/Content/Student/Assignments.aspx')
         html = resp.read()
         html = html.decode('utf8', 'ignore')
         soup = BeautifulSoup(html)
-        charts = soup.findAll('table')
-        return ClassesHAC(tables=charts, json='')
+        charts = soup.find_all('table')
+        classes_list = []
+        for classroom_soup in soup.find_all("div", { "class" : "AssignmentClass" }):
+            class_title = classroom_soup.find_all("div", class_="sg-header sg-header-square")[0].find_all("a")[0].string.strip()
+            print class_title
+            assignment_list = []
+            try:
+                for tr in classroom_soup.find("table", class_="sg-asp-table").find_all("tr", class_="sg-asp-table-data-row"):
+                    td = tr.find_all("td")
+                    due = td[0].string
+                    assigned = td[1].string
+                    assigment_title = td[2].find_all("a")[0].string.strip()
+                    print assigment_title
+                    assignment_category = td[3].string.strip()
+                    score_my = float(td[4].string)
+                    score_total = float(td[5].string)
+                    assignment = AssigmentHAC(title=assigment_title, category=assignment_category,
+                                                    date_assigned=assigned, date_due=due,
+                                                    score=score_my, max_score=score_total)
+                    assignment_list.append(assignment)
+            except:
+                print "Unexpected error:", sys.exc_info()[0]
+                continue
+
+            classes_list.append(ClassHAC(assignments=assignment_list, title=class_title))
+
+        return ClassesHAC(classes=classes_list)
 
 application = endpoints.api_server([DHSTutorialAPI, HomeAccessClientApi])
