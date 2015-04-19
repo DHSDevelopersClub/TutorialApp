@@ -59,3 +59,5 @@ libraries:
   version: 1.0
 - name: webapp2
   version: latest
+- name: lxml
+  version: latest

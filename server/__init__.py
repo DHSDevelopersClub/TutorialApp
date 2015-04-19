@@ -3,6 +3,7 @@ __author__ = 'Sebastian Boyd', 'Alexander Otavka'
 __copyright__ = 'Copyright (C) 2015 DHS Developers Club'
 
 import datetime
+import urllib, urllib2, cookielib
 
 import endpoints
 from protorpc import message_types, remote
@@ -11,12 +12,15 @@ from google.appengine.ext import ndb
 #from libs.endpoints_proto_datastore.ndb import EndpointsModel
 import libs.pytz as pytz
 
+from bs4 import BeautifulSoup
+
 from redirect_handler import redirect
 import models
 from messages import (ClassroomQueryMessage, ClassroomMessage, ClassroomListMessage,
                       SignupCommandMessage, SignupStateMessage, NextTutorialDateMessage,
                       StudentMessage, StudentListMessage, VerifyStudentMessage,
-                      VerifyStudentMessageResponse, GetAuthMessage, State)
+                      VerifyStudentMessageResponse, GetAuthMessage, State, LoginHAC,
+                      LoginHAC, ClassesHAC)
 from auth_decorators import (requires_student, requires_teacher, requires_root,
                             is_student, is_teacher, is_admin, is_root)
 
@@ -211,7 +215,7 @@ class DHSTutorialAPI(remote.Service):
     @requires_teacher
     def verify_student(self, request, user_entity):
         pass
-        
+
     @endpoints.method(message_types.VoidMessage, GetAuthMessage, name='get_auth')
     def get_auth(self, request):
         current_user = endpoints.get_current_user()
@@ -224,4 +228,25 @@ class DHSTutorialAPI(remote.Service):
         if is_root(current_user) != None:
             return GetAuthMessage(auth=GetAuthMessage.AuthLevel.ROOT)
         return GetAuthMessage(auth=GetAuthMessage.AuthLevel.NO_USER)
-application = endpoints.api_server([DHSTutorialAPI])
+
+@endpoints.api(name='homeaccessclient', version='v1',
+               allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
+class HomeAccessClientApi(remote.Service):
+    @endpoints.method(LoginHAC, ClassesHAC, name='login')
+    def login(self, request):
+        cj = cookielib.CookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+        username = request.username
+        password = request.password
+        database = '10'
+        login_data = urllib.urlencode({'Database' : database, 'LogOnDetails.UserName' : username, 'LogOnDetails.Password' : password})
+        print login_data
+        opener.open('https://home.tamdistrict.org/HomeAccess/Account/LogOn', login_data)
+        resp = opener.open('https://home.tamdistrict.org/HomeAccess/Content/Student/Assignments.aspx')
+        html = resp.read()
+        html = html.decode('utf8', 'ignore')
+        soup = BeautifulSoup(html)
+        charts = soup.findAll('table')
+        return ClassesHAC(tables=charts, json='')
+
+application = endpoints.api_server([DHSTutorialAPI, HomeAccessClientApi])

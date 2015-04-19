@@ -83,3 +83,13 @@ class GetAuthMessage(messages.Message):
         ADMIN = 3
         ROOT = 4
     auth = messages.EnumField(AuthLevel, 1)
+
+
+
+class LoginHAC(messages.Message):
+    username = messages.StringField(1)
+    password = messages.StringField(2)
+
+class ClassesHAC(messages.Message):
+    tables = messages.StringField(1, repeated=True)
+    json = messages.StringField(2)
