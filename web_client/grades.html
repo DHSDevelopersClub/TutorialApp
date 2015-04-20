@@ -11,6 +11,8 @@
       <script src="/res/components/webcomponentsjs/webcomponents.min.js"></script>
       <link rel="import" href="/res/components/polymer/polymer.html" />
 
+      <link rel="import" href="/res/components/local-grades-card/local-grades-card.html">
+
       <!-- Imports to third party components. -->
       <link rel="import" href="/res/components/core-toolbar/core-toolbar.html">
       <link rel="import" href="/res/components/core-icons/core-icons.html">
@@ -21,7 +23,6 @@
       <link rel="import" href="/res/components/sortable-table/sortable-table.html">
 
       <link rel="stylesheet" type="text/css" href="/res/web_client/main.css" shim-shadowdom>
-      <link rel="stylesheet" type="text/css" href="/res/components/sortable-table/css/bootstrap.css" shim-shadowdom>
       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
     </head>
@@ -34,9 +35,13 @@
             <div class="title">Grades</div>
           </core-toolbar>
         </paper-shadow>
-        <template repeat="{{classroom in classrooms}}" style="margin-top: 64px">
-            <sortable-table class="bootstrap" data="{{classroom}}"> </sortable-table>
-        </template>
+        <div id="contentWrapper">
+          <local-grades-card data='{title: "10017 - 43   English 1 (TREK)"}'></local-grades-card>
+          <local-grades-card data='{title: "10017 - 43   English 1 (TREK)"}'></local-grades-card>
+          <template repeat="{{classroom in classrooms}}" style="margin-top: 64px">
+              <local-grades-card data='{"title": "10017 - 43   English 1 (TREK)"}'></local-grades-card>
+          </template>
+        </div>
       </template>
     </body>
 </html>
