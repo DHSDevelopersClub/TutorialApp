@@ -229,6 +229,7 @@ class DHSTutorialAPI(remote.Service):
             return GetAuthMessage(auth=GetAuthMessage.AuthLevel.ROOT)
         return GetAuthMessage(auth=GetAuthMessage.AuthLevel.NO_USER)
 
+
 @endpoints.api(name='homeaccessclient', version='v1',
                allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
 class HomeAccessClientApi(remote.Service):
@@ -266,7 +267,6 @@ class HomeAccessClientApi(remote.Service):
                                                     score=score_my, max_score=score_total)
                     assignment_list.append(assignment)
             except:
-                print "Unexpected error:", sys.exc_info()[0]
                 continue
 
             classes_list.append(ClassHAC(assignments=assignment_list, title=class_title))

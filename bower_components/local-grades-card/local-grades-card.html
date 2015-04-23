@@ -12,9 +12,9 @@ Author: Sebastian Boyd
         <link rel="import" href="/res/components/core-icons/core-icons.html">
 
         <paper-shadow id="card" z="1">
-            <div vertical layout flex>
-              <div id="info">
-                <div>{{data.title}}10017 - 43   English 1 (TREK)</div>
+            <div layout vertical>
+              <div id="head" horizontal layout center>
+                <div flex>{{data.title}}10017 - 43   English 1 (TREK)</div>
                 <paper-icon-button icon="trending-up" on-tap=""></paper-icon-button>
               </div>
               <sortable-table class="bootstrap" data='[
