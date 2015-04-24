@@ -14,130 +14,17 @@ Author: Sebastian Boyd
         <paper-shadow id="card" z="1">
             <div layout vertical>
               <div id="head" horizontal layout center>
-                <div flex>{{data.title}}10017 - 43   English 1 (TREK)</div>
+                <div flex>{{data.title}}</div>
                 <paper-icon-button icon="trending-up" on-tap=""></paper-icon-button>
               </div>
-              <sortable-table class="bootstrap" data='[
-    {
-     "category": "Agency",
-     "date_assigned": "12/19/2014",
-     "date_due": "12/19/2014",
-     "max_score": 100,
-     "score": 100,
-     "title": "Agency"
-    },
-    {
-     "category": "Collaboration",
-     "date_assigned": "12/19/2014",
-     "date_due": "12/19/2014",
-     "max_score": 100,
-     "score": 100,
-     "title": "Collab"
-    },
-    {
-     "category": "Knowledge and Thinking",
-     "date_assigned": "12/19/2014",
-     "date_due": "12/19/2014",
-     "max_score": 100,
-     "score": 100,
-     "title": "Know/Think"
-    },
-    {
-     "category": "Oral Assessment",
-     "date_assigned": "12/19/2014",
-     "date_due": "12/19/2014",
-     "max_score": 100,
-     "score": 95,
-     "title": "Oral"
-    },
-    {
-     "category": "Written Communication",
-     "date_assigned": "12/19/2014",
-     "date_due": "12/19/2014",
-     "max_score": 100,
-     "score": 90,
-     "title": "Written Comm"
-    },
-    {
-     "category": "Agency",
-     "date_assigned": "11/03/2014",
-     "date_due": "11/03/2014",
-     "max_score": 100,
-     "score": 100,
-     "title": "R2 Agency"
-    },
-    {
-     "category": "Collaboration",
-     "date_assigned": "11/03/2014",
-     "date_due": "11/03/2014",
-     "max_score": 100,
-     "score": 90,
-     "title": "R2 Collaboration"
-    },
-    {
-     "category": "Knowledge and Thinking",
-     "date_assigned": "11/03/2014",
-     "date_due": "11/03/2014",
-     "max_score": 100,
-     "score": 95,
-     "title": "R2 Knowledge and Thinking"
-    },
-    {
-     "category": "Oral Assessment",
-     "date_assigned": "11/03/2014",
-     "date_due": "11/03/2014",
-     "max_score": 100,
-     "score": 95,
-     "title": "R2 Oral Communication"
-    },
-    {
-     "category": "Written Communication",
-     "date_assigned": "11/03/2014",
-     "date_due": "11/03/2014",
-     "max_score": 100,
-     "score": 90,
-     "title": "R2 Written Communication"
-    },
-    {
-     "category": "Knowledge and Thinking",
-     "date_assigned": "10/10/2014",
-     "date_due": "10/10/2014",
-     "max_score": 100,
-     "score": 100,
-     "title": "Know/Think"
-    },
-    {
-     "category": "Agency",
-     "date_assigned": "09/26/2014",
-     "date_due": "09/26/2014",
-     "max_score": 100,
-     "score": 85,
-     "title": "R1 Agency"
-    },
-    {
-     "category": "Oral Assessment",
-     "date_assigned": "09/26/2014",
-     "date_due": "09/26/2014",
-     "max_score": 100,
-     "score": 87.5,
-     "title": "R1 Collaborative Discussion"
-    },
-    {
-     "category": "Written Communication",
-     "date_assigned": "09/26/2014",
-     "date_due": "09/26/2014",
-     "max_score": 100,
-     "score": 100,
-     "title": "R1 Written Communication"
-    }
-   ]'></sortable-table>
+              <sortable-table class="bootstrap" id="table" data="{{data.assignments}}"></sortable-table>
             </div>
         </paper-shadow>
     </template>
 
     <script>
-        Polymer({
+      Polymer({
 
-        });
+      });
     </script>
 </polymer-element>

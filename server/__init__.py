@@ -8,6 +8,8 @@ import urllib, urllib2, cookielib, sys
 import endpoints
 from protorpc import message_types, remote
 from google.appengine.ext import ndb
+from google.appengine.api import urlfetch
+urlfetch.set_default_fetch_deadline(45)
 
 #from libs.endpoints_proto_datastore.ndb import EndpointsModel
 import libs.pytz as pytz

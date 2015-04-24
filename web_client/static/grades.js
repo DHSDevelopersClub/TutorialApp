@@ -5,11 +5,21 @@
  *
  * Author: Sebastian Boyd
  */
+var sendPostRequest = function(username, password, callback) {
+   gapi.client.homeaccessclient.login({
+       "username": username,
+       "password": password,
+   }).execute(callback);
+};
 
-var grades = document.querySelector("#grades");
-
-grades.addEventListener("template-bound", function() {
-  grades.Back = function() {
-      window.location.href = "/app";
-  };
+var app = document.querySelector("template#grades");
+app.addEventListener("template-bound", function(){
+  app.$.apiLoader.setOnload(function() {
+    var username = "sebastian.boyd";
+    var password = "";
+    sendPostRequest(username, password, function(response){
+      console.log(response.classes);
+      app.classrooms = response.classes
+    });
+  });
 });

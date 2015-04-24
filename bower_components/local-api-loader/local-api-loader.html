@@ -28,8 +28,9 @@
                 }
             };
 
-            apisToLoad = 2; // must match number of calls to gapi.client.load()
+            apisToLoad = 3; // must match number of calls to gapi.client.load()
             gapi.client.load('dhstutorial', 'v1', loadCallback, window.api.ROOT);
+            gapi.client.load('homeaccessclient', 'v1', loadCallback, window.api.ROOT);
             gapi.client.load('oauth2', 'v2', loadCallback);
         };
 
