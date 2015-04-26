@@ -448,7 +448,7 @@
 }
 .bootstrap::shadow > table > thead > tr > th,
 .bootstrap::shadow > table > tfoot > tr.footercells > td {
-	font-weight: 700;
+	font-weight: 300;
 }
 
 .bootstrap::shadow > table > caption+thead > tr:first-child > th,

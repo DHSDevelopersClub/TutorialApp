@@ -4,12 +4,15 @@ Author: Sebastian Boyd
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="/res/components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/res/components/core-icons/core-icons.html">
+<link rel="import" href="/res/components/chart-elements/chart-elements.html">
+
 
 <polymer-element name="local-grades-card" attributes="data">
     <template>
         <link rel="stylesheet" type="text/css" href="local-grades-card.css">
         <link rel="stylesheet" type="text/css" href="/res/components/sortable-table/css/bootstrap.css" shim-shadowdom>
-        <link rel="import" href="/res/components/core-icons/core-icons.html">
+
 
         <paper-shadow id="card" z="1">
             <div layout vertical>
@@ -17,14 +20,30 @@ Author: Sebastian Boyd
                 <div flex>{{data.title}}</div>
                 <paper-icon-button icon="trending-up" on-tap=""></paper-icon-button>
               </div>
-              <sortable-table class="bootstrap" id="table" data="{{data.assignments}}"></sortable-table>
+              <sortable-table class="bootstrap" id="table" data="{{data.assignments}}">
+              	<sortable-column name="title">Assignment</sortable-column>
+              	<sortable-column name="date_assigned">Assigned</sortable-column>
+              	<sortable-column name="date_due">Due</sortable-column>
+              	<sortable-column name="score">Score</sortable-column>
+                <sortable-column name="max_score">Total</sortable-column>
+                <sortable-column name="category">Category</sortable-column>
+              </sortable-table>
+              <chart-line
+                  width="400"
+                  height="200"
+                  labels="['Monday','Tuesday','Wednesday','thursday','Friday','Saturday','Sunday']"
+                  values="[ [10,14,20,25,13,9,40] ]"
+                  colors="['253,180,92','247,70,74','70,191,189','148,159,177','77,83,96']">
+              </chart-line>
             </div>
         </paper-shadow>
     </template>
 
     <script>
       Polymer({
-
+        ready: function() {
+          this.chartdata = "[ [10,14,20,25,13,9,40] ]"
+        }
       });
     </script>
 </polymer-element>

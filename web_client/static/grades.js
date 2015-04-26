@@ -14,12 +14,15 @@ var sendPostRequest = function(username, password, callback) {
 
 var app = document.querySelector("template#grades");
 app.addEventListener("template-bound", function(){
-  app.$.apiLoader.setOnload(function() {
-    var username = "sebastian.boyd";
-    var password = "";
-    sendPostRequest(username, password, function(response){
+  app.submit = function(){
+    document.getElementById("login").style.visibility = "collapse";
+    app.spinner = "true"
+    sendPostRequest(app.username, app.password, function(response){
       console.log(response.classes);
-      app.classrooms = response.classes
+      app.classrooms = response.classes;
     });
+  };
+  app.$.apiLoader.setOnload(function() {
+
   });
 });

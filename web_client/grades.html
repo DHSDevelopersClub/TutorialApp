@@ -19,9 +19,13 @@
       <link rel="import" href="/res/components/font-roboto/roboto.html">
       <link rel="import" href="/res/components/paper-shadow/paper-shadow.html">
       <link rel="import" href="/res/components/paper-icon-button/paper-icon-button.html">
+      <link rel="import" href="/res/components/paper-button/paper-button.html">
       <link rel="import" href="/res/components/core-ajax/core-ajax.html">
       <link rel="import" href="/res/components/sortable-table/sortable-table.html">
       <link rel="import" href="/res/components/local-api-loader/local-api-loader.html">
+      <link rel="import" href="/res/components/paper-input/paper-input.html">
+      <link rel="import" href="/res/components/core-input/core-input.html">
+      <link rel="import" href="/res/components/paper-spinner/paper-spinner.html">
 
       <link rel="stylesheet" type="text/css" href="/res/web_client/main.css" shim-shadowdom>
     </head>
@@ -29,11 +33,23 @@
       <template id="grades" is="auto-binding">
         <paper-shadow id="actionBar" z="1">
           <core-toolbar>
-            <paper-icon-button icon="arrow-back" on-tap="{{Back}}"></paper-icon-button>
+            <paper-icon-button icon="arrow-back" hidden="true" on-tap="{{Back}}"></paper-icon-button>
             <div class="title">Grades</div>
           </core-toolbar>
         </paper-shadow>
         <div id="contentWrapper">
+          <paper-spinner active={{spinner}}></paper-spinner>
+          <div id="login">
+            <paper-input-decorator label="Username">
+               <input id="username" is="core-input" value="{{username}}"/>
+            </paper-input-decorator>
+            <paper-input-decorator label="Password">
+               <input id="password" is="core-input" type="password" value="{{password}}"/>
+            </paper-input-decorator>
+            <div horizontal end-justified layout>
+              <paper-button raised on-tap="{{submit}}">Login</paper-button>
+            </div>
+          </div>
           <template repeat="{{classroom in classrooms}}" style="margin-top: 64px">
               <local-grades-card data="{{classroom}}"></local-grades-card>
           </template>
