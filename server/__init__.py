@@ -244,6 +244,10 @@ class HomeAccessClientApi(remote.Service):
         database = '10'
         login_data = urllib.urlencode({'Database' : database, 'LogOnDetails.UserName' : username, 'LogOnDetails.Password' : password})
         opener.open('https://home.tamdistrict.org/HomeAccess/Account/LogOn', login_data)
+        if [cookie for cookie in cj if cookie.name == ".AuthCookie"] == []:
+            login_status = ClassesHAC.LoginStatus.LOGIN_ERROR
+        else:
+            login_status = ClassesHAC.LoginStatus.OK
         resp = opener.open('https://home.tamdistrict.org/HomeAccess/Content/Student/Assignments.aspx')
         html = resp.read()
         html = html.decode('utf8', 'ignore')
@@ -252,7 +256,6 @@ class HomeAccessClientApi(remote.Service):
         classes_list = []
         for classroom_soup in soup.find_all("div", { "class" : "AssignmentClass" }):
             class_title = classroom_soup.find_all("div", class_="sg-header sg-header-square")[0].find_all("a")[0].string.strip()
-            print class_title
             assignment_list = []
             try:
                 for tr in classroom_soup.find("table", class_="sg-asp-table").find_all("tr", class_="sg-asp-table-data-row"):
@@ -260,7 +263,6 @@ class HomeAccessClientApi(remote.Service):
                     due = td[0].string
                     assigned = td[1].string
                     assigment_title = td[2].find_all("a")[0].string.strip()
-                    print assigment_title
                     assignment_category = td[3].string.strip()
                     score_my = float(td[4].string)
                     score_total = float(td[5].string)
@@ -273,6 +275,6 @@ class HomeAccessClientApi(remote.Service):
 
             classes_list.append(ClassHAC(assignments=assignment_list, title=class_title))
 
-        return ClassesHAC(classes=classes_list)
+        return ClassesHAC(classes=classes_list, status=login_status)
 
 application = endpoints.api_server([DHSTutorialAPI, HomeAccessClientApi])

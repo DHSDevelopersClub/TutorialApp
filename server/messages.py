@@ -104,3 +104,7 @@ class LoginHAC(messages.Message):
 
 class ClassesHAC(messages.Message):
     classes = messages.MessageField(ClassHAC, 1, repeated=True)
+    class LoginStatus(messages.Enum):
+        OK = 0
+        LOGIN_ERROR = 1
+    status = messages.EnumField(LoginStatus, 2)

@@ -18,7 +18,7 @@ Author: Sebastian Boyd
             <div layout vertical>
               <div id="head" horizontal layout center>
                 <div flex>{{data.title}}</div>
-                <paper-icon-button icon="trending-up" on-tap=""></paper-icon-button>
+                <paper-icon-button icon="trending-up" on-tap="" style="display:none;"></paper-icon-button>
               </div>
               <sortable-table class="bootstrap" id="table" data="{{data.assignments}}">
               	<sortable-column name="title">Assignment</sortable-column>
@@ -28,13 +28,6 @@ Author: Sebastian Boyd
                 <sortable-column name="max_score">Total</sortable-column>
                 <sortable-column name="category">Category</sortable-column>
               </sortable-table>
-              <chart-line
-                  width="400"
-                  height="200"
-                  labels="['Monday','Tuesday','Wednesday','thursday','Friday','Saturday','Sunday']"
-                  values="[ [10,14,20,25,13,9,40] ]"
-                  colors="['253,180,92','247,70,74','70,191,189','148,159,177','77,83,96']">
-              </chart-line>
             </div>
         </paper-shadow>
     </template>
