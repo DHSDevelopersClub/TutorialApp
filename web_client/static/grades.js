@@ -13,10 +13,14 @@ var sendPostRequest = function(username, password, callback) {
 };
 
 var app = document.querySelector("template#grades");
+
 app.addEventListener("template-bound", function(){
   app.logout = function(){
     app.classrooms = "";
-    document.getElementById("login_error").style.display = "";
+    app.username = "";
+    app.password = "";
+    document.getElementById("login").style.display = "";
+    document.getElementById("logout").style.display = "none";
   }
   app.submit = function(){
     app.spinner = true;
@@ -28,6 +32,7 @@ app.addEventListener("template-bound", function(){
       }
       else {
         document.getElementById("login").style.display = "none";
+        document.getElementById("logout").style.display = "";
         app.classrooms = response.classes;
       }
       console.log(response);
@@ -37,3 +42,11 @@ app.addEventListener("template-bound", function(){
 
   });
 });
+
+window.onkeyup = function(e) {
+   var key = e.keyCode ? e.keyCode : e.which;
+
+   if (key == 13) {
+       app.submit()
+   }
+}
