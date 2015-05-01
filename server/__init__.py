@@ -264,15 +264,14 @@ class HomeAccessClientApi(remote.Service):
                     assigned = td[1].string
                     assigment_title = td[2].find_all("a")[0].string.strip()
                     assignment_category = td[3].string.strip()
-                    score_my = float(td[4].string)
-                    score_total = float(td[5].string)
+                    score_my = td[4].string.strip()
+                    score_total = td[5].string.strip()
                     assignment = AssigmentHAC(title=assigment_title, category=assignment_category,
                                                     date_assigned=assigned, date_due=due,
                                                     score=score_my, max_score=score_total)
                     assignment_list.append(assignment)
             except:
                 continue
-
             classes_list.append(ClassHAC(assignments=assignment_list, title=class_title))
 
         return ClassesHAC(classes=classes_list, status=login_status)

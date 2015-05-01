@@ -91,8 +91,8 @@ class AssigmentHAC(messages.Message):
     category = messages.StringField(2)
     date_assigned = messages.StringField(3)
     date_due = messages.StringField(4)
-    score = messages.FloatField(5)
-    max_score = messages.FloatField(6)
+    score = messages.StringField(5)
+    max_score = messages.StringField(6)
 
 class ClassHAC(messages.Message):
     title = messages.StringField(1)
