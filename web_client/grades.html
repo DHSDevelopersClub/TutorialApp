@@ -40,30 +40,32 @@
             <paper-button id="logout" on-tap={{logout}} style="display:none;">Log out</paper-button>
           </core-toolbar>
         </paper-shadow>
-        <div id="contentWrapper">
-          <div id="login">
-            <paper-input-decorator label="Username">
-               <input id="username" is="core-input" value="{{username}}"/>
-            </paper-input-decorator>
-            <paper-input-decorator label="Password">
-               <input id="password" is="core-input" type="password" value="{{password}}"/>
-            </paper-input-decorator>
-            <div id="login_error" style="color:red;padding-bottom:5px;display:none;" horizontal center layout>
-              <core-icon icon="error"></core-icon>
-              <div>
-                There was a problem logging in
+        <div fit id="contentWrapper">
+          <div vertical center layout>
+            <div id="login">
+              <paper-input-decorator label="Username">
+                 <input id="username" is="core-input" value="{{username}}"/>
+              </paper-input-decorator>
+              <paper-input-decorator label="Password">
+                 <input id="password" is="core-input" type="password" value="{{password}}"/>
+              </paper-input-decorator>
+              <div id="login_error" style="color:red;padding-bottom:5px;display:none;" horizontal center layout>
+                <core-icon icon="error"></core-icon>
+                <div>
+                  There was a problem logging in
+                </div>
               </div>
-            </div>
-            <div horizontal center layout>
-              <div flex>
-                <paper-spinner active={{spinner}}></paper-spinner>
+              <div horizontal center layout>
+                <div flex>
+                  <paper-spinner active={{spinner}}></paper-spinner>
+                </div>
+                <paper-button raised on-tap="{{submit}}">Login</paper-button>
               </div>
-              <paper-button raised on-tap="{{submit}}">Login</paper-button>
-            </div>
 
+            </div>
           </div>
           <template repeat="{{classroom in classrooms}}" style="margin-top: 64px">
-              <local-grades-card data="{{classroom}}"></local-grades-card>
+              <local-grades-card flex data="{{classroom}}"></local-grades-card>
           </template>
         </div>
         <local-api-loader id="apiLoader"></local-api-loader>
