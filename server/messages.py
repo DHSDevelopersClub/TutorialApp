@@ -94,9 +94,20 @@ class AssigmentHAC(messages.Message):
     score = messages.StringField(5)
     max_score = messages.StringField(6)
 
+class GradeHAC(messages.Message):
+    category = messages.StringField(1)
+    weight = messages.StringField(2)
+    score = messages.StringField(3)
+    max_score = messages.StringField(4)
+    percent = messages.StringField(5)
+    weighted_points = messages.StringField(6)
+
 class ClassHAC(messages.Message):
     title = messages.StringField(1)
     assignments = messages.MessageField(AssigmentHAC, 2, repeated=True)
+    grade_table = messages.MessageField(GradeHAC, 3, repeated=True)
+    grade_percent = messages.StringField(4)
+
 
 class LoginHAC(messages.Message):
     username = messages.StringField(1)

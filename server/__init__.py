@@ -3,7 +3,7 @@ __author__ = 'Sebastian Boyd', 'Alexander Otavka'
 __copyright__ = 'Copyright (C) 2015 DHS Developers Club'
 
 import datetime
-import urllib, urllib2, cookielib, sys
+import urllib, urllib2, cookielib, sys, re
 
 import endpoints
 from protorpc import message_types, remote
@@ -22,7 +22,7 @@ from messages import (ClassroomQueryMessage, ClassroomMessage, ClassroomListMess
                       SignupCommandMessage, SignupStateMessage, NextTutorialDateMessage,
                       StudentMessage, StudentListMessage, VerifyStudentMessage,
                       VerifyStudentMessageResponse, GetAuthMessage, State, LoginHAC,
-                      LoginHAC, ClassesHAC, AssigmentHAC, ClassHAC)
+                      LoginHAC, ClassesHAC, AssigmentHAC, ClassHAC, GradeHAC)
 from auth_decorators import (requires_student, requires_teacher, requires_root,
                             is_student, is_teacher, is_admin, is_root)
 
@@ -177,6 +177,7 @@ class DHSTutorialAPI(remote.Service):
         for classroom in filtered:
             if check_signup(classroom, user_entity):
                 filtered.insert(0, filtered.pop(filtered.index(classroom)))
+
         return ClassroomListMessage(classrooms=[
             ClassroomMessage(
                 dsid=str(classroom.key.id()),
@@ -272,7 +273,24 @@ class HomeAccessClientApi(remote.Service):
                     assignment_list.append(assignment)
             except:
                 continue
-            classes_list.append(ClassHAC(assignments=assignment_list, title=class_title))
+            grade_list = []
+            for tr in classroom_soup.find("div", class_="sg-view-quick sg-clearfix").find("table", class_="sg-asp-table").find_all("tr", class_="sg-asp-table-data-row"):
+                td = tr.find_all("td")
+                length = len(td)
+                grade_items_docs = ["grade_category", "points", "max_points", "percent", "weight", "weighted_points"]
+                grade_items = []
+                for t in td:
+                    grade_items.append(t.string.strip())
+                while len(grade_items) < 6:
+                    grade_items.append('')
+                grade = GradeHAC(category=grade_items[0], weight=grade_items[4], score=grade_items[1],
+                                max_score=grade_items[2], percent=grade_items[3],
+                                weighted_points=grade_items[5])
+                print grade
+                grade_list.append(grade)
+            grade_percent = classroom_soup.find("span", id=re.compile("plnMain_rptAssigmnetsByCourse_lblOverallAverage_\d")).string.strip()
+            print grade_percent
+            classes_list.append(ClassHAC(assignments=assignment_list, title=class_title, grade_table=grade_list, grade_percent=grade_percent))
 
         return ClassesHAC(classes=classes_list, status=login_status)
 
