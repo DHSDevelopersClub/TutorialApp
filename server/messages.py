@@ -107,6 +107,7 @@ class ClassHAC(messages.Message):
     assignments = messages.MessageField(AssigmentHAC, 2, repeated=True)
     grade_table = messages.MessageField(GradeHAC, 3, repeated=True)
     grade_percent = messages.StringField(4)
+    grade_letter = messages.StringField(5)
 
 
 class LoginHAC(messages.Message):

@@ -17,10 +17,21 @@ Author: Sebastian Boyd
 
         <paper-shadow id="card" z="1">
             <div layout vertical>
-              <div id="head" on-click="{{toggleGrades}}" horizontal layout center>
+              <div id="head" on-click="{{toggleAssignments}}" horizontal layout center>
                 <div flex>{{data.title}}</div>
+                <div>{{data.grade_letter}} - {{data.grade_percent}}%</div>
                 <paper-icon-button icon="trending-up" on-tap="" style="display:none;"></paper-icon-button>
               </div>
+              <core-collapse id="gradesCollapse">
+                <sortable-table class="bootstrap" data="{{data.grade_table}}">
+                  <sortable-column name="category">Category</sortable-column>
+                  <sortable-column name="score">Score</sortable-column>
+                  <sortable-column name="max_score">Total</sortable-column>
+                  <sortable-column name="percent">Percentage</sortable-column>
+                  <sortable-column name="weight">Weight</sortable-column>
+                  <sortable-column name="weighted_points">Weighted Score</sortable-column>
+                </sortable-table>
+              </core-collapse>
               <core-collapse id="tableCollapse">
                 <sortable-table class="bootstrap" id="table" data="{{data.assignments}}">
                 	<sortable-column name="title">Assignment</sortable-column>
@@ -40,8 +51,11 @@ Author: Sebastian Boyd
         ready: function() {
           this.chartdata = "[ [10,14,20,25,13,9,40] ]"
         },
-        toggleGrades: function() {
+        toggleAssignments: function() {
           this.$.tableCollapse.toggle();
+        },
+        toggleGrades: function() {
+          this.$.gradesCollapse.toggle();
         },
       });
     </script>

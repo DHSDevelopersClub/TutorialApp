@@ -286,11 +286,12 @@ class HomeAccessClientApi(remote.Service):
                 grade = GradeHAC(category=grade_items[0], weight=grade_items[4], score=grade_items[1],
                                 max_score=grade_items[2], percent=grade_items[3],
                                 weighted_points=grade_items[5])
-                print grade
                 grade_list.append(grade)
-            grade_percent = classroom_soup.find("span", id=re.compile("plnMain_rptAssigmnetsByCourse_lblOverallAverage_\d")).string.strip()
-            print grade_percent
-            classes_list.append(ClassHAC(assignments=assignment_list, title=class_title, grade_table=grade_list, grade_percent=grade_percent))
+            grade_str = classroom_soup.find("span", id=re.compile("plnMain_rptAssigmnetsByCourse_lblOverallAverage_\d")).string
+            p = re.compile(r'\(([A-Z])\)')
+            grade_percent = re.sub(r'\([^)]*\)', '', grade_str).strip()
+            grade_letter = p.search(grade_str).group(1)
+            classes_list.append(ClassHAC(assignments=assignment_list, title=class_title, grade_table=grade_list, grade_percent=grade_percent, grade_letter=grade_letter))
 
         return ClassesHAC(classes=classes_list, status=login_status)
 
