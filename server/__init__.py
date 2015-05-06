@@ -288,9 +288,12 @@ class HomeAccessClientApi(remote.Service):
                                 weighted_points=grade_items[5])
                 grade_list.append(grade)
             grade_str = classroom_soup.find("span", id=re.compile("plnMain_rptAssigmnetsByCourse_lblOverallAverage_\d")).string
-            p = re.compile(r'\(([A-Z])\)')
+            p = re.compile(r'\(([^\)]+)\)')
             grade_percent = re.sub(r'\([^)]*\)', '', grade_str).strip()
-            grade_letter = p.search(grade_str).group(1)
+            try:
+                grade_letter = p.search(grade_str).group(1)
+            except:
+                grade_letter = ''
             classes_list.append(ClassHAC(assignments=assignment_list, title=class_title, grade_table=grade_list, grade_percent=grade_percent, grade_letter=grade_letter))
 
         return ClassesHAC(classes=classes_list, status=login_status)
