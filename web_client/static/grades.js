@@ -26,14 +26,14 @@ app.addEventListener("template-bound", function(){
     app.spinner = true;
     sendPostRequest(app.username, app.password, function(response){
       app.spinner = false;
-      if (response.status === "LOGIN_ERROR") {
-        document.getElementById("login_error").style.display = "";
-        app.password = '';
-      }
-      else {
+      if (response.status === "OK") {
         document.getElementById("login").style.display = "none";
         document.getElementById("logout").style.display = "";
         app.classrooms = response.classes;
+      }
+      else {
+        document.getElementById("login_error").style.display = "";
+        app.password = '';
       }
       console.log(response);
     });

@@ -19,7 +19,8 @@ Author: Sebastian Boyd
             <div layout vertical>
               <div id="head" on-click="{{toggleAssignments}}" horizontal layout center>
                 <div flex>{{data.title}}</div>
-                <div>{{data.grade_letter}} - {{data.grade_percent}}%</div>
+                <div id="letter">{{data.grade_letter}}</div>
+                <div>{{data.grade_percent}}%</div>
                 <paper-icon-button icon="trending-up" on-tap="" style="display:none;"></paper-icon-button>
               </div>
               <core-collapse id="gradesCollapse">
