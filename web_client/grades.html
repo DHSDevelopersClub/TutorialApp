@@ -18,6 +18,7 @@
       <link rel="import" href="/res/components/core-toolbar/core-toolbar.html">
       <link rel="import" href="/res/components/core-icons/core-icons.html">
       <link rel="import" href="/res/components/core-icon/core-icon.html">
+      <link rel="import" href="/res/components/core-icon-button/core-icon-button.html">
       <link rel="import" href="/res/components/font-roboto/roboto.html">
       <link rel="import" href="/res/components/paper-shadow/paper-shadow.html">
       <link rel="import" href="/res/components/paper-icon-button/paper-icon-button.html">
@@ -67,9 +68,23 @@
           <template repeat="{{classroom in classrooms}}" style="margin-top: 64px">
               <local-grades-card flex data="{{classroom}}"></local-grades-card>
           </template>
+          <div vertical center layout>
+            <div class="elevatorButton" id="up" style="display:none">
+              <paper-icon-button class="big" raised src="/res/web_client/images/elevator.svg"></paper-icon-button>
+            </div>
+          </div>
         </div>
         <local-api-loader id="apiLoader"></local-api-loader>
       </template>
+      <script src="/res/web_client/elevator.js"></script>
       <script src="/res/web_client/grades.js"></script>
+      <script>
+        var elementButton = document.querySelector('.elevatorButton');
+            var elevator = new Elevator({
+                element: elementButton,
+                mainAudio: '/res/web_client/music/elevator-music.mp3', // Music from http://www.bensound.com/
+                endAudio:  '/res/web_client/music/ding.mp3'
+            });
+      </script>
     </body>
 </html>
