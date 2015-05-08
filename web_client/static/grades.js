@@ -32,6 +32,7 @@ app.addEventListener("template-bound", function(){
         document.getElementById("logout").style.display = "";
         app.classrooms = response.classes;
         document.getElementById("up").style.display = "";
+        document.getElementById("copyright").style.display = "";
       }
       else {
         document.getElementById("login_error").style.display = "";

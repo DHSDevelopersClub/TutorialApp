@@ -80,17 +80,7 @@ body {
 }
 
 #contentWrapper {
-    margin: @dimen_screen_vertical_margin + 64px
-            @dimen_screen_horizontal_margin
-            @dimen_screen_vertical_margin
-            @dimen_screen_horizontal_margin;
 
-    @media screen and (max-width: @threshold_mobile_width) {
-        margin: @dimen_mobile_screen_vertical_margin + 64px
-                @dimen_mobile_screen_horizontal_margin
-                @dimen_mobile_screen_vertical_margin
-                @dimen_mobile_screen_horizontal_margin;
-    }
 }
 
 #actionButtons {
@@ -235,3 +225,27 @@ paper-icon-button.big::shadow #icon {
       width: 90px;
       height: 90px;
     }
+
+#copyright {
+  font-weight: 300;
+  bottom: 0px;
+  background-color: #CBCBCB;
+}
+
+#copy_text {
+  padding: 8px 16px 8px 16px
+}
+
+.content {
+  margin: @dimen_screen_vertical_margin + 64px
+          @dimen_screen_horizontal_margin
+          @dimen_screen_vertical_margin
+          @dimen_screen_horizontal_margin;
+
+  @media screen and (max-width: @threshold_mobile_width) {
+      margin: @dimen_mobile_screen_vertical_margin + 64px
+              @dimen_mobile_screen_horizontal_margin
+              @dimen_mobile_screen_vertical_margin
+              @dimen_mobile_screen_horizontal_margin;
+  }
+}

@@ -42,7 +42,7 @@
           </core-toolbar>
         </paper-shadow>
         <div fit id="contentWrapper">
-          <div vertical center layout>
+          <div class="content" vertical center layout>
             <div id="login">
               <paper-input-decorator label="Username">
                  <input id="username" is="core-input" value="{{username}}"/>
@@ -65,15 +65,24 @@
 
             </div>
           </div>
-          <template repeat="{{classroom in classrooms}}" style="margin-top: 64px">
-              <local-grades-card flex data="{{classroom}}"></local-grades-card>
-          </template>
+          <div class="content">
+            <template repeat="{{classroom in classrooms}}" style="margin-top: 64px">
+                <local-grades-card flex data="{{classroom}}"></local-grades-card>
+            </template>
+          </div>
+
           <div vertical center layout>
             <div class="elevatorButton" id="up" style="display:none">
               <paper-icon-button class="big" raised src="/res/web_client/images/elevator.svg"></paper-icon-button>
             </div>
           </div>
+          <div id="copyright" style="display:none">
+            <div id="copy_text">
+              &copy; 2015 DHS Developers Club &amp; SB Technology Holdings International
+            </div>
+          </div>
         </div>
+
         <local-api-loader id="apiLoader"></local-api-loader>
       </template>
       <script src="/res/web_client/elevator.js"></script>
