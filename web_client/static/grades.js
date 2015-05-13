@@ -45,7 +45,7 @@ app.addEventListener("template-bound", function(){
     var elementButton = document.querySelector('.elevatorButton');
             var elevator = new Elevator({
                 element: elementButton,
-                mainAudio: '/res/web_client/music/elevator-music.mp3', // Music from http://www.bensound.com/
+                mainAudioArray: ['/res/web_client/music/epic.mp3', '/res/web_client/music/elevator-music.mp3'], // Music from http://www.bensound.com/
                 endAudio:  '/res/web_client/music/ding.mp3'
             });
   });
