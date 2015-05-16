@@ -244,12 +244,12 @@ class HomeAccessClientApi(remote.Service):
         password = request.password
         database = '10'
         login_data = urllib.urlencode({'Database' : database, 'LogOnDetails.UserName' : username, 'LogOnDetails.Password' : password})
-        opener.open('https://home.tamdistrict.org/HomeAccess/Account/LogOn', login_data)
+        opener.open('https://home.tamdistrict.org/HomeAccess/Account/LogOn', login_data, 15)
         if [cookie for cookie in cj if cookie.name == ".AuthCookie"] == []:
             login_status = ClassesHAC.LoginStatus.LOGIN_ERROR
         else:
             login_status = ClassesHAC.LoginStatus.OK
-        resp = opener.open('https://home.tamdistrict.org/HomeAccess/Content/Student/Assignments.aspx')
+        resp = opener.open('https://home.tamdistrict.org/HomeAccess/Content/Student/Assignments.aspx', None, 15)
         html = resp.read()
         html = html.decode('utf8', 'ignore')
         soup = BeautifulSoup(html)
