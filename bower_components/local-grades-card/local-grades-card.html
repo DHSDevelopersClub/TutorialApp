@@ -50,7 +50,29 @@ Author: Sebastian Boyd
     <script>
       Polymer({
         ready: function() {
-          this.chartdata = "[ [10,14,20,25,13,9,40] ]"
+          tsv = '';
+          weighted_cumulative = [];
+          categories = {};
+          this.data.grade_table.forEach(function(entry) {
+            categories[entry.category] = [[],[]];
+          });
+          a = this.data.assignments.slice();
+          a.reverse();
+          a.forEach(function(assignment) {
+            percent = parseFloat(assignment.score) / parseFloat(assignment.max_score)
+            if (percent != NaN){
+              last = categories[assignment.category][categories[assignment.category].length - 1];
+              if (last === undefined){
+                categories[assignment.category][1].push(percent);
+              }
+              else {
+                categories[assignment.category][1].push((percent + last)/2)
+              }
+              categories[assignment.category][0] = assignment.date_due
+            }
+          });
+          a = null;
+          console.log(categories);
         },
         toggleAssignments: function() {
           this.$.tableCollapse.toggle();
