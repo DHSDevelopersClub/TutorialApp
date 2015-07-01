@@ -1,7 +1,7 @@
 /**
  * app.js
  *
- * Javascript for app template in index.html.
+ * Javascript (for app auto-binding template) shared across clients.
  *
  * Author: Alexander Otavka
  */
@@ -57,7 +57,7 @@ app.addEventListener("template-bound", function() {
         };
 
         return anim;
-    }());
+    })();
     var searchBoxResizeAnimation = (function() {
         var anim = new CoreAnimationGroup();
         anim.type = "par";
@@ -78,13 +78,13 @@ app.addEventListener("template-bound", function() {
         };
 
         return anim;
-    }());
+    })();
 
-    app.onReady = function() {
+    app.$.apiLoader.setOnload(function() {
         gapi.client.dhstutorial.next_tutorial().execute(function(response) {
             app.date = response.date;
         });
-    };
+    });
 
     app.onMediaMobileChange = function() {
         /* Align the search bar based on media and search state. */
@@ -165,10 +165,6 @@ app.addEventListener("template-bound", function() {
         app.$.navBack.setAttribute("hidden", "");
         app.$.navTitle.removeAttribute("hidden");
         app.onMediaMobileChange();
-    };
-
-    app.refresh = function() {
-        app.$.classroomManager.load(true);
     };
 
     app.signOut = function() {

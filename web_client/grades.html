@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+      <meta charset="UTF-8">
+
+      <Title>Home Access</Title>
+
+      <!-- Polymer setup. -->
+      <script src="/res/components/webcomponentsjs/webcomponents.min.js"></script>
+      <link rel="import" href="/res/components/polymer/polymer.html" />
+
+      <link rel="import" href="/res/components/local-grades-card/local-grades-card.html">
+      <link rel="icon" type="image/png" href="/favicon.png">
+
+      <!-- Imports to third party components. -->
+      <link rel="import" href="/res/components/core-toolbar/core-toolbar.html">
+      <link rel="import" href="/res/components/core-icons/core-icons.html">
+      <link rel="import" href="/res/components/core-icon/core-icon.html">
+      <link rel="import" href="/res/components/core-icon-button/core-icon-button.html">
+      <link rel="import" href="/res/components/font-roboto/roboto.html">
+      <link rel="import" href="/res/components/paper-shadow/paper-shadow.html">
+      <link rel="import" href="/res/components/paper-icon-button/paper-icon-button.html">
+      <link rel="import" href="/res/components/paper-button/paper-button.html">
+      <link rel="import" href="/res/components/core-ajax/core-ajax.html">
+      <link rel="import" href="/res/components/sortable-table/sortable-table.html">
+      <link rel="import" href="/res/components/local-api-loader/local-api-loader.html">
+      <link rel="import" href="/res/components/paper-input/paper-input.html">
+      <link rel="import" href="/res/components/core-input/core-input.html">
+      <link rel="import" href="/res/components/paper-spinner/paper-spinner.html">
+
+      <link rel="stylesheet" type="text/css" href="/res/web_client/grades.css" shim-shadowdom>
+    </head>
+    <body unresolved fullbleed vertical center layout>
+      <template id="grades" is="auto-binding">
+        <paper-shadow id="actionBar" z="1">
+          <core-toolbar>
+            <paper-icon-button icon="arrow-back" hidden="true" on-tap="{{Back}}"></paper-icon-button>
+            <div flex class="title">Grades - Home Access Center</div>
+            <paper-button id="logout" on-tap={{logout}} style="display:none;">Log out</paper-button>
+          </core-toolbar>
+        </paper-shadow>
+        <div fit id="contentWrapper">
+          <div class="content" vertical center layout>
+            <div id="login">
+              <paper-input-decorator label="Username">
+                 <input id="username" is="core-input" value="{{username}}"/>
+              </paper-input-decorator>
+              <paper-input-decorator label="Password">
+                 <input id="password" is="core-input" type="password" value="{{password}}"/>
+              </paper-input-decorator>
+              <div id="login_error" style="color:red;padding-bottom:5px;display:none;" horizontal center layout>
+                <core-icon icon="error"></core-icon>
+                <div>
+                  There was a problem logging in
+                </div>
+              </div>
+              <div horizontal center layout>
+                <div flex>
+                  <paper-spinner active={{spinner}}></paper-spinner>
+                </div>
+                <paper-button raised on-tap="{{submit}}">Login</paper-button>
+              </div>
+
+            </div>
+          </div>
+          <div class="content">
+            <template repeat="{{classroom in classrooms}}" style="margin-top: 64px">
+                <local-grades-card flex data="{{classroom}}"></local-grades-card>
+            </template>
+          </div>
+
+          <div vertical center layout>
+            <div class="elevatorButton" id="up" style="display:none">
+              <paper-icon-button class="big" raised src="/res/web_client/images/elevator.svg"></paper-icon-button>
+            </div>
+          </div>
+          <div id="copyright" style="display:none">
+            <div id="copy_text">
+              &copy; 2015 DHS Developers Club &amp; SB Technology Holdings International
+            </div>
+          </div>
+        </div>
+
+        <local-api-loader id="apiLoader"></local-api-loader>
+      </template>
+      <script src="/res/web_client/elevator.js"></script>
+      <script src="/res/web_client/grades.js"></script>
+    </body>
+</html>

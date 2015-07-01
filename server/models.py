@@ -15,13 +15,20 @@ class Student(ndb.Model):
     '''Represents a student with associated OAuth account.'''
     user = ndb.UserProperty()
 
+class StudentID(ndb.Model):
+    dsid = ndb.IntegerProperty()
+    attendence_status = ndb.IntegerProperty()
+
 class Classroom(ndb.Model):
     '''An individual classroom on a specific date.'''
-    teacher = ndb.StructuredProperty(Teacher)
+    teacher = ndb.IntegerProperty()
     room = ndb.StringProperty()
     totalseats = ndb.IntegerProperty()
-    takenseats = ndb.ComputedProperty(lambda self: len(self.signedup_sudents))
-    signedup_sudents = ndb.StructuredProperty(Student, repeated=True)
+    takenseats = ndb.ComputedProperty(lambda self: len(self.signedup_students))
+    signedup_students = ndb.IntegerProperty(repeated=True)
+
+class Prefs(ndb.Model):
+    enable_register_student = ndb.BooleanProperty(default=False)
 
 class Date(ndb.Model):
     '''The date of a tutorial.

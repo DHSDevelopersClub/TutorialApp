@@ -1,7 +1,7 @@
 application: signed-drakehs
 
-# Version 1.0 (Alpha 1)
-version: 1-0-a-1
+# Version 1.0 (Alpha 2)
+version: 1-0-a-2
 api_version: 1
 runtime: python27
 threadsafe: true
@@ -9,14 +9,37 @@ threadsafe: true
 
 handlers:
 
+# Favicon
+- url: /favicon\.ico
+  static_files: web_client/static/images/favicon.ico
+  upload: web_client/static/images/favicon\.ico
+- url: /favicon\.png
+  static_files: web_client/static/images/favicon.png
+  upload: web_client/static/images/favicon.png
+
 # Endpoints api
 - url: /_ah/spi/.*
   script: server.application
 
-# Main page
-- url: /
-  static_files: web_client/index.html
-  upload: web_client/index.html
+# Login page
+- url: /welcome
+  static_files: web_client/login.html
+  upload: web_client/login.html
+
+# Client page
+- url: /app
+  static_files: web_client/app.html
+  upload: web_client/app.html
+
+# Settings page
+- url: /app/settings
+  static_files: web_client/settings.html
+  upload: web_client/settings.html
+
+# Grades
+- url: /app/grades
+  static_files: web_client/grades.html
+  upload: web_client/grades.html
 
 # Web client resources
 - url: /res/web_client
@@ -24,9 +47,17 @@ handlers:
 - url: /res/components
   static_dir: bower_components
 
+# Redirect handler
+- url: /.*
+  script: server.redirect
+
 
 libraries:
 - name: pycrypto
   version: latest
 - name: endpoints
   version: 1.0
+- name: webapp2
+  version: latest
+- name: lxml
+  version: latest

@@ -1,0 +1,64 @@
+<!-- Know who the current user is.
+
+Author: Alexander Otavka
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<polymer-element name="local-user-manager" constructor="LocalUserManager" attributes="currentUser">
+    <script>
+        (function() {
+            "use strict";
+
+            // var isSignedIn = function() {
+            //     gapi.client.oauth2.userinfo.get().execute(function(resp) {
+            //         if (!response.code) {
+            //             return true;
+            //         } else if (response.code === 401) {
+            //             return false;
+            //         } else {
+            //             return null;
+            //         }
+            //     });
+            // }
+            //
+            // var responseIsSignedIn = function(response) {
+            //     if (!response.code) {
+            //         return true;
+            //     } else if (response.code === 401) {
+            //         return false;
+            //     } else {
+            //         return isSignedIn();
+            //     }
+            // };
+
+            /**
+             * Data about the current user.
+             *
+             * Fields:
+             *   name: First and lastname.
+             *   level: Enum for NO_USER, STUDENT, TEACHER, or ADMIN.
+             *   profilepic: URI to profile image.
+             */
+            var currentUser = {
+                name: "",
+                level: 0,
+                profilepic: "",
+            };
+
+            Polymer({
+                NO_USER: 0,
+                STUDENT: 1,
+                TEACHER: 2,
+                ADMIN: 3,
+
+                currentUser: currentUser,
+                // isSignedIn: isSignedIn,
+                // responseIsSignedIn: responseIsSignedIn,
+                load: function() {
+                    // TODO: send request to our api
+                },
+            });
+        })();
+    </script>
+</polymer-element>
