@@ -9,7 +9,7 @@ import endpoints
 from protorpc import message_types, remote
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
-urlfetch.set_default_fetch_deadline(10)
+urlfetch.set_default_fetch_deadline(30)
 
 #from libs.endpoints_proto_datastore.ndb import EndpointsModel
 import libs.pytz as pytz
@@ -244,8 +244,9 @@ class HomeAccessClientApi(remote.Service):
         password = request.password
         database = '10'
         login_data = urllib.urlencode({'Database' : database, 'LogOnDetails.UserName' : username, 'LogOnDetails.Password' : password})
-        opener.open('https://home.tamdistrict.org/HomeAccess/Account/LogOn', login_data, 15)
+        opener.open('https://home.tamdistrict.org/HomeAccess/Account/LogOn', login_data, 30)
         if [cookie for cookie in cj if cookie.name == ".AuthCookie"] == []:
+            print username
             login_status = ClassesHAC.LoginStatus.LOGIN_ERROR
         else:
             login_status = ClassesHAC.LoginStatus.OK

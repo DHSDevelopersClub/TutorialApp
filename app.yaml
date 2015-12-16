@@ -38,8 +38,8 @@ handlers:
 
 # Grades
 - url: /app/grades
-  static_files: web_client/grades.html
-  upload: web_client/grades.html
+  static_files: web_client/down.html
+  upload: web_client/down.html
 
 # Web client resources
 - url: /res/web_client
